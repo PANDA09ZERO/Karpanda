@@ -165,6 +165,18 @@ small,
   justify-content: space-between;
   gap: 20px;
 }
+.password-panel {
+  max-width: 700px;
+}
+.password-panel h2 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.user-pagination {
+  margin-top: 20px;
+  max-width: 460px;
+}
 .header {
   height: 88px;
   border-bottom: 1px solid var(--line);

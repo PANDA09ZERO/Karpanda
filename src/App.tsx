@@ -1,5 +1,5 @@
 import { Component, useEffect, type ErrorInfo, type ReactNode } from "react";
-import { Link, Route, Routes, useLocation } from "react-router-dom";
+import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { Provider, useApp } from "./context";
 import { DemoBanner, PortalLayout, PublicLayout } from "./components";
 import {
@@ -19,6 +19,7 @@ import {
   Support,
 } from "./pages/Portal";
 import { Admin, AdminLicenses } from "./pages/Admin";
+import { ForcedPasswordChange, PasswordForm, Users } from "./pages/Users";
 class ErrorBoundary extends Component<
   { children: ReactNode },
   { failed: boolean }
@@ -54,7 +55,14 @@ function NavigationEffects() {
   return null;
 }
 function AppRoutes() {
-  const { error, refresh } = useApp();
+  const { error, refresh, user } = useApp();
+  const location = useLocation();
+  if (
+    user?.app_metadata.must_change_password &&
+    location.pathname !== "/cambiar-contrasena"
+  ) {
+    return <Navigate to="/cambiar-contrasena" replace />;
+  }
   return (
     <>
       <a href="#main" className="skip-link">
@@ -82,6 +90,14 @@ function AppRoutes() {
           <Route path="soporte" element={<Support />} />
           <Route path="terminos" element={<Terms />} />
           <Route path="acceso" element={<Auth />} />
+          <Route
+            path="cambiar-contrasena"
+            element={
+              <Protected>
+                <ForcedPasswordChange />
+              </Protected>
+            }
+          />
           <Route path="*" element={<NotFound />} />
         </Route>
         <Route
@@ -97,6 +113,7 @@ function AppRoutes() {
           <Route path="descargas" element={<Downloads />} />
           <Route path="soporte" element={<Support />} />
           <Route path="perfil" element={<Profile />} />
+          <Route path="seguridad" element={<PasswordForm />} />
         </Route>
         <Route
           path="admin"
@@ -111,6 +128,7 @@ function AppRoutes() {
           <Route path="pedidos" element={<Orders admin />} />
           <Route path="licencias" element={<AdminLicenses />} />
           <Route path="soporte" element={<Support admin />} />
+          <Route path="usuarios" element={<Users />} />
         </Route>
       </Routes>
     </>

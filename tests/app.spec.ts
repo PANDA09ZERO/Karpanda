@@ -85,11 +85,13 @@ test("móvil: imágenes visibles, menú y pantallas sin desbordamiento", async (
   await page.goto("/");
   await expect(page.locator(".product-card")).toHaveCount(3);
   for (const img of await page.locator("img").all())
-    expect(
-      await img.evaluate(
-        (el: HTMLImageElement) => el.complete && el.naturalWidth > 0,
-      ),
-    ).toBeTruthy();
+    await expect
+      .poll(() =>
+        img.evaluate(
+          (el: HTMLImageElement) => el.complete && el.naturalWidth > 0,
+        ),
+      )
+      .toBeTruthy();
   await page.screenshot({
     path: "test-results/catalogo-movil.png",
     fullPage: true,

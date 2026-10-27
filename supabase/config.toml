@@ -1,0 +1,6 @@
+project_id = "karpanda"
+
+[functions.kp-accounts]
+# The handler validates bearer tokens with Auth.getUser and reauthenticates
+# password changes. Gateway legacy JWT verification does not accept all modern tokens.
+verify_jwt = false

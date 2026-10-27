@@ -8,6 +8,7 @@ import {
   CalendarDays,
   Download,
   LayoutDashboard,
+  LockKeyhole,
   LifeBuoy,
   LogOut,
   Menu,
@@ -168,6 +169,7 @@ const clientNav = [
   ["Descargas", "/cuenta/descargas", Download],
   ["Soporte", "/cuenta/soporte", LifeBuoy],
   ["Mi cuenta", "/cuenta/perfil", Users],
+  ["Contraseña", "/cuenta/seguridad", LockKeyhole],
 ] as const;
 const adminNav = [
   ["Resumen", "/admin", LayoutDashboard],
@@ -175,6 +177,7 @@ const adminNav = [
   ["Pedidos", "/admin/pedidos", ShoppingBag],
   ["Licencias", "/admin/licencias", BookOpen],
   ["Soporte", "/admin/soporte", LifeBuoy],
+  ["Usuarios", "/admin/usuarios", Users],
 ] as const;
 export function PortalLayout({ admin = false }: { admin?: boolean }) {
   const { user, notify, isAdmin } = useApp();

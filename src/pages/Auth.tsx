@@ -50,7 +50,19 @@ export function Auth() {
   const [register, setRegister] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  if (user) return <Navigate to={next} replace />;
+  if (user)
+    return (
+      <Navigate
+        to={
+          user.app_metadata.must_change_password
+            ? "/cambiar-contrasena"
+            : !params.has("next") && user.app_metadata.role === "admin"
+              ? "/admin"
+              : next
+        }
+        replace
+      />
+    );
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!supabase) return;
@@ -76,7 +88,15 @@ export function Auth() {
           "Revisa tu correo para confirmar la cuenta y luego inicia sesión.",
         );
         setRegister(false);
-      } else navigate(next);
+      } else
+        navigate(
+          result.data.user?.app_metadata.must_change_password
+            ? "/cambiar-contrasena"
+            : !params.has("next") &&
+                result.data.user?.app_metadata.role === "admin"
+              ? "/admin"
+              : next,
+        );
     } catch (e) {
       setError(e instanceof Error ? e.message : "No pudimos iniciar sesión.");
     } finally {
