@@ -166,6 +166,7 @@ export function ProductCard({ product }: { product: Product }) {
 const clientNav = [
   ["Mi software", "/cuenta", LayoutDashboard],
   ["Mis pedidos", "/cuenta/pedidos", ShoppingBag],
+  ["Mis licencias", "/cuenta/licencias", BookOpen],
   ["Descargas", "/cuenta/descargas", Download],
   ["Soporte", "/cuenta/soporte", LifeBuoy],
   ["Mi cuenta", "/cuenta/perfil", Users],
@@ -178,6 +179,7 @@ const adminNav = [
   ["Licencias", "/admin/licencias", BookOpen],
   ["Soporte", "/admin/soporte", LifeBuoy],
   ["Usuarios", "/admin/usuarios", Users],
+  ["Clientes", "/admin/clientes", Users],
 ] as const;
 export function PortalLayout({ admin = false }: { admin?: boolean }) {
   const { user, notify, isAdmin } = useApp();

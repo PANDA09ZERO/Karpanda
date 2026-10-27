@@ -39,15 +39,16 @@ Las cuentas temporales tienen `role: pending_admin` y `must_change_password: tru
 
 En **Administración → Usuarios** (`/admin/usuarios`) se muestran las cuentas, sus roles y el estado de cambio inicial. Cada usuario cambia únicamente su propia contraseña. Los clientes disponen del mismo formulario en **Mi espacio → Contraseña** (`/cuenta/seguridad`). Se requieren al menos 12 caracteres, mayúscula, minúscula, número y símbolo; tras el cambio se revocan las sesiones de renovación y se vuelve a iniciar sesión. Los JWT de acceso ya emitidos caducan según la configuración de Supabase.
 
-La Edge Function `kp-accounts` valida el token con `auth.getUser`, comprueba el rol actualizado para listar usuarios y vuelve a autenticar la contraseña actual antes de cambiarla. La clave `service_role` permanece en el entorno servidor de Supabase. Su configuración `verify_jwt = false` evita la verificación antigua de JWT de la pasarela: la autenticación se realiza dentro de la función, tanto para tokens actuales como para los antiguos. No contiene un endpoint público de aprovisionamiento ni de restablecimiento de contraseñas ajenas.
+La Edge Function `kp-accounts` valida el token con `auth.getUser`, comprueba el rol actualizado para listar usuarios y vuelve a autenticar la contraseña actual antes de cambiarla. La clave `service_role` permanece en el entorno servidor de Supabase. Su configuración `verify_jwt = false` evita la verificación antigua de JWT de la pasarela: la autenticación se realiza dentro de la función, tanto para tokens actuales como para los antiguos. El aprovisionamiento, la edición de roles y la desactivación requieren un administrador activo con contraseña personal. No permite restablecer contraseñas ajenas.
 
 Para desplegar esta función en otro proyecto:
 
 ```sh
 supabase functions deploy kp-accounts --project-ref TU_PROJECT_REF
+supabase functions deploy kp-office --project-ref TU_PROJECT_REF
 ```
 
-Para otras cuentas, registra al usuario desde `/acceso` y confirma el correo. Un operador autorizado puede asignar el rol administrador en `app_metadata`, nunca en `user_metadata`. Por ejemplo, desde el SQL Editor y sustituyendo el correo por el de la cuenta elegida:
+Para otras cuentas, usa **Administración → Usuarios → Nuevo usuario**. El servidor genera una contraseña temporal, mostrada una sola vez, y exige cambiarla al entrar. Se puede elegir cliente o administrador; también editar sus datos, consultar su historial o desactivar su acceso. No se puede desactivar la cuenta propia ni quitar el último administrador activo. Para aprovisionamiento externo, un operador autorizado puede modificar `app_metadata`, nunca `user_metadata`:
 
 ```sql
 update auth.users
@@ -61,7 +62,7 @@ Después, cierra sesión e inicia nuevamente para renovar el token. El panel est
 
 Los productos y precios cargados son ejemplos. La compra conectada **registra un pedido pendiente**. No procesa cobros ni simula confirmaciones en Supabase. La pasarela, impuestos y reglas comerciales deben elegirse antes de cobrar.
 
-Un futuro webhook debe validar firma, importe y moneda, confirmar el pedido y emitir la licencia en una transacción idempotente. `kp_licenses.order_id` es único para evitar duplicados. No habilites una licencia desde el retorno del navegador. La integración de pagos no está implementada en esta versión.
+Desde el detalle administrativo del pedido se puede **registrar un pago ya recibido** fuera del sistema. Requiere referencia, motivo y confirmación; una transacción confirma el pedido y emite una única licencia mensual. Se puede cancelar un pedido pendiente o registrar una devolución total ya realizada fuera del sistema, que revoca su licencia. Estas acciones no ejecutan cobros ni transferencias. La pasarela automática continúa pendiente; un futuro webhook deberá validar firma, importe y moneda antes de usar las mismas garantías de idempotencia.
 
 Para productos descargables, un operador sube el archivo a `kp-downloads/<product_id>/<archivo>` y registra una fila en `kp_releases` con `product_id`, `version` y `storage_path`. El usuario necesita una licencia activa y no vencida. Para SaaS, configura la URL HTTPS de acceso en el producto; el software de destino debe verificar la licencia y autenticar al usuario.
 
@@ -101,3 +102,16 @@ npm test
 `supabase/tests/rls.sql` prueba permisos, cálculo del precio, estado pendiente, aislamiento entre propietarios y rechazo de elevación de roles mediante `user_metadata`. Usa una transacción con rollback: no deja cuentas ni pedidos de prueba. Fue ejecutada contra el proyecto Karpanda.
 
 Las pruebas no cobran dinero ni verifican entrega de correos reales. Además de las pruebas reproducibles, se verificó contra Supabase el acceso de las cuentas aprovisionadas, el cambio real de contraseña, el rechazo de la contraseña anterior y la denegación de cambios sobre otra cuenta. Ambas cuentas se entregan con el cambio inicial pendiente. La comprobación de contraseñas filtradas de Supabase requiere un plan compatible; no se modificó la facturación del proyecto.
+
+## Panel ampliado
+
+- `/admin`: dashboard Bento con periodos, comparación, pagos/devoluciones, actividad, alertas y accesos rápidos.
+- `/admin/clientes` y `/admin/usuarios`: búsqueda, filtros, paginación, creación, edición, desactivación y fichas con relaciones.
+- `/admin/licencias`: emisión manual, renovación, límites, suspensión, revocación y archivo reversible.
+- `/admin/pedidos/:id`: importes históricos, movimientos externos, notas y licencias relacionadas.
+- `/admin/soporte/:id`: conversación, notas internas, asignación, prioridad y resolución/reapertura.
+- En móvil, cada registro se muestra como una tarjeta independiente; las tablas se conservan en escritorio.
+
+`kp-office` y `kp-accounts` validan el token y el perfil actual en cada petición. Las políticas RLS también consultan el perfil actual: desactivar o quitar un rol no depende de la caducidad de un JWT anterior. Los clientes solo consultan sus registros y las conversaciones públicas. La auditoría no admite modificaciones desde el cliente.
+
+Las migraciones en `supabase/migrations` reflejan el historial aplicado. `supabase/tests/backoffice.sql` comprueba pagos idempotentes, devolución/revocación, transiciones, conversaciones y RLS en una transacción que revierte todos sus fixtures. Ejecútalo únicamente sobre un esquema migrado. `npm test` verifica la navegación, formularios, contraseña inicial y tarjetas a 360/390/768 px. No requiere contraseñas de los propietarios. Consulta `docs/AMPLIACION.md` para las reglas y límites de esta versión.

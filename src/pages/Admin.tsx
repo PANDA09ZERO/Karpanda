@@ -37,7 +37,7 @@ export function Admin() {
       setError("");
     } catch (e) {
       setError(
-        e instanceof Error ? e.message : "Impossible de cargar productos.",
+        e instanceof Error ? e.message : "No se pudieron cargar los productos.",
       );
     } finally {
       setLoading(false);
@@ -177,7 +177,7 @@ export function Admin() {
       {loading ? (
         <Loading />
       ) : (
-        <div className="table-wrap">
+        <div className="table-wrap desktop-records">
           <table>
             <thead>
               <tr>
@@ -223,6 +223,51 @@ export function Admin() {
             </tbody>
           </table>
           {!products.length && <Empty title="Añade tu primer producto" />}
+        </div>
+      )}
+      {!loading && (
+        <div className="mobile-records">
+          {products.map((p) => (
+            <article className="record-card" key={p.id}>
+              <div className="record-card-title">{p.name}</div>
+              <dl>
+                <div>
+                  <dt>Categoría</dt>
+                  <dd>{p.category}</dd>
+                </div>
+                <div>
+                  <dt>Plan mensual</dt>
+                  <dd>{money(p.price)}</dd>
+                </div>
+                <div>
+                  <dt>Estado</dt>
+                  <dd>
+                    <Badge className={p.published ? "" : "warning"}>
+                      {p.published ? "Publicado" : "Borrador"}
+                    </Badge>
+                  </dd>
+                </div>
+              </dl>
+              <div className="record-actions">
+                <button
+                  className="button secondary"
+                  onClick={() => {
+                    setEditing(p);
+                    setError("");
+                  }}
+                >
+                  Editar <Pencil size={15} />
+                </button>
+                <button
+                  className="text-link button-plain"
+                  disabled={busy}
+                  onClick={() => void toggle(p)}
+                >
+                  {p.published ? "Retirar" : "Publicar"}
+                </button>
+              </div>
+            </article>
+          ))}
         </div>
       )}
       {!onlyProducts && (

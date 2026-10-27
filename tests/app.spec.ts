@@ -65,11 +65,12 @@ test("administración guarda edición y publica productos en el catálogo", asyn
 });
 test("soporte guarda y vuelve a mostrar la solicitud", async ({ page }) => {
   await page.goto("/cuenta/soporte");
+  await page.getByRole("button", { name: "Nueva solicitud" }).click();
   await page.getByLabel("Asunto").fill("Consulta sobre inventario");
   await page
     .getByLabel("Tu mensaje")
     .fill("Necesito ayuda para configurar mi inventario inicial.");
-  await page.getByRole("button", { name: "Enviar solicitud" }).click();
+  await page.getByRole("button", { name: "Guardar cambios" }).click();
   await expect(
     page.getByRole("heading", { name: "Consulta sobre inventario" }),
   ).toBeVisible();

@@ -1,0 +1,13 @@
+alter table public.kp_profiles enable row level security;
+alter table public.kp_activity enable row level security;
+alter table public.kp_payments enable row level security;
+alter table public.kp_refunds enable row level security;
+alter table public.kp_ticket_messages enable row level security;
+revoke all on public.kp_profiles,public.kp_activity,public.kp_payments,public.kp_refunds,public.kp_ticket_messages from anon,authenticated;
+grant select on public.kp_profiles,public.kp_activity,public.kp_payments,public.kp_refunds,public.kp_ticket_messages to authenticated;
+grant all on public.kp_profiles,public.kp_activity,public.kp_payments,public.kp_refunds,public.kp_ticket_messages to service_role;
+create policy "Own profile or administrator" on public.kp_profiles for select to authenticated using(id=(select auth.uid()) or (select kp_private.is_admin()));
+create policy "Visible activity" on public.kp_activity for select to authenticated using((select kp_private.is_admin()) or (not internal and owner_id=(select auth.uid()) and (select kp_private.account_ready())));
+create policy "Visible payments" on public.kp_payments for select to authenticated using((select kp_private.is_admin()) or exists(select 1 from public.kp_orders o where o.id=order_id and o.user_id=(select auth.uid())));
+create policy "Visible refunds" on public.kp_refunds for select to authenticated using((select kp_private.is_admin()) or exists(select 1 from public.kp_orders o where o.id=order_id and o.user_id=(select auth.uid())));
+create policy "Visible conversation" on public.kp_ticket_messages for select to authenticated using((select kp_private.is_admin()) or (not internal and exists(select 1 from public.kp_tickets t where t.id=ticket_id and t.user_id=(select auth.uid()))));

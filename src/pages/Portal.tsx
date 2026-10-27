@@ -64,8 +64,11 @@ export function useLicenses() {
         } else if (supabase && user) {
           const { data, error } = await supabase
             .from("kp_licenses")
-            .select("*, kp_products(app_url)")
+            .select(
+              "id,product_id,product_name,status,expires_at,starts_at,archived_at,plan_name,user_limit,kp_products(app_url)",
+            )
             .eq("user_id", user.id)
+            .is("archived_at", null)
             .order("created_at", { ascending: false });
           if (error) throw error;
           if (alive)
@@ -73,7 +76,10 @@ export function useLicenses() {
               data.map((l) => ({
                 ...l,
                 product_name: l.product_name,
-                app_url: l.kp_products?.app_url,
+                app_url: (Array.isArray(l.kp_products)
+                  ? l.kp_products[0]
+                  : l.kp_products
+                )?.app_url,
               })),
             );
         }
@@ -136,7 +142,8 @@ export function ClientHome() {
                 <Status status={demoMode ? "demo" : l.status} />
                 <h2>{l.product_name}</h2>
                 <p className="muted">
-                  Plan Empresa · 1 empresa · hasta 5 usuarios
+                  {l.plan_name || "Plan Empresa"} · hasta {l.user_limit || 5}{" "}
+                  usuarios
                 </p>
                 <p className="small muted">Licencia: {l.id}</p>
                 <p className="green small">
@@ -152,6 +159,7 @@ export function ClientHome() {
                   className="button"
                   disabled={
                     l.status !== "active" ||
+                    (!!l.starts_at && Date.parse(l.starts_at) > Date.now()) ||
                     (!!l.expires_at && Date.parse(l.expires_at) < Date.now())
                   }
                   onClick={() => access(l)}
@@ -161,6 +169,11 @@ export function ClientHome() {
                 <Link className="button secondary" to="/cuenta/descargas">
                   Descargas
                 </Link>
+                {!demoMode && (
+                  <Link className="text-link" to={`/cuenta/licencias/${l.id}`}>
+                    Ver detalle de licencia
+                  </Link>
+                )}
               </div>
             </article>
           ))}

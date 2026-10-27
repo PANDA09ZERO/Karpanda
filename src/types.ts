@@ -24,6 +24,10 @@ export type License = {
   status: string;
   expires_at: string | null;
   app_url?: string | null;
+  starts_at?: string;
+  archived_at?: string | null;
+  plan_name?: string;
+  user_limit?: number;
 };
 export type Ticket = {
   id: string;

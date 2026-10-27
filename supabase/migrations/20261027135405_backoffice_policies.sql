@@ -1,0 +1,22 @@
+-- Authoritative role checks make demotions effective even for old JWTs.
+alter policy "Read licensed products" on public.kp_products using(published or (select kp_private.is_admin()) or exists(select 1 from public.kp_licenses l where l.product_id=kp_products.id and l.user_id=(select auth.uid())));
+alter policy "Administrators insert products" on public.kp_products with check((select kp_private.is_admin()));
+alter policy "Administrators update products" on public.kp_products using((select kp_private.is_admin())) with check((select kp_private.is_admin()));
+alter policy "Administrators delete products" on public.kp_products using((select kp_private.is_admin()));
+alter policy "Administrators insert releases" on public.kp_releases with check((select kp_private.is_admin()));
+alter policy "Administrators update releases" on public.kp_releases using((select kp_private.is_admin())) with check((select kp_private.is_admin()));
+alter policy "Administrators delete releases" on public.kp_releases using((select kp_private.is_admin()));
+alter policy "Owners or administrators read orders" on public.kp_orders using(user_id=(select auth.uid()) or (select kp_private.is_admin()));
+alter policy "Owners or administrators read licenses" on public.kp_licenses using(user_id=(select auth.uid()) or (select kp_private.is_admin()));
+alter policy "Owners or administrators read tickets" on public.kp_tickets using(user_id=(select auth.uid()) or (select kp_private.is_admin()));
+alter policy "Administrators resolve tickets" on public.kp_tickets using((select kp_private.is_admin())) with check((select kp_private.is_admin()));
+alter policy "Licensed users read releases" on public.kp_releases using((select kp_private.is_admin()) or exists(select 1 from public.kp_licenses l where l.product_id=kp_releases.product_id and l.user_id=(select auth.uid()) and l.status='active' and l.starts_at<=now() and l.archived_at is null and(l.expires_at is null or l.expires_at>now())));
+create policy "Active account required" on public.kp_orders as restrictive for all to authenticated using((select kp_private.account_ready())) with check((select kp_private.account_ready()));
+create policy "Active account required" on public.kp_licenses as restrictive for all to authenticated using((select kp_private.account_ready())) with check((select kp_private.account_ready()));
+create policy "Active account required" on public.kp_tickets as restrictive for all to authenticated using((select kp_private.account_ready())) with check((select kp_private.account_ready()));
+create policy "Active account required" on public.kp_releases as restrictive for all to authenticated using((select kp_private.account_ready())) with check((select kp_private.account_ready()));
+create policy "Active account required" on public.kp_products as restrictive for all to authenticated using((select kp_private.account_ready())) with check((select kp_private.account_ready()));
+create policy "Active account required" on public.kp_ticket_messages as restrictive for select to authenticated using((select kp_private.account_ready()));
+revoke update on public.kp_tickets from authenticated;
+revoke update(status) on public.kp_tickets from authenticated;
+alter policy "Download with active Karpanda license" on storage.objects using(bucket_id='kp-downloads' and (select kp_private.account_ready()) and exists(select 1 from public.kp_licenses l where l.product_id::text=(storage.foldername(name))[1] and l.user_id=(select auth.uid()) and l.status='active' and l.starts_at<=now() and l.archived_at is null and (l.expires_at is null or l.expires_at>now())));

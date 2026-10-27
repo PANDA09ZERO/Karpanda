@@ -1,7 +1,14 @@
-import { Component, useEffect, type ErrorInfo, type ReactNode } from "react";
+import {
+  Component,
+  lazy,
+  Suspense,
+  useEffect,
+  type ErrorInfo,
+  type ReactNode,
+} from "react";
 import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { Provider, useApp } from "./context";
-import { DemoBanner, PortalLayout, PublicLayout } from "./components";
+import { DemoBanner, Loading, PortalLayout, PublicLayout } from "./components";
 import {
   Catalog,
   Checkout,
@@ -11,15 +18,29 @@ import {
   Terms,
 } from "./pages/Store";
 import { Auth, Protected } from "./pages/Auth";
-import {
-  ClientHome,
-  Downloads,
-  Orders,
-  Profile,
-  Support,
-} from "./pages/Portal";
-import { Admin, AdminLicenses } from "./pages/Admin";
-import { ForcedPasswordChange, PasswordForm, Users } from "./pages/Users";
+import { ClientHome, Downloads, Profile } from "./pages/Portal";
+import { Admin } from "./pages/Admin";
+import { ForcedPasswordChange, PasswordForm } from "./pages/Users";
+const OfficeDashboard = lazy(() =>
+  import("./pages/OfficeDashboard").then((m) => ({
+    default: m.OfficeDashboard,
+  })),
+);
+const OfficeDetail = lazy(() =>
+  import("./pages/OfficeRecords").then((m) => ({ default: m.OfficeDetail })),
+);
+const OfficeList = lazy(() =>
+  import("./pages/OfficeRecords").then((m) => ({ default: m.OfficeList })),
+);
+const PublicSupport = lazy(() =>
+  import("./pages/OfficeRecords").then((m) => ({ default: m.PublicSupport })),
+);
+const ManageUsers = lazy(() =>
+  import("./pages/ManageUsers").then((m) => ({ default: m.ManageUsers })),
+);
+const UserDetail = lazy(() =>
+  import("./pages/ManageUsers").then((m) => ({ default: m.UserDetail })),
+);
 class ErrorBoundary extends Component<
   { children: ReactNode },
   { failed: boolean }
@@ -81,56 +102,98 @@ function AppRoutes() {
           </button>
         </div>
       )}
-      <Routes>
-        <Route element={<PublicLayout />}>
-          <Route index element={<Catalog />} />
-          <Route path="producto/:slug" element={<Detail />} />
-          <Route path="compra/:slug" element={<Checkout />} />
-          <Route path="como-funciona" element={<HowItWorks />} />
-          <Route path="soporte" element={<Support />} />
-          <Route path="terminos" element={<Terms />} />
-          <Route path="acceso" element={<Auth />} />
+      <Suspense fallback={<Loading />}>
+        <Routes>
+          <Route element={<PublicLayout />}>
+            <Route index element={<Catalog />} />
+            <Route path="producto/:slug" element={<Detail />} />
+            <Route path="compra/:slug" element={<Checkout />} />
+            <Route path="como-funciona" element={<HowItWorks />} />
+            <Route path="soporte" element={<PublicSupport />} />
+            <Route path="terminos" element={<Terms />} />
+            <Route path="acceso" element={<Auth />} />
+            <Route
+              path="cambiar-contrasena"
+              element={
+                <Protected>
+                  <ForcedPasswordChange />
+                </Protected>
+              }
+            />
+            <Route path="*" element={<NotFound />} />
+          </Route>
           <Route
-            path="cambiar-contrasena"
+            path="cuenta"
             element={
               <Protected>
-                <ForcedPasswordChange />
+                <PortalLayout />
               </Protected>
             }
-          />
-          <Route path="*" element={<NotFound />} />
-        </Route>
-        <Route
-          path="cuenta"
-          element={
-            <Protected>
-              <PortalLayout />
-            </Protected>
-          }
-        >
-          <Route index element={<ClientHome />} />
-          <Route path="pedidos" element={<Orders />} />
-          <Route path="descargas" element={<Downloads />} />
-          <Route path="soporte" element={<Support />} />
-          <Route path="perfil" element={<Profile />} />
-          <Route path="seguridad" element={<PasswordForm />} />
-        </Route>
-        <Route
-          path="admin"
-          element={
-            <Protected admin>
-              <PortalLayout admin />
-            </Protected>
-          }
-        >
-          <Route index element={<Admin />} />
-          <Route path="productos" element={<Admin />} />
-          <Route path="pedidos" element={<Orders admin />} />
-          <Route path="licencias" element={<AdminLicenses />} />
-          <Route path="soporte" element={<Support admin />} />
-          <Route path="usuarios" element={<Users />} />
-        </Route>
-      </Routes>
+          >
+            <Route index element={<ClientHome />} />
+            <Route
+              path="pedidos"
+              element={<OfficeList module="orders" admin={false} />}
+            />
+            <Route
+              path="pedidos/:id"
+              element={<OfficeDetail module="orders" admin={false} />}
+            />
+            <Route
+              path="licencias"
+              element={<OfficeList module="licenses" admin={false} />}
+            />
+            <Route
+              path="licencias/:id"
+              element={<OfficeDetail module="licenses" admin={false} />}
+            />
+            <Route path="descargas" element={<Downloads />} />
+            <Route
+              path="soporte"
+              element={<OfficeList module="tickets" admin={false} />}
+            />
+            <Route
+              path="soporte/:id"
+              element={<OfficeDetail module="tickets" admin={false} />}
+            />
+            <Route path="perfil" element={<Profile />} />
+            <Route path="seguridad" element={<PasswordForm />} />
+          </Route>
+          <Route
+            path="admin"
+            element={
+              <Protected admin>
+                <PortalLayout admin />
+              </Protected>
+            }
+          >
+            <Route index element={<OfficeDashboard />} />
+            <Route path="productos" element={<Admin />} />
+            <Route path="pedidos" element={<OfficeList module="orders" />} />
+            <Route
+              path="pedidos/:id"
+              element={<OfficeDetail module="orders" />}
+            />
+            <Route
+              path="licencias"
+              element={<OfficeList module="licenses" />}
+            />
+            <Route
+              path="licencias/:id"
+              element={<OfficeDetail module="licenses" />}
+            />
+            <Route path="soporte" element={<OfficeList module="tickets" />} />
+            <Route
+              path="soporte/:id"
+              element={<OfficeDetail module="tickets" />}
+            />
+            <Route path="usuarios" element={<ManageUsers />} />
+            <Route path="usuarios/:id" element={<UserDetail />} />
+            <Route path="clientes" element={<ManageUsers />} />
+            <Route path="clientes/:id" element={<UserDetail />} />
+          </Route>
+        </Routes>
+      </Suspense>
     </>
   );
 }
