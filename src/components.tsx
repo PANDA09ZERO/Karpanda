@@ -21,6 +21,7 @@ import { demoMode, supabase } from "./lib/supabase";
 import { useApp } from "./context";
 import { money } from "./lib/data";
 import type { Product } from "./types";
+import { analyticsConfigured, settingsEvent } from "./lib/analytics";
 export const logo = "/assets/karpanda-logo.png";
 export const pandas = "/assets/karpanda-pandas.png";
 export function Brand() {
@@ -108,8 +109,10 @@ export function PublicLayout() {
             aria-label="Navegación principal"
           >
             <NavLink end to="/">
-              Catálogo
+              Inicio
             </NavLink>
+            <NavLink to="/servicios">Servicios</NavLink>
+            <a href="/#soluciones">Catálogo</a>
             <NavLink to="/como-funciona">Cómo funciona</NavLink>
             <NavLink to="/soporte">Soporte</NavLink>
             <Link className="button secondary account-link" to="/cuenta">
@@ -127,15 +130,25 @@ export function PublicLayout() {
 }
 export function Footer() {
   return (
-    <footer className="footer container">
+    <footer className="footer container public-footer">
       <div>
         <strong>Karpanda Software</strong>
         <p>Tecnología que te acompaña a crecer.</p>
+        <small>Software, desarrollo web y soluciones a medida.</small>
       </div>
       <nav aria-label="Pie de página">
-        <Link to="/como-funciona">Documentación</Link>
+        <Link to="/servicios">Servicios a medida</Link>
+        <Link to="/como-funciona">Cómo funciona</Link>
         <Link to="/soporte">Soporte</Link>
         <Link to="/terminos">Términos y privacidad</Link>
+        {analyticsConfigured && (
+          <button
+            className="button-plain privacy-settings"
+            onClick={() => window.dispatchEvent(new Event(settingsEvent))}
+          >
+            Preferencias de medición
+          </button>
+        )}
       </nav>
     </footer>
   );

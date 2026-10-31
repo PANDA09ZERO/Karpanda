@@ -1,5 +1,11 @@
 # Karpanda
 
+## Página pública y tráfico
+
+La portada incluye servicios propuestos, catálogo filtrable, presentación de Karpanda, proceso de trabajo y preguntas frecuentes. `/servicios` amplía las ideas de desarrollo web, sistemas de gestión, catálogos/tiendas y automatización. El resumen de proyecto se prepara y copia en el navegador; el visitante debe enviarlo desde soporte. No es un formulario que envíe consultas automáticamente.
+
+Google Analytics 4 está preparado mediante `VITE_GA_MEASUREMENT_ID`. **Sin un ID real no carga Google ni mide tráfico.** Al configurarlo, se solicita permiso para medir la página pública; los visitantes pueden rechazarlo y cambiar su elección desde el pie de página. Las visitas de React se registran manualmente, se excluyen rutas privadas y no se envía el contenido de formularios. Es necesario desactivar la medición mejorada en el flujo de Google para evitar eventos automáticos y duplicados. Consulta [la guía de activación](docs/GOOGLE_ANALYTICS.md).
+
 Aplicación React + TypeScript + Vite basada en el [diseño de Figma](https://www.figma.com/design/9lVkuMmrAV5a0cEJ2NHV9z?node-id=5-791). Incluye catálogo adaptable a móvil, producto y plan, compra, registro e inicio de sesión, portal del cliente y administración.
 
 ## Ejecutar

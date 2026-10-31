@@ -20,10 +20,25 @@ import {
 } from "../components";
 import { money, placeOrder } from "../lib/data";
 import { demoMode } from "../lib/supabase";
+import {
+  FrequentlyAsked,
+  PublicCTA,
+  ServicePreview,
+  WhyKarpanda,
+  WorkingMethod,
+} from "./PublicMarketing";
+import { trackPublicAction } from "../lib/analytics";
 export function Catalog() {
   const { products, loading } = useApp();
+  const [category, setCategory] = useState("Todas");
+  const categories = ["Todas", ...new Set(products.map((p) => p.category))];
+  const selected = categories.includes(category) ? category : "Todas";
+  const visible =
+    selected === "Todas"
+      ? products
+      : products.filter((p) => p.category === selected);
   return (
-    <div className="container">
+    <div className="container public-marketing">
       <section className="hero">
         <div className="hero-copy">
           <Badge>SOFTWARE PARA NEGOCIOS</Badge>
@@ -38,12 +53,24 @@ export function Catalog() {
             a tu negocio.
           </p>
           <div className="hero-actions">
-            <a href="#soluciones" className="button">
+            <a
+              href="#soluciones"
+              className="button"
+              onClick={() => trackPublicAction("explore_catalog", "hero")}
+            >
               Explorar soluciones <ArrowRight size={18} />
             </a>
-            <Link to="/como-funciona" className="text-link">
-              Conoce cómo funciona
+            <Link to="/servicios" className="text-link">
+              Tengo un proyecto en mente <ArrowUpRight size={17} />
             </Link>
+          </div>
+          <div className="hero-notes">
+            <span>
+              <Check size={14} /> Pensado para tu negocio
+            </span>
+            <span>
+              <Check size={14} /> Desde cualquier pantalla
+            </span>
           </div>
         </div>
         <div className="hero-visual">
@@ -57,14 +84,47 @@ export function Catalog() {
           <Badge>Simple. Cercano. Karpanda.</Badge>
         </div>
       </section>
+      <div className="public-intro-strip">
+        <span>UN ECOSISTEMA PARA DAR EL SIGUIENTE PASO</span>
+        <div>
+          <span>Software</span>
+          <i />
+          <span>Desarrollo web</span>
+          <i />
+          <span>Soluciones a medida</span>
+        </div>
+      </div>
+      <ServicePreview />
       <section className="solutions" id="soluciones">
+        <p className="eyebrow">ENCUENTRA TU PUNTO DE PARTIDA</p>
         <h2>Una solución para cada forma de crecer</h2>
         <p className="muted">Elige tu herramienta. Nosotros te acompañamos.</p>
+        {products.length > 0 && (
+          <div
+            className="catalog-filters"
+            role="group"
+            aria-label="Filtrar soluciones por categoría"
+          >
+            {categories.map((c) => (
+              <button
+                className={selected === c ? "selected" : ""}
+                aria-pressed={selected === c}
+                key={c}
+                onClick={() => {
+                  setCategory(c);
+                  trackPublicAction("filter_catalog", c);
+                }}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
+        )}
         {loading ? (
           <Loading />
         ) : products.length ? (
           <div className="product-grid">
-            {products.map((p) => (
+            {visible.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}
           </div>
@@ -73,7 +133,15 @@ export function Catalog() {
             Pronto encontrarás nuestros productos aquí.
           </Empty>
         )}
+        <p className="marketing-caption">
+          Los planes y precios de esta versión son ilustrativos. Consulta sus
+          condiciones antes de registrar un pedido.
+        </p>
       </section>
+      <WhyKarpanda />
+      <WorkingMethod />
+      <FrequentlyAsked />
+      <PublicCTA />
     </div>
   );
 }
@@ -350,6 +418,29 @@ export function Terms() {
           centro de soporte <ArrowUpRight size={14} />
         </Link>
         .
+      </p>
+      <h2 id="medicion">Medición de visitas y preferencias</h2>
+      <p>
+        Cuando la medición esté activada y la aceptes, Google Analytics 4 podrá
+        ayudarnos a entender las visitas a la página pública, el origen del
+        tráfico y la interacción con el catálogo y los servicios. No utilizamos
+        esta integración para enviar el contenido de tus formularios, tu correo,
+        contraseñas ni datos de pedidos. Las rutas privadas y de acceso se
+        excluyen de nuestra medición de páginas.
+      </p>
+      <p>
+        Puedes elegir «Solo necesarias», seguir utilizando la web y cambiar tu
+        preferencia desde el pie de página cuando la medición esté disponible.
+        Guardamos la elección en este navegador durante un máximo de 180 días.
+        Al rechazarla, detenemos nuestra medición y eliminamos las cookies de
+        Analytics accesibles desde este sitio. Esto no elimina los datos que
+        Google haya recibido anteriormente.
+      </p>
+      <p>
+        Si Google Analytics todavía no se ha configurado, esta integración no
+        carga su etiqueta ni envía visitas. Las preferencias de medición son
+        independientes de los datos necesarios para iniciar sesión y utilizar el
+        sistema.
       </p>
     </article>
   );

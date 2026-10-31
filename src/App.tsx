@@ -21,6 +21,8 @@ import { Auth, Protected } from "./pages/Auth";
 import { ClientHome, Downloads, Profile } from "./pages/Portal";
 import { Admin } from "./pages/Admin";
 import { ForcedPasswordChange, PasswordForm } from "./pages/Users";
+import { ServicesPage } from "./pages/PublicMarketing";
+import { PublicAnalytics } from "./components/PublicAnalytics";
 const OfficeDashboard = lazy(() =>
   import("./pages/OfficeDashboard").then((m) => ({
     default: m.OfficeDashboard,
@@ -67,12 +69,24 @@ class ErrorBoundary extends Component<
   }
 }
 function NavigationEffects() {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = `Karpanda · ${pathname.startsWith("/admin") ? "Administración" : pathname.startsWith("/cuenta") ? "Mi espacio" : "Software para crecer"}`;
+    document.title = `Karpanda · ${pathname.startsWith("/admin") ? "Administración" : pathname.startsWith("/cuenta") ? "Mi espacio" : pathname === "/servicios" ? "Desarrollo web y soluciones a medida" : pathname === "/como-funciona" ? "Cómo funciona" : pathname === "/terminos" ? "Términos y privacidad" : "Software para crecer"}`;
     document.getElementById("main")?.focus({ preventScroll: true });
-  }, [pathname]);
+    if (hash) {
+      const frame = requestAnimationFrame(() => {
+        try {
+          document
+            .getElementById(decodeURIComponent(hash.slice(1)))
+            ?.scrollIntoView();
+        } catch {
+          /* Ignore malformed fragments. */
+        }
+      });
+      return () => cancelAnimationFrame(frame);
+    }
+  }, [pathname, hash]);
   return null;
 }
 function AppRoutes() {
@@ -90,6 +104,7 @@ function AppRoutes() {
         Saltar al contenido
       </a>
       <NavigationEffects />
+      <PublicAnalytics />
       <DemoBanner />
       {error && (
         <div className="global-error" role="alert">
@@ -106,6 +121,7 @@ function AppRoutes() {
         <Routes>
           <Route element={<PublicLayout />}>
             <Route index element={<Catalog />} />
+            <Route path="servicios" element={<ServicesPage />} />
             <Route path="producto/:slug" element={<Detail />} />
             <Route path="compra/:slug" element={<Checkout />} />
             <Route path="como-funciona" element={<HowItWorks />} />

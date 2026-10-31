@@ -15,7 +15,7 @@ export default defineConfig({
       command: "npm run dev -- --port 5175 --strictPort",
       url: "http://127.0.0.1:5175",
       reuseExistingServer: false,
-      env: { VITE_DEMO_MODE: "true" },
+      env: { VITE_DEMO_MODE: "true", VITE_GA_MEASUREMENT_ID: "" },
     },
     {
       command: "npm run dev -- --port 5176 --strictPort",
@@ -25,6 +25,7 @@ export default defineConfig({
         VITE_DEMO_MODE: "false",
         VITE_SUPABASE_URL: "https://mock-supabase.test",
         VITE_SUPABASE_PUBLISHABLE_KEY: "sb_publishable_test_only",
+        VITE_GA_MEASUREMENT_ID: "G-TEST123456",
       },
     },
   ],

@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /cuenta
+Disallow: /acceso
+Disallow: /cambiar-contrasena
+Disallow: /compra
+Sitemap: https://karpanda.vercel.app/sitemap.xml

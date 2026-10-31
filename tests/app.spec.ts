@@ -85,7 +85,8 @@ test("móvil: imágenes visibles, menú y pantallas sin desbordamiento", async (
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
   await expect(page.locator(".product-card")).toHaveCount(3);
-  for (const img of await page.locator("img").all())
+  for (const img of await page.locator("img").all()) {
+    await img.scrollIntoViewIfNeeded();
     await expect
       .poll(() =>
         img.evaluate(
@@ -93,6 +94,8 @@ test("móvil: imágenes visibles, menú y pantallas sin desbordamiento", async (
         ),
       )
       .toBeTruthy();
+  }
+  await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({
     path: "test-results/catalogo-movil.png",
     fullPage: true,
