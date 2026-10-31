@@ -75,7 +75,6 @@ export function ManageUsers() {
   const [params, setParams] = useSearchParams();
   const { user, notify } = useApp();
   const [create, setCreate] = useState(params.has("new"));
-  const [editing, setEditing] = useState<OfficeRow | null>(null);
   const [credential, setCredential] = useState<{
     email: string;
     temporaryPassword: string;
@@ -87,7 +86,6 @@ export function ManageUsers() {
   });
   const close = useCallback(() => {
     setCreate(false);
-    setEditing(null);
     if (params.has("new")) {
       const p = new URLSearchParams(params);
       p.delete("new");
@@ -135,16 +133,11 @@ export function ManageUsers() {
   ];
   async function save(payload: Record<string, any>) {
     const r = await people<{ email: string; temporaryPassword: string }>({
-      action: editing ? "update" : "create",
-      ...(editing ? { id: editing.id } : {}),
+      action: "create",
       ...payload,
     });
     if (r.temporaryPassword) setCredential(r);
-    notify(
-      editing
-        ? "Datos de la cuenta actualizados."
-        : "Cuenta creada. Guarda la contraseña temporal antes de cerrar.",
-    );
+    notify("Cuenta creada. Guarda la contraseña temporal antes de cerrar.");
     reload();
   }
   return (
@@ -208,14 +201,6 @@ export function ManageUsers() {
             columns={cols}
             base={base}
             title={(r) => r.name || r.email}
-            actions={(r) => (
-              <button
-                className="text-link button-plain"
-                onClick={() => setEditing(r)}
-              >
-                Editar
-              </button>
-            )}
           />
           <Pagination
             total={data.total ?? data.users.length}
@@ -232,35 +217,12 @@ export function ManageUsers() {
         <h2>Tu seguridad</h2>
       </div>
       <PasswordForm />
-      {(create || editing) && (
+      {create && (
         <MutationDialog
-          title={
-            editing
-              ? "Editar usuario"
-              : customersOnly
-                ? "Crear cliente"
-                : "Crear usuario"
-          }
-          description={
-            editing
-              ? "Los cambios de datos y rol quedan registrados. No se puede quitar el propio acceso ni desactivar al último administrador."
-              : "La cuenta tendrá una contraseña temporal y deberá cambiarla al primer acceso. No se envían correos automáticamente."
-          }
-          fields={userFields.map((f) => ({
-            ...f,
-            disabled: Boolean(
-              editing?.id === user?.id && ["role", "email"].includes(f.name),
-            ),
-          }))}
-          initial={
-            editing
-              ? {
-                  ...editing,
-                  role:
-                    editing.role === "pending_admin" ? "admin" : editing.role,
-                }
-              : { role: customersOnly ? "customer" : "customer" }
-          }
+          title={customersOnly ? "Crear cliente" : "Crear usuario"}
+          description="La cuenta tendrá una contraseña temporal y deberá cambiarla al primer acceso. No se envían correos automáticamente."
+          fields={userFields}
+          initial={{ role: "customer" }}
           save={save}
           close={close}
         />

@@ -185,6 +185,7 @@ function AppRoutes() {
           >
             <Route index element={<OfficeDashboard />} />
             <Route path="productos" element={<Admin />} />
+            <Route path="productos/:id" element={<Admin />} />
             <Route path="pedidos" element={<OfficeList module="orders" />} />
             <Route
               path="pedidos/:id"

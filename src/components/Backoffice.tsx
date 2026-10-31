@@ -1,6 +1,18 @@
 import { useState, type FormEvent, type ReactNode } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { ArrowDown, ArrowRight, Check, Filter, Search, X } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowRight,
+  Check,
+  Filter,
+  Search,
+  X,
+  ShoppingBag,
+  KeyRound,
+  LifeBuoy,
+  UserRound,
+  Package,
+} from "lucide-react";
 import { Modal } from "../components";
 import { dateTime, label, type Activity, type OfficeRow } from "../lib/office";
 import {
@@ -33,61 +45,74 @@ export function Records({
   actions?: (r: OfficeRow) => ReactNode;
 }) {
   return (
-    <>
-      <div className="desktop-records table-wrap">
-        <table>
-          <thead>
-            <tr>
-              {columns.map((c) => (
-                <th key={c.label}>{c.label}</th>
-              ))}
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((r) => (
-              <tr key={r.id}>
-                {columns.map((c) => (
-                  <td key={c.label}>{c.render(r)}</td>
-                ))}
-                <td>
-                  <div className="record-actions">
-                    <Link className="text-link" to={`${base}/${r.id}`}>
-                      Ver detalle <ArrowRight size={15} />
-                    </Link>
-                    {actions?.(r)}
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="mobile-records">
-        {items.map((r) => (
+    <div className="record-grid" aria-label="Registros">
+      {items.map((r) => {
+        const kind = base.includes("pedidos")
+          ? "Pedido"
+          : base.includes("licencias")
+            ? "Licencia"
+            : base.includes("soporte")
+              ? "Solicitud"
+              : base.includes("clientes")
+                ? "Cliente"
+                : base.includes("productos")
+                  ? "Producto"
+                  : "Usuario";
+        const Icon =
+          kind === "Pedido"
+            ? ShoppingBag
+            : kind === "Licencia"
+              ? KeyRound
+              : kind === "Solicitud"
+                ? LifeBuoy
+                : kind === "Producto"
+                  ? Package
+                  : UserRound;
+        return (
           <article className="record-card" key={r.id}>
-            <div className="record-card-title">
-              <Link to={`${base}/${r.id}`}>{title(r)}</Link>
-              <ArrowRight size={18} />
+            <div className="record-card-top">
+              <span className="record-card-symbol">
+                <Icon size={21} />
+              </span>
+              <span className="record-kind">{kind}</span>
+              {columns.find((c) => c.label === "Estado")?.render(r)}
             </div>
+            <div className="record-card-title">
+              <h2>
+                <Link
+                  className="record-main-link"
+                  to={`${base}/${r.id}`}
+                  aria-label={`Ver detalle: ${title(r)}`}
+                >
+                  {title(r)}
+                </Link>
+              </h2>
+              <ArrowRight size={18} aria-hidden="true" />
+            </div>
+            <p className="record-card-subtitle">
+              {r.company || r.plan_name || `#${r.id.slice(0, 8).toUpperCase()}`}
+            </p>
             <dl>
-              {columns.map((c) => (
-                <div key={c.label}>
-                  <dt>{c.label}</dt>
-                  <dd>{c.render(r)}</dd>
-                </div>
-              ))}
+              {columns
+                .slice(1)
+                .filter((c) => c.label !== "Estado")
+                .map((c) => (
+                  <div key={c.label}>
+                    <dt>{c.label}</dt>
+                    <dd>{c.render(r)}</dd>
+                  </div>
+                ))}
             </dl>
             <div className="record-actions">
-              <Link className="button secondary" to={`${base}/${r.id}`}>
-                Ver detalle
-              </Link>
+              <span className="record-open-hint">
+                Ver detalle <ArrowRight size={15} />
+              </span>
               {actions?.(r)}
             </div>
           </article>
-        ))}
-      </div>
-    </>
+        );
+      })}
+    </div>
   );
 }
 type SelectFilter = {

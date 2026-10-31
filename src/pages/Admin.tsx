@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { ArrowRight, Pencil, Plus } from "lucide-react";
 import { useApp } from "../context";
 import {
@@ -19,18 +19,15 @@ import {
   seedProducts,
 } from "../lib/data";
 import type { License, Order, Product } from "../types";
-import { useOrders } from "./Portal";
+import { Records, InfoGrid, type Column } from "../components/Backoffice";
 export function Admin() {
-  const location = useLocation();
-  const onlyProducts = location.pathname.endsWith("/productos");
+  const { id } = useParams();
   const { refresh, notify } = useApp();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [editing, setEditing] = useState<Product | null | undefined>(undefined);
   const [busy, setBusy] = useState(false);
-  const { orders } = useOrders(true);
-  const [licenseCount, setLicenseCount] = useState(0);
   const reload = useCallback(async () => {
     try {
       setProducts(await loadProducts(true));
@@ -45,12 +42,6 @@ export function Admin() {
   }, []);
   useEffect(() => {
     void reload();
-    if (supabase)
-      void supabase
-        .from("kp_licenses")
-        .select("id", { count: "exact", head: true })
-        .eq("status", "active")
-        .then(({ count }) => setLicenseCount(count || 0));
   }, [reload]);
   const close = useCallback(() => setEditing(undefined), []);
   async function save(e: FormEvent<HTMLFormElement>) {
@@ -123,176 +114,132 @@ export function Admin() {
       setBusy(false);
     }
   }
-  const demoLicenseCount = new Set(
-    orders.filter((o) => o.status === "demo").map((o) => o.product_id),
-  ).size;
+  const selected = products.find((p) => p.id === id);
+  const cols: Column[] = [
+    { label: "Producto", render: (r) => r.name },
+    { label: "Categoría", render: (r) => r.category },
+    { label: "Plan mensual", render: (r) => money(r.price) },
+    {
+      label: "Estado",
+      render: (r) => (
+        <span
+          className={`state-pill ${r.published ? "state-active" : "state-pending"}`}
+        >
+          {r.published ? "Publicado" : "Borrador"}
+        </span>
+      ),
+    },
+  ];
   return (
     <>
-      <div className="row heading-row">
-        <PageHeading
-          title={
-            onlyProducts
-              ? "Tus productos, listos para crecer."
-              : "Tu negocio, de un vistazo."
-          }
-        >
-          Productos, pedidos y licencias en un mismo espacio.
-        </PageHeading>
-        {demoMode && <Badge>Datos de demostración</Badge>}
-      </div>
-      {!onlyProducts && (
-        <div className="metric-grid">
-          {[
-            [
-              "Productos",
-              products.filter((p) => p.published).length,
-              "Catálogo publicado",
-            ],
-            ["Pedidos", orders.length, "Pedidos registrados"],
-            [
-              "Licencias activas",
-              demoMode ? demoLicenseCount : licenseCount,
-              demoMode ? "Accesos simulados" : "Accesos habilitados",
-            ],
-          ].map(([label, value, note]) => (
-            <article className="soft-panel metric" key={label}>
-              <span className="muted">{label}</span>
-              <strong>{value}</strong>
-              <small className="green">{note}</small>
-            </article>
-          ))}
+      <div className="office-layout">
+        {id && (
+          <Link className="text-link" to="/admin/productos">
+            ← Volver a productos
+          </Link>
+        )}
+        <div className="office-heading">
+          <PageHeading
+            eyebrow="CATÁLOGO"
+            title={
+              id
+                ? selected?.name || "Detalle del producto"
+                : "Tus productos, listos para crecer."
+            }
+          >
+            {id
+              ? "Consulta la información y gestiona la publicación del producto."
+              : "Cada producto en su espacio. Toca una tarjeta para conocer sus detalles."}
+          </PageHeading>
+          {!id && (
+            <button className="button" onClick={() => setEditing(null)}>
+              <Plus size={18} />
+              Nuevo producto
+            </button>
+          )}
         </div>
-      )}
-      <div className="row section-title">
-        <h2>Productos publicados</h2>
-        <button className="button" onClick={() => setEditing(null)}>
-          <Plus size={18} /> Nuevo producto
-        </button>
-      </div>
-      {error && editing === undefined && (
-        <p role="alert" className="error">
-          {error}
-        </p>
-      )}
-      {loading ? (
-        <Loading />
-      ) : (
-        <div className="table-wrap desktop-records">
-          <table>
-            <thead>
-              <tr>
-                <th>Producto</th>
-                <th>Plan mensual</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {products.map((p) => (
-                <tr key={p.id}>
-                  <td>
-                    <strong>{p.name}</strong>
-                    <small className="muted">{p.category}</small>
-                  </td>
-                  <td>{money(p.price)}</td>
-                  <td>
-                    <button
-                      className="button-plain"
-                      disabled={busy}
-                      onClick={() => void toggle(p)}
-                      aria-label={`${p.published ? "Retirar" : "Publicar"} ${p.name}`}
-                    >
-                      <Badge className={p.published ? "" : "warning"}>
-                        {p.published ? "Publicado" : "Borrador"}
-                      </Badge>
-                    </button>
-                  </td>
-                  <td>
-                    <button
-                      className="text-link button-plain"
-                      onClick={() => {
-                        setEditing(p);
-                        setError("");
-                      }}
-                    >
-                      Editar <Pencil size={15} />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {!products.length && <Empty title="Añade tu primer producto" />}
-        </div>
-      )}
-      {!loading && (
-        <div className="mobile-records">
-          {products.map((p) => (
-            <article className="record-card" key={p.id}>
-              <div className="record-card-title">{p.name}</div>
-              <dl>
-                <div>
-                  <dt>Categoría</dt>
-                  <dd>{p.category}</dd>
-                </div>
-                <div>
-                  <dt>Plan mensual</dt>
-                  <dd>{money(p.price)}</dd>
-                </div>
-                <div>
-                  <dt>Estado</dt>
-                  <dd>
-                    <Badge className={p.published ? "" : "warning"}>
-                      {p.published ? "Publicado" : "Borrador"}
-                    </Badge>
-                  </dd>
-                </div>
-              </dl>
-              <div className="record-actions">
+        {error && editing === undefined && (
+          <p className="error" role="alert">
+            {error}
+          </p>
+        )}
+        {loading ? (
+          <Loading />
+        ) : id ? (
+          selected ? (
+            <div className="office-detail-grid">
+              <section className="bento-card">
+                <h2>Información del producto</h2>
+                <p className="muted">{selected.description}</p>
+                <InfoGrid
+                  items={[
+                    { label: "Nombre", value: selected.name },
+                    { label: "Categoría", value: selected.category },
+                    { label: "Plan mensual", value: money(selected.price) },
+                    {
+                      label: "Publicación",
+                      value: selected.published
+                        ? "Visible en el catálogo"
+                        : "Borrador",
+                    },
+                    {
+                      label: "Dirección del software",
+                      value: selected.app_url || "Sin configurar",
+                    },
+                  ]}
+                />
+                <Link
+                  className="text-link product-public-link"
+                  to={`/producto/${selected.slug}`}
+                >
+                  Ver página pública <ArrowRight size={16} />
+                </Link>
+              </section>
+              <aside className="bento-card action-panel">
+                <h2>Gestionar producto</h2>
                 <button
-                  className="button secondary"
+                  className="button"
                   onClick={() => {
-                    setEditing(p);
+                    setEditing(selected);
                     setError("");
                   }}
                 >
-                  Editar <Pencil size={15} />
+                  Editar producto <Pencil size={16} />
                 </button>
                 <button
-                  className="text-link button-plain"
+                  className="button secondary"
                   disabled={busy}
-                  onClick={() => void toggle(p)}
+                  onClick={() => void toggle(selected)}
+                  aria-label={`${selected.published ? "Retirar" : "Publicar"} ${selected.name}`}
                 >
-                  {p.published ? "Retirar" : "Publicar"}
+                  {selected.published
+                    ? "Retirar del catálogo"
+                    : "Publicar en catálogo"}
                 </button>
-              </div>
-            </article>
-          ))}
-        </div>
-      )}
-      {!onlyProducts && (
-        <section className="activity">
-          <div className="row">
-            <h2>Actividad reciente</h2>
-            <Link className="text-link" to="/admin/pedidos">
-              Ver pedidos <ArrowRight size={16} />
-            </Link>
-          </div>
-          {orders.slice(0, 3).map((o) => (
-            <div className="activity-row" key={o.id}>
-              <span className="muted">
-                {o.product_name} · {o.id.slice(0, 8)}
-              </span>
-              <Status status={o.status} />
+                <small className="muted">
+                  Retirar un producto conserva los pedidos y las licencias
+                  existentes.
+                </small>
+              </aside>
             </div>
-          ))}
-          {!orders.length && (
-            <p className="muted">
-              Aquí aparecerán los pedidos de tus clientes.
-            </p>
-          )}
-        </section>
-      )}
+          ) : (
+            <Empty title="Producto no encontrado">
+              <Link className="text-link" to="/admin/productos">
+                Ver productos
+              </Link>
+            </Empty>
+          )
+        ) : products.length ? (
+          <Records
+            items={products}
+            columns={cols}
+            base="/admin/productos"
+            title={(r) => r.name}
+          />
+        ) : (
+          <Empty title="Añade tu primer producto" />
+        )}
+      </div>
       {editing !== undefined && (
         <Modal
           title={editing ? "Editar producto" : "Nuevo producto"}

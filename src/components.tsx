@@ -1,4 +1,12 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  useCallback,
+  Suspense,
+  useLayoutEffect,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import {
   ArrowLeft,
@@ -16,6 +24,7 @@ import {
   ShoppingBag,
   Users,
   X,
+  Ellipsis,
 } from "lucide-react";
 import { demoMode, supabase } from "./lib/supabase";
 import { useApp } from "./context";
@@ -270,10 +279,135 @@ export function PortalLayout({ admin = false }: { admin?: boolean }) {
           </span>
         </header>
         <main className="portal-content" id="main" tabIndex={-1}>
-          <Outlet />
+          <Suspense fallback={<Loading />}>
+            <Outlet />
+          </Suspense>
         </main>
       </div>
+      <MobilePortalNavigation
+        admin={admin}
+        canAdmin={isAdmin}
+        canLogout={Boolean(supabase && user)}
+        logout={logout}
+      />
     </div>
+  );
+}
+function MobilePortalNavigation({
+  admin,
+  canAdmin,
+  canLogout,
+  logout,
+}: {
+  admin: boolean;
+  canAdmin: boolean;
+  canLogout: boolean;
+  logout: () => Promise<void>;
+}) {
+  const [open, setOpen] = useState(false);
+  const close = useCallback(() => setOpen(false), []);
+  const location = useLocation();
+  useEffect(() => setOpen(false), [location.pathname]);
+  const items = admin ? adminNav : clientNav;
+  const primary = admin
+    ? [adminNav[0], adminNav[2], adminNav[3], adminNav[4]]
+    : [clientNav[0], clientNav[2], clientNav[1], clientNav[4]];
+  const isPrimary = primary.some(([, path]) =>
+    path === "/admin" || path === "/cuenta"
+      ? location.pathname === path
+      : location.pathname === path || location.pathname.startsWith(path + "/"),
+  );
+  return (
+    <>
+      <nav
+        className="mobile-bottom-nav"
+        aria-label={
+          admin
+            ? "Accesos rápidos de administración"
+            : "Accesos rápidos de mi cuenta"
+        }
+      >
+        {primary.map(([name, path, Icon]) => (
+          <NavLink
+            key={path}
+            to={path}
+            end={path === "/admin" || path === "/cuenta"}
+          >
+            <Icon size={21} />
+            <span>
+              {path === "/admin" || path === "/cuenta"
+                ? "Inicio"
+                : path.endsWith("/licencias")
+                  ? "Licencias"
+                  : path.endsWith("/pedidos")
+                    ? "Pedidos"
+                    : name}
+            </span>
+          </NavLink>
+        ))}
+        <button
+          type="button"
+          className={!isPrimary ? "more-active" : ""}
+          aria-label="Más opciones"
+          aria-expanded={open}
+          aria-haspopup="dialog"
+          onClick={() => setOpen(true)}
+        >
+          <Ellipsis size={22} />
+          <span>Más</span>
+        </button>
+      </nav>
+      {open && (
+        <Modal
+          title={admin ? "Todas las secciones" : "Tu espacio"}
+          close={close}
+          className="mobile-navigation-sheet"
+        >
+          <nav className="mobile-sections" aria-label="Todas las secciones">
+            {items.map(([name, path, Icon]) => (
+              <NavLink
+                key={path}
+                to={path}
+                end={path === "/admin" || path === "/cuenta"}
+                onClick={close}
+              >
+                <Icon size={21} />
+                <span>{name}</span>
+                <ArrowRight size={15} />
+              </NavLink>
+            ))}
+          </nav>
+          <div className="mobile-menu-footer">
+            {canAdmin && (
+              <Link
+                className="button secondary"
+                to={admin ? "/cuenta" : "/admin"}
+                onClick={close}
+              >
+                <LayoutDashboard size={17} />
+                {admin ? "Ir a mi cuenta" : "Administración"}
+              </Link>
+            )}
+            <Link className="button secondary" to="/" onClick={close}>
+              <ArrowLeft size={17} />
+              Volver a la tienda
+            </Link>
+            {canLogout && (
+              <button
+                className="button secondary"
+                onClick={() => {
+                  close();
+                  void logout();
+                }}
+              >
+                <LogOut size={17} />
+                Cerrar sesión
+              </button>
+            )}
+          </div>
+        </Modal>
+      )}
+    </>
   );
 }
 export function PageHeading({
@@ -351,14 +485,20 @@ export function Modal({
   title,
   children,
   close,
+  className = "",
 }: {
   title: string;
   children: ReactNode;
   close: () => void;
+  className?: string;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
-  useEffect(() => {
+  useLayoutEffect(() => {
     const d = ref.current!;
+    const previous =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
     d.showModal();
     const onCancel = (e: Event) => {
       e.preventDefault();
@@ -368,10 +508,15 @@ export function Modal({
     return () => {
       d.removeEventListener("cancel", onCancel);
       d.close();
+      if (previous?.isConnected) previous.focus({ preventScroll: true });
     };
   }, [close]);
   return (
-    <dialog ref={ref} className="modal" aria-labelledby="modal-title">
+    <dialog
+      ref={ref}
+      className={`modal ${className}`}
+      aria-labelledby="modal-title"
+    >
       <div className="modal-title">
         <h2 id="modal-title">{title}</h2>
         <button

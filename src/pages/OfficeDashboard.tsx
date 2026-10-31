@@ -286,25 +286,22 @@ export function OfficeDashboard() {
                 {series.length > 0 && (
                   <details className="data-disclosure">
                     <summary>Ver importes por día</summary>
-                    <div className="table-wrap">
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>Día</th>
-                            <th>Pagos</th>
-                            <th>Devoluciones</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {series.map((s) => (
-                            <tr key={s.day}>
-                              <td>{s.day}</td>
-                              <td>{money(s.gross)}</td>
-                              <td>{money(s.refunds)}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                    <div className="daily-totals">
+                      {series.map((s) => (
+                        <article key={s.day}>
+                          <strong>{dateOnly(s.day + "T12:00:00")}</strong>
+                          <dl>
+                            <div>
+                              <dt>Pagos</dt>
+                              <dd>{money(s.gross)}</dd>
+                            </div>
+                            <div>
+                              <dt>Devoluciones</dt>
+                              <dd>{money(s.refunds)}</dd>
+                            </div>
+                          </dl>
+                        </article>
+                      ))}
                     </div>
                   </details>
                 )}

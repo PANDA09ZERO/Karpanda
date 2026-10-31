@@ -116,7 +116,7 @@ Las pruebas no cobran dinero ni verifican entrega de correos reales. Además de 
 - `/admin/licencias`: emisión manual, renovación, límites, suspensión, revocación y archivo reversible.
 - `/admin/pedidos/:id`: importes históricos, movimientos externos, notas y licencias relacionadas.
 - `/admin/soporte/:id`: conversación, notas internas, asignación, prioridad y resolución/reapertura.
-- En móvil, cada registro se muestra como una tarjeta independiente; las tablas se conservan en escritorio.
+- Cada registro se muestra como una tarjeta independiente en escritorio, tableta y móvil. Tocar la tarjeta abre su ficha; los enlaces al cliente siguen funcionando por separado. En teléfonos, una barra inferior permite acceder a Inicio, Pedidos, Licencias y Soporte; Más abre las demás secciones y las opciones de cuenta.
 
 `kp-office` y `kp-accounts` validan el token y el perfil actual en cada petición. Las políticas RLS también consultan el perfil actual: desactivar o quitar un rol no depende de la caducidad de un JWT anterior. Los clientes solo consultan sus registros y las conversaciones públicas. La auditoría no admite modificaciones desde el cliente.
 

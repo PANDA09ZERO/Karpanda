@@ -126,10 +126,10 @@ test("contraseña personal: no repite cambio inicial y muestra gestión de usuar
     page.getByRole("heading", { name: "Gestión de usuarios" }),
   ).toBeVisible();
   await expect(
-    page.getByRole("cell", { name: "qa@example.invalid", exact: true }),
+    page.locator(".record-card").filter({ hasText: "qa@example.invalid" }),
   ).toBeVisible();
   await expect(
-    page.getByRole("cell", { name: "otro@example.invalid", exact: true }),
+    page.locator(".record-card").filter({ hasText: "otro@example.invalid" }),
   ).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "Cambiar mi contraseña" }),

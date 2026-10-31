@@ -137,10 +137,22 @@ export function ClientHome() {
       ) : licenses.length ? (
         <div className="license-list">
           {licenses.map((l) => (
-            <article className="panel license" key={l.id}>
+            <article className="panel license software-access-card" key={l.id}>
               <div>
                 <Status status={demoMode ? "demo" : l.status} />
-                <h2>{l.product_name}</h2>
+                <h2>
+                  {demoMode ? (
+                    l.product_name
+                  ) : (
+                    <Link
+                      className="record-main-link"
+                      to={`/cuenta/licencias/${l.id}`}
+                      aria-label={`Ver detalle: ${l.product_name}`}
+                    >
+                      {l.product_name}
+                    </Link>
+                  )}
+                </h2>
                 <p className="muted">
                   {l.plan_name || "Plan Empresa"} · hasta {l.user_limit || 5}{" "}
                   usuarios

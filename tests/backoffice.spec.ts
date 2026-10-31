@@ -150,9 +150,9 @@ test("móvil: cada registro tiene su tarjeta y los detalles no desbordan", async
     await page.goto(path);
     await expect(page.locator("h1")).toBeVisible();
     await expect(
-      page.locator(".mobile-records .record-card").first(),
+      page.locator(".record-grid .record-card").first(),
     ).toBeVisible();
-    await expect(page.locator(".desktop-records")).not.toBeVisible();
+    await expect(page.getByRole("table")).toHaveCount(0);
     expect(
       await page.evaluate(
         () => document.documentElement.scrollWidth <= innerWidth,
@@ -192,4 +192,127 @@ test("móvil: cada registro tiene su tarjeta y los detalles no desbordan", async
     fullPage: true,
   });
   expect(errors).toEqual([]);
+});
+
+test("tarjetas: tocar el fondo y usar teclado abre el detalle correcto", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/admin/pedidos");
+  await expect(page.getByRole("table")).toHaveCount(0);
+  const card = page.locator(".record-grid .record-card").first();
+  await expect(card).toBeVisible();
+  await card.click({ position: { x: 18, y: 18 } });
+  await expect(page).toHaveURL(new RegExp(`/admin/pedidos/${order}`));
+  await page.goto("/admin/pedidos");
+  await page.locator(".record-main-link").first().focus();
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(new RegExp(order));
+  await page.goto("/admin/pedidos");
+  await page
+    .locator(".record-card dd")
+    .getByRole("link", { name: "Empresa de prueba" })
+    .click();
+  await expect(page).toHaveURL(new RegExp(`/admin/clientes/${client}`));
+  await page.goto("/admin/productos");
+  await page
+    .locator(".record-card")
+    .first()
+    .click({ position: { x: 18, y: 18 } });
+  await expect(
+    page.getByRole("heading", { name: "Información del producto" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Editar producto" }),
+  ).toBeVisible();
+  await page.goto("/admin/pedidos");
+  await expect(page.locator(".record-grid .record-card").first()).toBeVisible();
+  await page.screenshot({
+    path: "test-results/records-cards-desktop.png",
+    fullPage: true,
+  });
+});
+
+test("barra inferior: navegación, detalle activo y Más en administración y cliente", async ({
+  page,
+}) => {
+  test.setTimeout(60000);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/admin/licencias");
+  const bar = page.getByRole("navigation", {
+    name: "Accesos rápidos de administración",
+  });
+  await expect(bar).toBeVisible();
+  await expect(bar.getByRole("link", { name: "Licencias" })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+  await bar.getByRole("link", { name: "Pedidos" }).click();
+  await expect(page).toHaveURL(/\/admin\/pedidos$/);
+  await page.locator(".record-main-link").first().click();
+  await expect(bar.getByRole("link", { name: "Pedidos" })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+  await bar.getByRole("button", { name: "Más opciones" }).click();
+  const sheet = page.getByRole("dialog");
+  await expect(sheet).toBeVisible();
+  await sheet.getByRole("link", { name: "Clientes", exact: true }).click();
+  await expect(sheet).toHaveCount(0);
+  await expect(page).toHaveURL(/\/admin\/clientes$/);
+  await expect(bar.getByRole("button", { name: "Más opciones" })).toHaveClass(
+    /more-active/,
+  );
+  await bar.getByRole("button", { name: "Más opciones" }).click();
+  await page.keyboard.press("Escape");
+  await expect(sheet).toHaveCount(0);
+  await expect(bar.getByRole("button", { name: "Más opciones" })).toBeFocused();
+  await bar.getByRole("button", { name: "Más opciones" }).click();
+  await sheet.getByRole("link", { name: "Usuarios", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Gestión de usuarios" }),
+  ).toBeVisible();
+  await page.screenshot({
+    path: "test-results/records-cards-phone.png",
+    fullPage: true,
+  });
+  await bar.getByRole("button", { name: "Más opciones" }).click();
+  await page.screenshot({ path: "test-results/bottom-navigation-more.png" });
+  await page.keyboard.press("Escape");
+  for (const width of [320, 360, 390, 767]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto("/admin/pedidos");
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBeTruthy();
+    const box = await bar.boundingBox();
+    expect(box).not.toBeNull();
+    expect(Math.round(box!.y + box!.height)).toBe(844);
+  }
+  await page.goto("/cuenta/pedidos");
+  const clientBar = page.getByRole("navigation", {
+    name: "Accesos rápidos de mi cuenta",
+  });
+  await expect(clientBar).toBeVisible();
+  await clientBar.getByRole("button", { name: "Más opciones" }).click();
+  await page
+    .getByRole("dialog")
+    .getByRole("link", { name: "Mi cuenta", exact: true })
+    .click();
+  await expect(page).toHaveURL(/\/cuenta\/perfil$/);
+  await clientBar.getByRole("button", { name: "Más opciones" }).click();
+  await page
+    .getByRole("dialog")
+    .getByRole("link", { name: "Contraseña", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Cambiar mi contraseña" }),
+  ).toBeVisible();
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await expect(clientBar).not.toBeVisible();
+  await expect(
+    page.getByRole("navigation", { name: "Área del cliente", exact: true }),
+  ).toBeVisible();
 });

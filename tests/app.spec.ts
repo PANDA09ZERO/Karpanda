@@ -21,7 +21,9 @@ test("catálogo → producto → compra → pedidos → licencia persistente", a
   await page.getByLabel("Nombre o razón social").fill("Empresa de prueba");
   await page.getByLabel("Correo de acceso").fill("prueba@example.com");
   await page.getByRole("button", { name: "Simular compra" }).click();
-  await expect(page.getByRole("cell", { name: "Simulado" })).toBeVisible();
+  await expect(
+    page.locator(".record-card").filter({ hasText: "Simulado" }),
+  ).toBeVisible();
   await page.getByRole("link", { name: "Mi software", exact: true }).click();
   await expect(
     page.getByRole("button", { name: "Abrir mi software" }),
@@ -44,11 +46,12 @@ test("administración guarda edición y publica productos en el catálogo", asyn
   page,
 }) => {
   await page.goto("/admin/productos");
-  await page.getByRole("button", { name: "Editar" }).first().click();
+  await page.locator(".record-main-link").first().click();
+  await page.getByRole("button", { name: "Editar producto" }).click();
   await page.getByLabel("Nombre", { exact: true }).fill("Karpanda Ventas Pro");
   await page.getByLabel("Precio mensual en soles").fill("210");
   await page.getByRole("button", { name: "Guardar producto" }).click();
-  await expect(page.getByRole("cell", { name: "S/ 210.00" })).toBeVisible();
+  await expect(page.getByText("S/ 210.00", { exact: true })).toBeVisible();
   await page
     .getByRole("button", { name: "Retirar Karpanda Ventas Pro" })
     .click();
