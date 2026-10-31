@@ -16,6 +16,7 @@ import { Loading, PageHeading } from "../components";
 import { dateOnly, dateTime, shortId, type OfficeRow } from "../lib/office";
 import { money } from "../lib/data";
 import { useRemote } from "../lib/useRemote";
+import { activityTitle } from "../lib/activity";
 type DashboardData = {
   metrics: Record<string, number>;
   previous: Record<string, number>;
@@ -435,7 +436,11 @@ export function OfficeDashboard() {
                           <ArrowUpRight size={18} />
                         </span>
                         <div>
-                          <strong>{a.message || a.action}</strong>
+                          <strong>
+                            {activityTitle(
+                              a as import("../lib/office").Activity,
+                            )}
+                          </strong>
                           <small>
                             {a.actor_name || "Sistema"} · {shortId(a.entity_id)}
                           </small>

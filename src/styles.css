@@ -4168,3 +4168,87 @@ button {
     transition: none;
   }
 }
+/* Readable activity history: business fields instead of database snapshots. */
+.history-changes {
+  display: grid;
+  gap: 0;
+  margin: 14px 0 0;
+  border: 1px solid #e3eade;
+  background: #f8faf5;
+  border-radius: 13px;
+  padding: 4px 14px;
+}
+.history-changes > div {
+  display: grid;
+  grid-template-columns: 145px minmax(0, 1fr);
+  align-items: start;
+  gap: 16px;
+  padding: 11px 0;
+  border-bottom: 1px solid #e5ebdf;
+}
+.history-changes > div:last-child {
+  border-bottom: 0;
+}
+.history-changes dt {
+  color: #6b7c65;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.history-changes dd {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px 12px;
+  min-width: 0;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.history-before,
+.history-after {
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  max-width: 100%;
+  min-width: 0;
+}
+.history-before {
+  color: #75816e;
+}
+.history-after {
+  color: #284e37;
+  font-weight: 700;
+}
+.history-changes dd > svg {
+  color: #829176;
+  flex-shrink: 0;
+}
+.history-note {
+  margin: 12px 0 0;
+  padding: 12px 15px;
+  background: #fff8e8;
+  border-left: 3px solid #dac78e;
+  color: #6d623d;
+  border-radius: 0 10px 10px 0;
+  font-size: 12px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 640px) {
+  .history-changes {
+    padding: 3px 12px;
+  }
+  .history-changes > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 5px;
+  }
+  .history-changes dd {
+    font-size: 11px;
+    gap: 6px 9px;
+  }
+  .audit-timeline .internal-tag {
+    margin-top: 5px;
+  }
+  .history-note {
+    font-size: 11px;
+  }
+}

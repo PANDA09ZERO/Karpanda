@@ -11,6 +11,7 @@ export type Activity = {
   created_at: string;
   internal?: boolean;
   actor_name?: string;
+  actor_id?: string;
   changes?: Record<string, any>;
 };
 export type Listing = {

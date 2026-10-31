@@ -3,6 +3,13 @@ import { Link, useSearchParams } from "react-router-dom";
 import { ArrowDown, ArrowRight, Check, Filter, Search, X } from "lucide-react";
 import { Modal } from "../components";
 import { dateTime, label, type Activity, type OfficeRow } from "../lib/office";
+import {
+  activityNote,
+  activityTitle,
+  readableChanges,
+  readableHistory,
+  type PeopleNames,
+} from "../lib/activity";
 
 export function StatePill({ state }: { state?: string }) {
   return (
@@ -297,29 +304,70 @@ export function queryFilters(params: URLSearchParams) {
 export function AuditTimeline({
   history,
   title = "Historial",
+  names = {},
 }: {
   history: Activity[];
   title?: string;
+  names?: PeopleNames;
 }) {
+  const people = {
+    ...Object.fromEntries(
+      history
+        .filter((h) => h.actor_id && h.actor_name)
+        .map((h) => [h.actor_id!, h.actor_name!]),
+    ),
+    ...names,
+  };
+  const entries = readableHistory(history);
   return (
     <section className="bento-card">
       <h2>{title}</h2>
-      {history.length ? (
+      {entries.length ? (
         <ol className="audit-timeline">
-          {history.map((h) => (
+          {entries.map((h) => (
             <li key={h.id}>
               <span className="timeline-dot" />
               <div>
-                <strong>{h.message || h.action}</strong>
+                <strong>{activityTitle(h)}</strong>
                 <p>
-                  {h.actor_name || "Sistema"} · {dateTime(h.created_at)}{" "}
-                  {h.internal && <span className="internal-tag">Interno</span>}
+                  {h.actor_name && <>{h.actor_name} · </>}
+                  {dateTime(h.created_at)}{" "}
+                  {h.internal && (
+                    <span className="internal-tag">Solo administradores</span>
+                  )}
                 </p>
-                {h.changes && Object.keys(h.changes).length > 0 && (
-                  <details>
-                    <summary>Ver cambios</summary>
-                    <pre>{JSON.stringify(h.changes, null, 2)}</pre>
-                  </details>
+                {activityNote(h) && (
+                  <blockquote className="history-note">
+                    {activityNote(h)}
+                  </blockquote>
+                )}
+                {readableChanges(h, people).length > 0 && (
+                  <dl className="history-changes">
+                    {readableChanges(h, people).map((change) => (
+                      <div key={change.label}>
+                        <dt>{change.label}</dt>
+                        <dd>
+                          {change.before !== undefined ? (
+                            <>
+                              <span className="history-before">
+                                <span className="sr-only">Antes: </span>
+                                {change.before}
+                              </span>
+                              <ArrowRight size={14} aria-hidden="true" />
+                              <span className="history-after">
+                                <span className="sr-only">Ahora: </span>
+                                {change.after}
+                              </span>
+                            </>
+                          ) : (
+                            <span className="history-after">
+                              {change.after}
+                            </span>
+                          )}
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
                 )}
               </div>
             </li>

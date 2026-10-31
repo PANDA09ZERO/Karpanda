@@ -881,7 +881,15 @@ export function OfficeDetail({
           )}
           <AuditTimeline
             history={data?.history || []}
-            title={admin ? "Historial y auditoría" : "Seguimiento"}
+            title={admin ? "Historial de la actividad" : "Seguimiento"}
+            names={{
+              ...(r.assigned_to && r.assigned_name
+                ? { [r.assigned_to]: r.assigned_name }
+                : {}),
+              ...(r.user_id && r.customer_name
+                ? { [r.user_id]: r.customer_name }
+                : {}),
+            }}
           />
         </div>
         <aside className="detail-secondary">
