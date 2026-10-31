@@ -23,6 +23,7 @@ import { Admin } from "./pages/Admin";
 import { ForcedPasswordChange, PasswordForm } from "./pages/Users";
 import { ServicesPage } from "./pages/PublicMarketing";
 import { PublicAnalytics } from "./components/PublicAnalytics";
+import { PwaPrompt } from "./components/PwaPrompt";
 const OfficeDashboard = lazy(() =>
   import("./pages/OfficeDashboard").then((m) => ({
     default: m.OfficeDashboard,
@@ -106,6 +107,7 @@ function AppRoutes() {
       <NavigationEffects />
       <PublicAnalytics />
       <DemoBanner />
+      <PwaPrompt />
       {error && (
         <div className="global-error" role="alert">
           No pudimos conectar con el catálogo: {error}{" "}

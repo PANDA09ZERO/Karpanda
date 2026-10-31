@@ -4678,3 +4678,71 @@ button {
   outline: 2px solid #5c8c54;
   outline-offset: 3px;
 }
+/* PWA install/update prompt */
+.pwa-prompt {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  background: #ffffff;
+  color: #1f2937;
+  border: 1px solid rgba(18, 91, 72, 0.18);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  font-size: 13px;
+}
+.pwa-prompt-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.pwa-prompt-text strong {
+  font-size: 14px;
+  color: #125b48;
+}
+.pwa-prompt-text span {
+  color: #4b5563;
+  font-size: 12px;
+}
+.pwa-prompt-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.pwa-prompt-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  font-size: 13px;
+}
+.pwa-prompt-dismiss {
+  padding: 4px;
+  color: #6b7280;
+}
+.pwa-prompt-update {
+  background: #125b48;
+  color: #ffffff;
+  border-color: #125b48;
+}
+.pwa-prompt-update .pwa-prompt-text strong,
+.pwa-prompt-update .pwa-prompt-text span {
+  color: #ffffff;
+}
+.pwa-prompt-update .pwa-prompt-btn {
+  background: #ffffff;
+  color: #125b48;
+}
+@media (min-width: 769px) {
+  .pwa-prompt {
+    display: none !important;
+  }
+}
