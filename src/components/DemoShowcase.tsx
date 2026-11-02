@@ -57,12 +57,12 @@ function DemoCards() {
           id: "educacion",
           title: "Tu colegio, conectado.",
           subtitle: "GESTIÓN EDUCATIVA",
-          body: "Conoce Colegio Panda, una demo basada en el proyecto Tesis: alumnos, asistencia, notas y libretas.",
+          body: "Explora Colegio Panda: alumnos, profesores, familias, matrículas, pagos, horarios y gestión académica.",
           Icon: GraduationCap,
           items: [
             "Dashboard académico propio",
-            "Alumnos, asistencia y calificaciones",
-            "Libreta con datos de ejemplo",
+            "Matrículas y pagos conectados",
+            "Asistencia, notas, libretas y reportes",
           ],
         },
         {

@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, useCallback, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowLeft,
@@ -14,7 +14,14 @@ import {
   Users,
   BookOpen,
   FileText,
+  School,
+  CalendarRange,
+  CreditCard,
+  Bell,
+  ChartNoAxesCombined,
+  MoreHorizontal,
 } from "lucide-react";
+import { Modal } from "./Modal";
 import { measurementConfigured, settingsEvent } from "../lib/analytics";
 
 export function DemoSystem({
@@ -32,6 +39,8 @@ export function DemoSystem({
 }) {
   const sales = kind === "ventas";
   const education = kind === "educacion";
+  const [moreOpen, setMoreOpen] = useState(false);
+  const closeMore = useCallback(() => setMoreOpen(false), []);
   const brand = education
     ? "Colegio Panda"
     : sales
@@ -46,6 +55,12 @@ export function DemoSystem({
         { id: "students", label: "Alumnos", Icon: Users },
         { id: "academic", label: "Académico", Icon: BookOpen },
         { id: "documents", label: "Documentos", Icon: FileText },
+        { id: "institution", label: "Profesores y familias", Icon: Users },
+        { id: "planning", label: "Cursos y horarios", Icon: CalendarRange },
+        { id: "enrollment", label: "Matrículas", Icon: School },
+        { id: "payments", label: "Pagos", Icon: CreditCard },
+        { id: "alerts", label: "Alertas", Icon: Bell },
+        { id: "reports", label: "Reportes", Icon: ChartNoAxesCombined },
       ]
     : sales
       ? [
@@ -100,10 +115,10 @@ export function DemoSystem({
             {education ? "MI INSTITUCIÓN" : "MI NEGOCIO"}
           </p>
           <nav aria-label="Menú del sistema de demostración">
-            {items.map(({ id, label, Icon }) => (
+            {items.map(({ id, label, Icon }, index) => (
               <button
                 key={id}
-                className={view === id ? "active" : ""}
+                className={`${view === id ? "active" : ""} ${education && index > 3 ? "ds-extra-nav" : ""}`}
                 aria-current={view === id ? "page" : undefined}
                 onClick={() => onView(id)}
               >
@@ -111,6 +126,17 @@ export function DemoSystem({
                 <span>{label}</span>
               </button>
             ))}
+            {education && (
+              <button
+                className={`ds-more-nav ${items.slice(4).some((i) => i.id === view) ? "active" : ""}`}
+                aria-label="Más módulos del colegio"
+                aria-haspopup="dialog"
+                onClick={() => setMoreOpen(true)}
+              >
+                <MoreHorizontal size={19} />
+                <span>Más</span>
+              </button>
+            )}
           </nav>
           <div className="ds-sidebar-note">
             <CircleHelp size={20} />
@@ -168,6 +194,29 @@ export function DemoSystem({
           </div>
         </div>
       </div>
+      {moreOpen && (
+        <Modal
+          title="Módulos del colegio"
+          close={closeMore}
+          className="ds-school-menu"
+        >
+          <div className="ds-more-grid">
+            {items.slice(4).map(({ id, label, Icon }) => (
+              <button
+                key={id}
+                className={view === id ? "active" : ""}
+                onClick={() => {
+                  onView(id);
+                  closeMore();
+                }}
+              >
+                <Icon size={23} />
+                <span>{label}</span>
+              </button>
+            ))}
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }

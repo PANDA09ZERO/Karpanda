@@ -17,6 +17,12 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { DemoSystem } from "../components/DemoSystem";
+import {
+  SchoolModules,
+  SchoolOverview,
+  SchoolDocumentChecklist,
+} from "../components/SchoolModules";
+import { useSchoolOffice } from "../lib/schoolOffice";
 import { trackDemoAction } from "../lib/analytics";
 import { localDay } from "../lib/demoData";
 import {
@@ -32,6 +38,9 @@ import {
 } from "../lib/demoSchoolData";
 
 export function EducationDemo() {
+  const office = useSchoolOffice();
+  const [editingStudent, setEditingStudent] = useState<number | null>(null);
+  const [resetKey, setResetKey] = useState(0);
   const [view, setView] = useState("dashboard"),
     [students, setStudents] = useState<SchoolStudent[]>(() =>
       schoolStudents.map((s) => ({ ...s })),
@@ -78,7 +87,10 @@ export function EducationDemo() {
   const shown = students.filter((s) => group === "Todos" || s.group === group);
   const selected = students.find((s) => s.id === reportStudent) || students[0];
   function navigate(v: string) {
-    setView(v);
+    if (v === "attendance" || v === "grades") {
+      setTab(v);
+      setView("academic");
+    } else setView(v);
     setError("");
   }
   function start() {
@@ -90,6 +102,9 @@ export function EducationDemo() {
     );
   }
   function reset() {
+    office.reset();
+    setEditingStudent(null);
+    setResetKey((prev) => prev + 1);
     setStudents(schoolStudents.map((s) => ({ ...s })));
     setAttendance({ ...schoolAttendance });
     setAttendanceDraft({ ...schoolAttendance });
@@ -139,8 +154,33 @@ export function EducationDemo() {
       setError("Escribe un alias ficticio de al menos dos caracteres.");
       return;
     }
+    if (editingStudent !== null) {
+      setStudents((prev) =>
+        prev.map((s) =>
+          s.id === editingStudent
+            ? {
+                ...s,
+                name,
+                group: office.registrations.some(
+                  (r) => r.student === s.id && r.active,
+                )
+                  ? s.group
+                  : newGroup,
+              }
+            : s,
+        ),
+      );
+      office.log("Datos del alumno ficticio actualizados.");
+      setEditingStudent(null);
+      setAdding(false);
+      setAlias("");
+      setError("");
+      setNotice("Datos del alumno actualizados en la demo.");
+      return;
+    }
     const id = Math.max(...students.map((s) => s.id)) + 1;
     setStudents((prev) => [...prev, { id, name, group: newGroup }]);
+    office.log(`Alumno ficticio ${name} agregado al directorio.`);
     setAttendanceDraft((prev) => ({ ...prev, [id]: "pending" }));
     setAlias("");
     setAdding(false);
@@ -165,6 +205,7 @@ export function EducationDemo() {
       ...Object.fromEntries(shown.map((s) => [s.id, attendanceDraft[s.id]])),
     }));
     setSavedAttendance(true);
+    office.log(`Asistencia guardada para ${shown.length} alumnos.`);
     setError("");
     setNotice(
       "Asistencia guardada en la demo. El dashboard y los expedientes se actualizaron.",
@@ -198,6 +239,7 @@ export function EducationDemo() {
       ),
     }));
     setSavedGrades(true);
+    office.log(`Calificaciones de ${course} guardadas.`);
     setError("");
     setNotice(
       "Calificaciones guardadas. Puedes ver los resultados en la libreta de ejemplo.",
@@ -255,8 +297,9 @@ export function EducationDemo() {
         <GraduationCap size={20} />
         <p>
           Colegio y alumnos ficticios. Usa solo alias de ejemplo. Los cambios
-          viven en esta pestaña y se reinician al salir. Esta demo presenta sus
-          módulos principales, no todos sus roles o funciones.
+          viven en esta pestaña y se reinician al salir. Explora también
+          matrículas, pagos de ejemplo, horarios, familias y reportes desde el
+          menú.
         </p>
       </div>
       <ol className="demo-steps" aria-label="Pasos de la demostración">
@@ -450,6 +493,13 @@ export function EducationDemo() {
                 <ArrowRight size={18} />
               </button>
             </div>
+            <SchoolOverview
+              office={office}
+              students={students}
+              attendance={attendance}
+              grades={grades}
+              navigate={navigate}
+            />
           </>
         )}
         {view === "students" && (
@@ -467,6 +517,8 @@ export function EducationDemo() {
                 className="button"
                 aria-expanded={adding}
                 onClick={() => {
+                  setEditingStudent(null);
+                  setAlias("");
                   setAdding(!adding);
                   setError("");
                 }}
@@ -491,6 +543,12 @@ export function EducationDemo() {
                   Grado de ejemplo
                   <select
                     value={newGroup}
+                    disabled={
+                      editingStudent !== null &&
+                      office.registrations.some(
+                        (r) => r.student === editingStudent && r.active,
+                      )
+                    }
                     onChange={(e) => setNewGroup(e.target.value)}
                   >
                     {schoolGroups.map((g) => (
@@ -499,7 +557,9 @@ export function EducationDemo() {
                   </select>
                 </label>
                 <button className="button" type="submit">
-                  Guardar alumno
+                  {editingStudent !== null
+                    ? "Guardar cambios"
+                    : "Guardar alumno"}
                 </button>
               </form>
             )}
@@ -531,7 +591,11 @@ export function EducationDemo() {
                             .join("")}
                         </span>
                         <span className="state-pill state-active">
-                          Matriculado (demo)
+                          {office.registrations.some(
+                            (r) => r.student === s.id && r.active,
+                          )
+                            ? "Matriculado (demo)"
+                            : "Sin matrícula activa"}
                         </span>
                         <h3>{s.name}</h3>
                         <p>{s.group}</p>
@@ -571,6 +635,26 @@ export function EducationDemo() {
                         }}
                       >
                         Ver libreta de este alumno
+                      </button>
+                      <p className="muted">
+                        Familias:{" "}
+                        {office.families
+                          .filter((f) => f.students.includes(s.id))
+                          .map((f) => f.name)
+                          .join(", ") || "Sin vincular"}
+                      </p>
+                      <button
+                        className="button secondary full"
+                        onClick={() => {
+                          setEditingStudent(s.id);
+                          setAlias(s.name);
+                          setNewGroup(s.group);
+                          setAdding(true);
+                          setError("");
+                          window.scrollTo(0, 0);
+                        }}
+                      >
+                        Editar alumno de ejemplo
                       </button>
                     </details>
                   </article>
@@ -828,6 +912,12 @@ export function EducationDemo() {
                   <Download size={17} />
                   Descargar resumen de texto
                 </button>
+                <button
+                  className="button secondary"
+                  onClick={() => window.print()}
+                >
+                  Imprimir libreta de ejemplo
+                </button>
               </article>
             ) : (
               <div className="ds-card ds-empty">
@@ -841,6 +931,18 @@ export function EducationDemo() {
             )}
           </section>
         )}
+        {view === "documents" && (
+          <SchoolDocumentChecklist office={office} students={students} />
+        )}
+        <SchoolModules
+          key={resetKey}
+          view={view}
+          office={office}
+          students={students}
+          attendance={attendance}
+          grades={grades}
+          navigate={navigate}
+        />
         {error && (
           <p className="error" role="alert">
             {error}

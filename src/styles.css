@@ -7372,3 +7372,450 @@ button {
   font-size: 10px;
   line-height: 1.5;
 }
+
+/* Expanded school demo: connected administration modules. */
+.ds-sidebar nav .ds-more-nav {
+  display: none;
+}
+.demo-system-education .ds-sidebar {
+  overflow-y: auto;
+  gap: 18px;
+}
+.demo-system-education .ds-sidebar nav {
+  gap: 3px;
+}
+.demo-system-education .ds-sidebar nav button {
+  padding: 11px 12px;
+  min-height: 40px;
+}
+.edu-office-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+.edu-office-kpis > button,
+.edu-office-kpis > article {
+  border: 1px solid #dbe5ef;
+  background: #fff;
+  padding: 23px;
+  border-radius: 17px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  align-items: start;
+  gap: 13px;
+  color: #6e8caf;
+  min-width: 0;
+}
+.edu-office-kpis small {
+  font-size: 11px;
+  line-height: 1.6;
+}
+.edu-office-kpis strong {
+  font-size: 25px;
+  letter-spacing: -0.7px;
+  color: #243f5f;
+}
+.edu-office-kpis > button:hover {
+  border-color: #97b6d9;
+  background: #fbfcff;
+}
+.edu-office-overview {
+  margin-top: 24px;
+}
+.edu-activity-list {
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 23px;
+  margin: 24px 0 0;
+}
+.edu-activity-list li {
+  display: flex;
+  gap: 13px;
+  align-items: start;
+}
+.edu-activity-list li > span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #8baed2;
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+.edu-activity-list strong {
+  font-size: 11px;
+  line-height: 1.7;
+  display: block;
+  font-weight: 500;
+}
+.edu-activity-list small {
+  display: block;
+  color: #98a7b8;
+  font-size: 9px;
+  margin-top: 4px;
+}
+.edu-module-links {
+  display: grid;
+  gap: 0;
+}
+.edu-module-links > button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  text-align: left;
+  padding: 17px 0;
+  border: 0;
+  border-bottom: 1px solid #e9eef5;
+  background: transparent;
+  font-size: 12px;
+  color: #456a95;
+}
+.edu-module-links > div {
+  padding: 16px 0;
+  border-bottom: 1px solid #e9eef5;
+}
+.edu-module-links strong {
+  font-size: 12px;
+}
+.edu-info-list {
+  font-size: 11px;
+  display: grid;
+  gap: 14px;
+  margin: 22px 0;
+}
+.edu-info-list > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+}
+.edu-info-list dt {
+  color: #8495aa;
+}
+.edu-info-list dd {
+  text-align: right;
+  margin: 0;
+  line-height: 1.6;
+}
+.edu-section-title {
+  margin: 27px 0 20px;
+  font-size: 19px;
+}
+.edu-family-checks {
+  border: 0;
+  padding: 0;
+  display: grid;
+  gap: 13px;
+}
+.edu-family-checks legend {
+  font-size: 11px;
+  color: #7f93ab;
+  margin-bottom: 17px;
+}
+.edu-family-checks label {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: 12px;
+}
+.edu-family-checks input[type="checkbox"],
+.edu-document-check input[type="checkbox"] {
+  width: 17px;
+  min-height: 17px;
+  height: 17px;
+  accent-color: #295c94;
+}
+.edu-school-module .ds-card > .button {
+  margin-top: 16px;
+  font-size: 11px;
+  white-space: normal;
+}
+.edu-school-module .ds-card > small {
+  display: block;
+  font-size: 10px;
+  line-height: 1.7;
+  margin-top: 12px;
+}
+.edu-period-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 22px;
+  margin-bottom: 24px;
+  color: #5e80a8;
+}
+.edu-period-card > div {
+  flex: 1;
+  min-width: 180px;
+}
+.edu-period-card h3 {
+  margin: 0 0 8px;
+}
+.edu-period-card p {
+  margin: 0 0 8px;
+}
+.edu-period-card small {
+  font-size: 10px;
+}
+.edu-schedule-list {
+  display: grid;
+  gap: 15px;
+}
+.edu-schedule-list > article {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+}
+.edu-schedule-list > article > div:nth-child(2) {
+  flex: 1;
+}
+.edu-schedule-list h3 {
+  font-size: 20px;
+  margin: 12px 0 0;
+}
+.edu-schedule-list small {
+  color: #8296ae;
+  font-size: 11px;
+}
+.edu-schedule-list p {
+  margin: 8px 0;
+}
+.edu-schedule-list .button {
+  margin: 0 !important;
+}
+.edu-info-banner {
+  background: #e8f0fa;
+  color: #617f9f;
+  padding: 17px;
+  border-radius: 12px;
+  font-size: 12px;
+  line-height: 1.8;
+}
+.edu-info-banner .text-link {
+  font-size: 12px;
+  display: inline;
+}
+.edu-payment-history {
+  margin: 20px 0;
+  padding-top: 16px;
+  border-top: 1px solid #e5ecf4;
+  font-size: 11px;
+}
+.edu-payment-history summary {
+  color: #456d9c;
+  cursor: pointer;
+}
+.edu-alert-actions {
+  display: flex;
+  gap: 16px;
+  flex-direction: column;
+  align-items: start;
+  margin-top: 22px;
+}
+.edu-alert-actions .text-link {
+  font-size: 11px;
+}
+.edu-alert-actions .button {
+  font-size: 11px;
+}
+.edu-module-form {
+  display: grid;
+  gap: 19px;
+  padding: 12px 0 0;
+}
+.edu-module-form label {
+  display: grid;
+  gap: 9px;
+  font-size: 12px;
+  color: #62768d;
+}
+.edu-module-form .button {
+  margin-top: 8px;
+}
+.edu-module-form p {
+  font-size: 12px;
+}
+.edu-module-form input,
+.edu-module-form select {
+  min-width: 0;
+  width: 100%;
+  min-height: 45px;
+}
+.edu-form-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.edu-role-preview {
+  margin-top: 27px;
+}
+.edu-role-record {
+  padding: 22px;
+  border-radius: 14px;
+  background: #eef3fa;
+  font-size: 12px;
+  color: #59738d;
+}
+.edu-document-checklist {
+  margin-top: 28px;
+}
+.edu-document-checklist > p {
+  color: #7f93ab;
+}
+.edu-document-checklist .ds-record-grid {
+  margin-top: 24px;
+}
+.edu-document-check {
+  display: flex !important;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px !important;
+  margin: 18px 0;
+}
+.edu-document-check small {
+  margin-left: 27px;
+  color: #8c9caf;
+  width: 100%;
+  font-size: 10px;
+}
+.edu-student .button + .button {
+  margin-top: 13px;
+}
+.edu-report > .button {
+  margin: 8px 10px 0 0;
+}
+.ds-more-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.ds-more-grid > button {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  text-align: left;
+  gap: 14px;
+  padding: 20px;
+  border: 1px solid #dfe7f2;
+  border-radius: 14px;
+  background: #f6f9fe;
+  color: #5a7ca4;
+  font-size: 12px;
+}
+.ds-more-grid > button.active {
+  background: #e6eef9;
+  border-color: #9cb9d8;
+}
+@media (max-width: 1100px) {
+  .edu-office-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 700px) {
+  .demo-system-education .ds-sidebar nav {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .demo-system-education .ds-sidebar {
+    overflow: visible;
+  }
+  .demo-system-education .ds-sidebar nav button {
+    padding: 9px 2px;
+  }
+  .demo-system-education .ds-sidebar nav .ds-extra-nav {
+    display: none;
+  }
+  .demo-system-education .ds-sidebar nav .ds-more-nav {
+    display: flex;
+  }
+  .edu-office-kpis {
+    gap: 11px;
+  }
+  .edu-office-kpis > button,
+  .edu-office-kpis > article {
+    padding: 18px 14px;
+  }
+  .edu-office-kpis strong {
+    font-size: 23px;
+  }
+  .edu-office-kpis small {
+    font-size: 10px;
+  }
+  .edu-schedule-list > article {
+    align-items: start;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .edu-schedule-list > article > div {
+    width: 100%;
+  }
+  .edu-schedule-list .button {
+    width: 100%;
+  }
+  .ds-school-menu.modal {
+    width: calc(100% - 24px);
+    padding: 22px;
+    border-radius: 20px;
+    max-height: 80dvh;
+  }
+  .ds-more-grid > button {
+    padding: 17px;
+    font-size: 11px;
+  }
+  .edu-report .button {
+    width: 100%;
+  }
+}
+@media print {
+  body:has(.edu-report) * {
+    visibility: hidden;
+  }
+  body:has(.edu-report) .edu-report,
+  body:has(.edu-report) .edu-report * {
+    visibility: visible;
+  }
+  body:has(.edu-report) .edu-report {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    border: 0;
+    background: #fff;
+  }
+  body:has(.edu-report) .edu-report .button {
+    display: none;
+  }
+}
+@media print {
+  body:has(.edu-report) .demo-banner,
+  body:has(.edu-report) .ds-banner,
+  body:has(.edu-report) .ds-sidebar,
+  body:has(.edu-report) .ds-topbar,
+  body:has(.edu-report) .ds-guide,
+  body:has(.edu-report) .edu-stats,
+  body:has(.edu-report) .edu-period,
+  body:has(.edu-report) .ds-footer,
+  body:has(.edu-report) .edu-document-checklist,
+  body:has(.edu-report) .edu-completed,
+  body:has(.edu-report) .demo-notice,
+  body:has(.edu-report) .ds-module-heading,
+  body:has(.edu-report) .edu-report-controls {
+    display: none !important;
+  }
+  body:has(.edu-report) .ds-layout {
+    display: block;
+  }
+  body:has(.edu-report) .ds-content {
+    padding: 0;
+  }
+  body:has(.edu-report) .demo-system {
+    min-height: 0;
+  }
+  body:has(.edu-report) .edu-report {
+    position: static;
+    padding: 0;
+  }
+}
