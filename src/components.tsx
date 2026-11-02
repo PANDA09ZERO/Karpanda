@@ -99,6 +99,12 @@ export function PublicLayout() {
   useEffect(() => {
     setOpen(false);
   }, [location.pathname]);
+  if (["/demo/ventas", "/demo/reservas"].includes(location.pathname))
+    return (
+      <main id="main" tabIndex={-1}>
+        <Outlet />
+      </main>
+    );
   return (
     <>
       <header className="header">

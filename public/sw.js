@@ -1,5 +1,5 @@
 /* Karpanda PWA service worker */
-const APP_VERSION = "1.1.0";
+const APP_VERSION = "1.1.1";
 const CACHE_NAME = "karpanda-cache-" + APP_VERSION;
 
 const PRECACHE_URLS = [

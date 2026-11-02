@@ -1,0 +1,184 @@
+import { useEffect, type ReactNode } from "react";
+import { Link } from "react-router-dom";
+import {
+  ArrowLeft,
+  ArrowUpRight,
+  LayoutDashboard,
+  ShoppingBag,
+  Package,
+  ReceiptText,
+  CalendarDays,
+  Sparkles,
+  CircleHelp,
+} from "lucide-react";
+import { measurementConfigured, settingsEvent } from "../lib/analytics";
+
+export function DemoSystem({
+  kind,
+  view,
+  onView,
+  guide,
+  children,
+}: {
+  kind: "ventas" | "reservas";
+  view: string;
+  onView: (view: string) => void;
+  guide: ReactNode;
+  children: ReactNode;
+}) {
+  const sales = kind === "ventas";
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [view]);
+  const items = sales
+    ? [
+        { id: "dashboard", label: "Dashboard", Icon: LayoutDashboard },
+        { id: "work", label: "Punto de venta", Icon: ShoppingBag },
+        { id: "inventory", label: "Inventario", Icon: Package },
+        { id: "history", label: "Ventas", Icon: ReceiptText },
+      ]
+    : [
+        { id: "dashboard", label: "Dashboard", Icon: LayoutDashboard },
+        { id: "work", label: "Nueva reserva", Icon: CalendarDays },
+        { id: "agenda", label: "Agenda", Icon: CalendarDays },
+        { id: "services", label: "Servicios y equipo", Icon: Sparkles },
+      ];
+  return (
+    <div
+      className={`demo-system ${sales ? "demo-system-sales" : "demo-system-booking"}`}
+    >
+      <div className="ds-banner">
+        <span>
+          <span className="ds-live-dot" />
+          Sistema de ejemplo · Todo es ficticio
+        </span>
+        <Link to="/demos">
+          <ArrowLeft size={14} /> Salir de la demo
+        </Link>
+      </div>
+      <div className="ds-layout">
+        <aside className="ds-sidebar">
+          <div className="ds-brand">
+            <span>
+              {sales ? <ShoppingBag size={23} /> : <Sparkles size={23} />}
+            </span>
+            <div>
+              <strong>{sales ? "Panda Papelería" : "Estudio Panda"}</strong>
+              <small>
+                {sales ? "Ventas e inventario" : "Agenda y servicios"}
+              </small>
+            </div>
+          </div>
+          <p className="ds-nav-caption">MI NEGOCIO</p>
+          <nav aria-label="Menú del sistema de demostración">
+            {items.map(({ id, label, Icon }) => (
+              <button
+                key={id}
+                className={view === id ? "active" : ""}
+                aria-current={view === id ? "page" : undefined}
+                onClick={() => onView(id)}
+              >
+                <Icon size={19} />
+                <span>{label}</span>
+              </button>
+            ))}
+          </nav>
+          <div className="ds-sidebar-note">
+            <CircleHelp size={20} />
+            <strong>Explora con confianza</strong>
+            <p>Las acciones solo cambian los datos de esta demo.</p>
+            <a
+              href="#demo-guide"
+              onClick={() => {
+                const guide = document.getElementById(
+                  "demo-guide",
+                ) as HTMLDetailsElement | null;
+                if (guide) guide.open = true;
+              }}
+            >
+              Ver instrucciones <ArrowUpRight size={14} />
+            </a>
+          </div>
+          <small className="ds-powered">Un sistema creado con Karpanda</small>
+        </aside>
+        <div className="ds-body">
+          <header className="ds-topbar">
+            <div>
+              <small>
+                {sales ? "PANDA PAPELERÍA" : "ESTUDIO PANDA"} / ESPACIO DE
+                TRABAJO
+              </small>
+              <h1>{items.find((i) => i.id === view)?.label}</h1>
+            </div>
+            <div className="ds-profile">
+              <span>AD</span>
+              <div>
+                <strong>Administrador</strong>
+                <small>Cuenta de ejemplo</small>
+              </div>
+            </div>
+          </header>
+          <div className="ds-content">
+            <details className="ds-guide" id="demo-guide" open>
+              <summary>
+                <CircleHelp size={18} />
+                <span>Tu guía para explorar el sistema</span>
+                <small>Ver / ocultar</small>
+              </summary>
+              <div>{guide}</div>
+            </details>
+            {children}
+            <footer className="ds-footer">
+              <span>Karpanda · Demostración sin cobros ni datos reales.</span>
+              {measurementConfigured && (
+                <button
+                  className="button-plain text-link"
+                  onClick={() => window.dispatchEvent(new Event(settingsEvent))}
+                >
+                  Preferencias de medición
+                </button>
+              )}
+            </footer>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function DemoDashboard({
+  kind,
+  children,
+  action,
+  onAction,
+}: {
+  kind: "ventas" | "reservas";
+  children: ReactNode;
+  action: string;
+  onAction: () => void;
+}) {
+  return (
+    <section className="ds-overview">
+      <div className="ds-welcome">
+        <div>
+          <p className="eyebrow">TU NEGOCIO, DE UN VISTAZO</p>
+          <h2>
+            {kind === "ventas"
+              ? "Cada venta, todo bajo control."
+              : "Una agenda clara. Un día más simple."}
+          </h2>
+          <p>
+            {kind === "ventas"
+              ? "Consulta tus existencias, registra ventas y sigue los resultados en un solo lugar."
+              : "Organiza tus citas, consulta los horarios y conoce los servicios de tu equipo."}
+          </p>
+        </div>
+        <button className="button" onClick={onAction}>
+          {action}
+          <ArrowUpRight size={17} />
+        </button>
+      </div>
+      {children}
+    </section>
+  );
+}

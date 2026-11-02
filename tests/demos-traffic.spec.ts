@@ -4,11 +4,9 @@ test("Ventas: recorrido, comprobante ficticio, stock, límite y reinicio", async
 }) => {
   await page.goto("/demo/ventas");
   await page.getByRole("button", { name: "Comenzar recorrido" }).click();
-  const notebook = page
-    .locator(".demo-product")
-    .filter({
-      has: page.getByRole("heading", { name: "Cuaderno kraft", exact: true }),
-    });
+  const notebook = page.locator(".demo-product").filter({
+    has: page.getByRole("heading", { name: "Cuaderno kraft", exact: true }),
+  });
   await notebook
     .getByRole("button", { name: "Agregar Cuaderno kraft" })
     .click();
@@ -31,7 +29,6 @@ test("Ventas: recorrido, comprobante ficticio, stock, límite y reinicio", async
   for (let i = 0; i < 6; i++) await thermos.click();
   await expect(thermos).toBeDisabled();
   await page.getByRole("button", { name: "Reiniciar demo" }).click();
-  await expect(notebook).toContainText("Stock: 12");
   await expect(
     page.getByRole("button", { name: "Comenzar recorrido" }),
   ).toBeVisible();
@@ -40,6 +37,8 @@ test("Ventas: recorrido, comprobante ficticio, stock, límite y reinicio", async
       .locator(".demo-stat-grid article")
       .filter({ hasText: "Ventas simuladas" }),
   ).toContainText("0");
+  await page.getByRole("button", { name: "Comenzar recorrido" }).click();
+  await expect(notebook).toContainText("Stock: 12");
   expect(
     await page.evaluate(() => localStorage.getItem("karpanda:v1:orders")),
   ).toBeNull();
