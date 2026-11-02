@@ -6,7 +6,8 @@ const INSTALLED_KEY = "karpanda_pwa_installed";
 function isMobileDevice() {
   if (typeof navigator === "undefined") return false;
   const ua = navigator.userAgent || "";
-  const uaMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+  const uaMobile =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
   const touchSmall =
     typeof window !== "undefined" &&
     window.matchMedia("(max-width: 768px)").matches &&
@@ -31,6 +32,7 @@ export function PwaPrompt() {
   const deferredPrompt = useRef<any>(null);
   const registrationRef = useRef<ServiceWorkerRegistration | null>(null);
   const waitingWorker = useRef<ServiceWorker | null>(null);
+  const updateRequested = useRef(false);
 
   useEffect(() => {
     const m = isMobileDevice();
@@ -38,12 +40,27 @@ export function PwaPrompt() {
     const st = isStandalone();
     setInstalled(st || localStorage.getItem(INSTALLED_KEY) === "1");
 
-    // Register service worker
+    let disposed = false;
+    let iosTimer: number | undefined;
+    let refreshing = false;
+    const onControllerChange = () => {
+      if (updateRequested.current && !refreshing) {
+        refreshing = true;
+        window.location.reload();
+      }
+    };
+    navigator.serviceWorker?.addEventListener(
+      "controllerchange",
+      onControllerChange,
+    );
+    // Initial installation must not interrupt the current page or demo.
+    let doRegister = () => {};
     if ("serviceWorker" in navigator) {
-      const doRegister = () => {
+      doRegister = () => {
         navigator.serviceWorker
           .register("/sw.js")
           .then((reg) => {
+            if (disposed) return;
             registrationRef.current = reg;
 
             // If a new worker is already waiting
@@ -67,14 +84,6 @@ export function PwaPrompt() {
             });
           })
           .catch(() => {});
-
-        let refreshing = false;
-        navigator.serviceWorker.addEventListener("controllerchange", () => {
-          if (!refreshing) {
-            refreshing = true;
-            window.location.reload();
-          }
-        });
       };
 
       if (document.readyState === "complete") {
@@ -108,18 +117,28 @@ export function PwaPrompt() {
       /iPhone|iPad|iPod/.test(navigator.userAgent) &&
       /Safari/.test(navigator.userAgent) &&
       !/CriOS|FxiOS|EdgiOS/.test(navigator.userAgent);
-    if (m && isIosSafari && !st && localStorage.getItem(INSTALLED_KEY) !== "1") {
-      const timer = window.setTimeout(() => {
+    if (
+      m &&
+      isIosSafari &&
+      !st &&
+      localStorage.getItem(INSTALLED_KEY) !== "1"
+    ) {
+      iosTimer = window.setTimeout(() => {
         if (!deferredPrompt.current) setShowIosHint(true);
       }, 2500);
-      // store cleanup? effect cleanup handles listeners only; timer cleared on unmount not tracked. Acceptable.
-      void timer;
     }
 
     window.addEventListener("beforeinstallprompt", onBeforeInstall);
     window.addEventListener("appinstalled", onInstalled);
 
     return () => {
+      disposed = true;
+      window.clearTimeout(iosTimer);
+      window.removeEventListener("load", doRegister);
+      navigator.serviceWorker?.removeEventListener(
+        "controllerchange",
+        onControllerChange,
+      );
       window.removeEventListener("beforeinstallprompt", onBeforeInstall);
       window.removeEventListener("appinstalled", onInstalled);
     };
@@ -128,9 +147,12 @@ export function PwaPrompt() {
   // Check for updates periodically (every 60 min) when installed/active
   useEffect(() => {
     if (!mobile) return;
-    const id = window.setInterval(() => {
-      registrationRef.current?.update().catch(() => {});
-    }, 60 * 60 * 1000);
+    const id = window.setInterval(
+      () => {
+        registrationRef.current?.update().catch(() => {});
+      },
+      60 * 60 * 1000,
+    );
     return () => window.clearInterval(id);
   }, [mobile]);
 
@@ -150,6 +172,7 @@ export function PwaPrompt() {
   const handleUpdate = () => {
     const worker = waitingWorker.current || registrationRef.current?.waiting;
     if (worker) {
+      updateRequested.current = true;
       worker.postMessage("SKIP_WAITING");
     } else {
       window.location.reload();
@@ -164,7 +187,11 @@ export function PwaPrompt() {
   // Update banner takes priority
   if (updateAvailable) {
     return (
-      <div className="pwa-prompt pwa-prompt-update" role="status" aria-live="polite">
+      <div
+        className="pwa-prompt pwa-prompt-update"
+        role="status"
+        aria-live="polite"
+      >
         <div className="pwa-prompt-text">
           <strong>Nueva versión disponible</strong>
           <span>Actualiza Karpanda para obtener las últimas mejoras.</span>
@@ -183,11 +210,16 @@ export function PwaPrompt() {
 
   if (showIosHint) {
     return (
-      <div className="pwa-prompt" role="dialog" aria-label="Instalar aplicación">
+      <div
+        className="pwa-prompt"
+        role="dialog"
+        aria-label="Instalar aplicación"
+      >
         <div className="pwa-prompt-text">
           <strong>Instala Karpanda</strong>
           <span>
-            En Safari toca <em>Compartir</em> y luego “Agregar a pantalla de inicio”.
+            En Safari toca <em>Compartir</em> y luego “Agregar a pantalla de
+            inicio”.
           </span>
         </div>
         <div className="pwa-prompt-actions">

@@ -23,10 +23,23 @@ import { Admin } from "./pages/Admin";
 import { ForcedPasswordChange, PasswordForm } from "./pages/Users";
 import { ServicesPage } from "./pages/PublicMarketing";
 import { PublicAnalytics } from "./components/PublicAnalytics";
+import { DemosPage } from "./components/DemoShowcase";
 import { PwaPrompt } from "./components/PwaPrompt";
 const OfficeDashboard = lazy(() =>
   import("./pages/OfficeDashboard").then((m) => ({
     default: m.OfficeDashboard,
+  })),
+);
+
+const SalesDemo = lazy(() =>
+  import("./pages/Demos").then((m) => ({ default: m.SalesDemo })),
+);
+const BookingDemo = lazy(() =>
+  import("./pages/Demos").then((m) => ({ default: m.BookingDemo })),
+);
+const TrafficDashboard = lazy(() =>
+  import("./pages/TrafficDashboard").then((m) => ({
+    default: m.TrafficDashboard,
   })),
 );
 const OfficeDetail = lazy(() =>
@@ -124,6 +137,9 @@ function AppRoutes() {
           <Route element={<PublicLayout />}>
             <Route index element={<Catalog />} />
             <Route path="servicios" element={<ServicesPage />} />
+            <Route path="demos" element={<DemosPage />} />
+            <Route path="demo/ventas" element={<SalesDemo />} />
+            <Route path="demo/reservas" element={<BookingDemo />} />
             <Route path="producto/:slug" element={<Detail />} />
             <Route path="compra/:slug" element={<Checkout />} />
             <Route path="como-funciona" element={<HowItWorks />} />
@@ -186,6 +202,7 @@ function AppRoutes() {
             }
           >
             <Route index element={<OfficeDashboard />} />
+            <Route path="visitas" element={<TrafficDashboard />} />
             <Route path="productos" element={<Admin />} />
             <Route path="productos/:id" element={<Admin />} />
             <Route path="pedidos" element={<OfficeList module="orders" />} />

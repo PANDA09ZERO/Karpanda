@@ -1,6 +1,6 @@
 # Google Analytics 4 en Karpanda
 
-Estado inicial: integración preparada, **sin una propiedad ni ID de medición de producción**. Una variable vacía no carga la etiqueta de Google ni muestra el aviso de medición. No hay datos de tráfico reales hasta completar la configuración.
+Google Analytics está configurado con el ID de medición **G-LFW3QXZ3DK**. Solo carga después de aceptar la medición. El panel de Karpanda usa su propio resumen de visitas, independiente de los informes de Google; consulta [Demos y visitas](DEMOS_Y_VISITAS.md). Una variable de Google vacía desactiva Google, pero no la medición propia si está habilitada.
 
 ## Activación
 
@@ -21,6 +21,7 @@ Guía oficial: [Configurar Analytics para una web](https://support.google.com/an
 - `view_service`: interés por uno de los servicios propuestos.
 - `consult_service`: copia del resumen de proyecto, **sin enviar el resumen**. Este evento indica interés, no una consulta enviada ni una venta.
 - `open_faq`: apertura de una pregunta frecuente, mediante su identificador fijo.
+- `demo_start`, `demo_step`, `demo_complete`, `demo_reset` y `demo_consult`: interacciones con las demostraciones públicas de ventas y reservas, mediante identificadores fijos. Las ventas y reservas son ficticias.
 
 No hay eventos de compra ni ingresos porque este sitio no procesa cobros. No se envían nombres, correos, contraseñas, mensajes, datos de pedidos o identificadores de usuarios con esta integración. No se mide `/admin`, `/cuenta`, `/acceso`, `/cambiar-contrasena`, `/compra` ni las conversaciones de soporte. Al entrar en una ruta excluida, se deshabilita el destino de Analytics.
 

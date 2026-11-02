@@ -25,12 +25,13 @@ import {
   Users,
   X,
   Ellipsis,
+  ChartNoAxesCombined,
 } from "lucide-react";
 import { demoMode, supabase } from "./lib/supabase";
 import { useApp } from "./context";
 import { money } from "./lib/data";
 import type { Product } from "./types";
-import { analyticsConfigured, settingsEvent } from "./lib/analytics";
+import { measurementConfigured, settingsEvent } from "./lib/analytics";
 export const logo = "/assets/karpanda-logo.png";
 export const pandas = "/assets/karpanda-pandas.png";
 export function Brand() {
@@ -121,6 +122,7 @@ export function PublicLayout() {
               Inicio
             </NavLink>
             <NavLink to="/servicios">Servicios</NavLink>
+            <NavLink to="/demos">Demos</NavLink>
             <a href="/#soluciones">Catálogo</a>
             <NavLink to="/como-funciona">Cómo funciona</NavLink>
             <NavLink to="/soporte">Soporte</NavLink>
@@ -147,10 +149,11 @@ export function Footer() {
       </div>
       <nav aria-label="Pie de página">
         <Link to="/servicios">Servicios a medida</Link>
+        <Link to="/demos">Probar las demos</Link>
         <Link to="/como-funciona">Cómo funciona</Link>
         <Link to="/soporte">Soporte</Link>
         <Link to="/terminos">Términos y privacidad</Link>
-        {analyticsConfigured && (
+        {measurementConfigured && (
           <button
             className="button-plain privacy-settings"
             onClick={() => window.dispatchEvent(new Event(settingsEvent))}
@@ -202,6 +205,7 @@ const adminNav = [
   ["Soporte", "/admin/soporte", LifeBuoy],
   ["Usuarios", "/admin/usuarios", Users],
   ["Clientes", "/admin/clientes", Users],
+  ["Visitas de la web", "/admin/visitas", ChartNoAxesCombined],
 ] as const;
 export function PortalLayout({ admin = false }: { admin?: boolean }) {
   const { user, notify, isAdmin } = useApp();

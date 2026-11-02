@@ -17,6 +17,7 @@ import { dateOnly, dateTime, shortId, type OfficeRow } from "../lib/office";
 import { money } from "../lib/data";
 import { useRemote } from "../lib/useRemote";
 import { activityTitle } from "../lib/activity";
+import { TrafficTeaser } from "../components/TrafficTeaser";
 type DashboardData = {
   metrics: Record<string, number>;
   previous: Record<string, number>;
@@ -123,6 +124,7 @@ export function OfficeDashboard() {
           )}
         </div>
       </div>
+      <TrafficTeaser />
       {error ? (
         <div className="error" role="alert">
           {error}{" "}

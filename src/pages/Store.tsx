@@ -28,6 +28,7 @@ import {
   WorkingMethod,
 } from "./PublicMarketing";
 import { trackPublicAction } from "../lib/analytics";
+import { DemoPreview } from "../components/DemoShowcase";
 export function Catalog() {
   const { products, loading } = useApp();
   const [category, setCategory] = useState("Todas");
@@ -95,6 +96,7 @@ export function Catalog() {
         </div>
       </div>
       <ServicePreview />
+      <DemoPreview />
       <section className="solutions" id="soluciones">
         <p className="eyebrow">ENCUENTRA TU PUNTO DE PARTIDA</p>
         <h2>Una solución para cada forma de crecer</h2>
@@ -168,6 +170,14 @@ export function Detail() {
         <div>
           <ProductPreview product={p} />
           <section className="features">
+            {["ventas", "reservas"].includes(p.slug) && (
+              <Link
+                className="button secondary product-demo-link"
+                to={`/demo/${p.slug}`}
+              >
+                Probar una demo interactiva <ArrowRight size={17} />
+              </Link>
+            )}
             <h2>
               Todo lo que necesitas para{" "}
               {p.slug === "reservas" ? "organizarte" : "trabajar"} mejor
@@ -421,12 +431,31 @@ export function Terms() {
       </p>
       <h2 id="medicion">Medición de visitas y preferencias</h2>
       <p>
-        Cuando la medición esté activada y la aceptes, Google Analytics 4 podrá
-        ayudarnos a entender las visitas a la página pública, el origen del
-        tráfico y la interacción con el catálogo y los servicios. No utilizamos
-        esta integración para enviar el contenido de tus formularios, tu correo,
-        contraseñas ni datos de pedidos. Las rutas privadas y de acceso se
-        excluyen de nuestra medición de páginas.
+        Cuando la medición esté activada y la aceptes, Karpanda y Google
+        Analytics 4 podrán ayudarnos a entender las visitas a la página pública,
+        el origen del tráfico y la interacción con el catálogo y los servicios.
+        No utilizamos esta integración para enviar el contenido de tus
+        formularios, tu correo, contraseñas ni datos de pedidos. Las rutas
+        privadas y de acceso se excluyen de nuestra medición de páginas.
+      </p>
+      <p>
+        Karpanda mantiene su propio resumen desde esta actualización, separado
+        del historial de Google Analytics. Cuenta páginas, sesiones del
+        navegador y recorridos de demostración; no identifica personas únicas.
+        Para reconocer una sesión se utiliza un identificador aleatorio de esta
+        pestaña que se renueva después de 30 minutos de inactividad. El servidor
+        guarda una huella temporal de la sesión que cambia cada día, categorías
+        de origen y pantalla, y contadores agregados. La huella de red usada
+        para limitar abusos también cambia cada día; no se guardan direcciones
+        IP en texto ni el contenido de los formularios.
+      </p>
+      <p>
+        La limpieza se ejecuta al recibir nuevas mediciones: elimina controles
+        con más de dos horas, comprobantes técnicos de duplicados con más de
+        siete días y sesiones con más de 90 días. Los totales por día y página
+        se conservan para el historial. Las demostraciones usan datos ficticios
+        y sus ventas y reservas solo viven en la pantalla; no se convierten en
+        pedidos reales.
       </p>
       <p>
         Puedes elegir «Solo necesarias», seguir utilizando la web y cambiar tu
@@ -438,9 +467,10 @@ export function Terms() {
       </p>
       <p>
         Si Google Analytics todavía no se ha configurado, esta integración no
-        carga su etiqueta ni envía visitas. Las preferencias de medición son
-        independientes de los datos necesarios para iniciar sesión y utilizar el
-        sistema.
+        carga su etiqueta ni envía visitas a Google. El resumen propio de
+        Karpanda puede funcionar por separado si lo aceptas. Las preferencias de
+        medición son independientes de los datos necesarios para iniciar sesión
+        y utilizar el sistema.
       </p>
     </article>
   );

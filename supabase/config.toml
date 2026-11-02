@@ -8,3 +8,7 @@ verify_jwt = false
 [functions.kp-office]
 # Each request validates its bearer token and current account state.
 verify_jwt = false
+
+[functions.kp-traffic]
+# Anonymous, consented aggregate events only. No read access; origin, payload and rate checks in handler.
+verify_jwt = false

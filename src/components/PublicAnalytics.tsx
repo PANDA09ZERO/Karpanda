@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ChartNoAxesCombined } from "lucide-react";
 import {
-  analyticsConfigured,
+  measurementConfigured,
   consentEvent,
   publicPath,
   readConsent,
@@ -29,7 +29,7 @@ export function PublicAnalytics() {
   useEffect(() => {
     trackPage(pathname, document.title);
   }, [pathname, choice]);
-  if (!analyticsConfigured || !publicPath(pathname) || (choice && !editing))
+  if (!measurementConfigured || !publicPath(pathname) || (choice && !editing))
     return null;
   function choose(value: "accepted" | "rejected") {
     setConsent(value);
@@ -42,9 +42,9 @@ export function PublicAnalytics() {
         <div>
           <strong>Nos ayudas a mejorar Karpanda</strong>
           <p>
-            Con tu permiso, usamos Google Analytics para conocer las visitas y
-            las páginas que más interesan. Puedes navegar sin aceptar y cambiar
-            tu elección en el pie de página.{" "}
+            Con tu permiso, Karpanda y Google Analytics registran visitas y uso
+            de las demos, sin guardar lo que escribas. Puedes navegar sin
+            aceptar y cambiar tu elección en el pie de página.{" "}
             <Link to="/terminos#medicion">Más información</Link>
           </p>
         </div>

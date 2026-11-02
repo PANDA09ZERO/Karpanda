@@ -1,4 +1,28 @@
-type Consent = "accepted" | "rejected" | null;
+import {
+  readConsent,
+  publicPath,
+  writeConsent,
+  consentEvent,
+  type Consent,
+} from "./visitor";
+import {
+  trafficConfigured,
+  trafficPage,
+  trafficDemo,
+  forgetTraffic,
+  type DemoEvent,
+} from "./traffic";
+export {
+  readConsent,
+  publicPath,
+  consentEvent,
+  settingsEvent,
+} from "./visitor";
+export const measurementConfigured =
+  trafficConfigured ||
+  /^G-[A-Z0-9]+$/.test(
+    String(import.meta.env.VITE_GA_MEASUREMENT_ID || "").trim(),
+  );
 declare global {
   interface Window {
     dataLayer?: unknown[];
@@ -8,32 +32,9 @@ declare global {
 }
 const id = String(import.meta.env.VITE_GA_MEASUREMENT_ID || "").trim();
 export const analyticsConfigured = /^G-[A-Z0-9]+$/.test(id);
-const key = "karpanda:analytics-consent:v1";
-export const consentEvent = "karpanda:analytics-consent";
-export const settingsEvent = "karpanda:analytics-settings";
 let initialized = false;
 let lastPath = "";
 let previousPage = "";
-let memoryChoice: Consent = null;
-export function publicPath(path: string) {
-  return (
-    ["/", "/servicios", "/como-funciona", "/terminos"].includes(path) ||
-    /^\/producto\/[a-z0-9-]+$/.test(path)
-  );
-}
-export function readConsent(): Consent {
-  if (memoryChoice) return memoryChoice;
-  try {
-    const value = JSON.parse(localStorage.getItem(key) || "null");
-    return value &&
-      Date.now() - value.at < 180 * 86400000 &&
-      ["accepted", "rejected"].includes(value.choice)
-      ? value.choice
-      : null;
-  } catch {
-    return null;
-  }
-}
 function send(...args: any[]) {
   window.gtag?.(...args);
 }
@@ -50,15 +51,10 @@ function clearCookies() {
   }
 }
 export function setConsent(choice: Exclude<Consent, null>) {
-  try {
-    localStorage.setItem(key, JSON.stringify({ choice, at: Date.now() }));
-    memoryChoice = null;
-  } catch {
-    /* A browser that blocks storage keeps the explicit choice for this tab only. */
-    memoryChoice = choice;
-  }
+  writeConsent(choice);
   if (choice === "rejected") {
     pauseAnalytics();
+    forgetTraffic();
     clearCookies();
   }
   window.dispatchEvent(new Event(consentEvent));
@@ -76,6 +72,7 @@ export function pauseAnalytics() {
   lastPath = "";
 }
 export function trackPage(path: string, title: string) {
+  trafficPage(path);
   if (
     !analyticsConfigured ||
     readConsent() !== "accepted" ||
@@ -162,4 +159,19 @@ export function trackPublicAction(
     content_id: label.slice(0, 80),
     page_location: location.origin + location.pathname,
   });
+}
+
+export function trackDemoAction(event: DemoEvent, demo: "ventas" | "reservas") {
+  trafficDemo(event);
+  if (
+    analyticsConfigured &&
+    initialized &&
+    readConsent() === "accepted" &&
+    publicPath(location.pathname)
+  )
+    send("event", event, {
+      send_to: id,
+      content_id: demo,
+      page_location: location.origin + location.pathname,
+    });
 }

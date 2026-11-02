@@ -1,5 +1,5 @@
 /* Karpanda PWA service worker */
-const APP_VERSION = "1.0.0";
+const APP_VERSION = "1.1.0";
 const CACHE_NAME = "karpanda-cache-" + APP_VERSION;
 
 const PRECACHE_URLS = [
@@ -15,8 +15,7 @@ self.addEventListener("install", (event) => {
     caches
       .open(CACHE_NAME)
       .then((cache) => cache.addAll(PRECACHE_URLS))
-      .then(() => self.skipWaiting())
-      .catch(() => self.skipWaiting()),
+      .catch(() => {}),
   );
 });
 
@@ -27,7 +26,9 @@ self.addEventListener("activate", (event) => {
       .then((keys) =>
         Promise.all(
           keys
-            .filter((key) => key !== CACHE_NAME)
+            .filter(
+              (key) => key.startsWith("karpanda-cache-") && key !== CACHE_NAME,
+            )
             .map((key) => caches.delete(key)),
         ),
       )
@@ -38,13 +39,31 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   const request = event.request;
   if (request.method !== "GET") return;
+  const url = new URL(request.url);
+  // Never persist third-party responses, authentication, or private report data.
+  if (url.origin !== self.location.origin || url.pathname.startsWith("/api/"))
+    return;
 
   if (request.mode === "navigate") {
+    const publicPage =
+      [
+        "/",
+        "/servicios",
+        "/como-funciona",
+        "/terminos",
+        "/demos",
+        "/demo/ventas",
+        "/demo/reservas",
+      ].includes(url.pathname) || /^\/producto\/[a-z0-9-]+$/.test(url.pathname);
     event.respondWith(
       fetch(request)
         .then((response) => {
           const copy = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, copy)).catch(() => {});
+          if (publicPage)
+            caches
+              .open(CACHE_NAME)
+              .then((cache) => cache.put(request, copy))
+              .catch(() => {});
           return response;
         })
         .catch(() => caches.match("/index.html")),
@@ -52,16 +71,30 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  if (
+    !["/assets/", "/icons/"].some((prefix) =>
+      url.pathname.startsWith(prefix),
+    ) &&
+    !["/manifest.webmanifest", "/favicon.ico"].includes(url.pathname)
+  )
+    return;
   event.respondWith(
     caches.match(request).then((cached) => {
       if (cached) return cached;
       return fetch(request)
         .then((response) => {
-          if (!response || response.status !== 200 || response.type === "opaque") {
+          if (
+            !response ||
+            response.status !== 200 ||
+            response.type === "opaque"
+          ) {
             return response;
           }
           const copy = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, copy)).catch(() => {});
+          caches
+            .open(CACHE_NAME)
+            .then((cache) => cache.put(request, copy))
+            .catch(() => {});
           return response;
         })
         .catch(() => cached);

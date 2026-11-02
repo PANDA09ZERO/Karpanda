@@ -47,6 +47,14 @@ async function enrich(items: any[]) {
 serve(async ({ user, profile, body, isAdmin }) => {
   const module = body.module as keyof typeof tables;
   const action = body.action;
+  if (module === ("traffic" as string)) {
+    requireValue(isAdmin, "Acceso administrativo requerido.", 403);
+    const days = Number(body.days || 30);
+    requireValue([7, 30, 90].includes(days), "Periodo no válido.");
+    return unwrap(
+      await admin.rpc("kp_traffic_report", { p_actor: user.id, p_days: days }),
+    );
+  }
   if (module === ("dashboard" as string)) {
     requireValue(isAdmin, "Acceso administrativo requerido.", 403);
     return unwrap(

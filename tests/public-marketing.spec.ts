@@ -89,7 +89,7 @@ test("sin ID: no carga Google aunque exista una preferencia anterior", async ({
 }) => {
   await page.addInitScript(() =>
     localStorage.setItem(
-      "karpanda:analytics-consent:v1",
+      "karpanda:analytics-consent:v2",
       JSON.stringify({ choice: "accepted", at: Date.now() }),
     ),
   );
@@ -173,7 +173,7 @@ test.describe("Analytics con ID de prueba aislado", () => {
   }) => {
     await page.addInitScript(() =>
       localStorage.setItem(
-        "karpanda:analytics-consent:v1",
+        "karpanda:analytics-consent:v2",
         JSON.stringify({ choice: "accepted", at: Date.now() }),
       ),
     );

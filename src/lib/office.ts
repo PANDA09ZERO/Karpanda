@@ -182,6 +182,7 @@ function demoPeople(b: Record<string, any>): unknown {
   };
 }
 function demoOffice(b: Record<string, any>): unknown {
+  if(b.module==='traffic')return {source:'demo',started_at:null,generated_at:new Date().toISOString(),days:Number(b.days)||30,metrics:{views:0,sessions:0,starts:0,completions:0,consults:0,recent_sessions:0},series:[],pages:[],sources:[],devices:[],demos:[]};
   if (b.module === "options")
     return {
       customers: rows("users").filter((u) => u.active !== false),
