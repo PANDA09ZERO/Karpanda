@@ -255,9 +255,8 @@ export function EducationDemo() {
         <GraduationCap size={20} />
         <p>
           Colegio y alumnos ficticios. Usa solo alias de ejemplo. Los cambios
-          viven en esta pestaña y se reinician al salir; no se conectan al
-          sistema original de Tesis. Esta demo presenta sus módulos principales,
-          no todos sus roles o funciones.
+          viven en esta pestaña y se reinician al salir. Esta demo presenta sus
+          módulos principales, no todos sus roles o funciones.
         </p>
       </div>
       <ol className="demo-steps" aria-label="Pasos de la demostración">
