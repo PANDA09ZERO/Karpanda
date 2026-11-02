@@ -1,5 +1,5 @@
 /* Karpanda PWA service worker */
-const APP_VERSION = "1.1.1";
+const APP_VERSION = "1.2.0";
 const CACHE_NAME = "karpanda-cache-" + APP_VERSION;
 
 const PRECACHE_URLS = [
@@ -54,6 +54,7 @@ self.addEventListener("fetch", (event) => {
         "/demos",
         "/demo/ventas",
         "/demo/reservas",
+        "/demo/educacion",
       ].includes(url.pathname) || /^\/producto\/[a-z0-9-]+$/.test(url.pathname);
     event.respondWith(
       fetch(request)

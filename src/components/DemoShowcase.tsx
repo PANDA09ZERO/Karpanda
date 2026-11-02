@@ -6,6 +6,7 @@ import {
   ShoppingBag,
   CalendarDays,
   Sparkles,
+  GraduationCap,
 } from "lucide-react";
 export function DemoPreview() {
   return (
@@ -53,6 +54,18 @@ function DemoCards() {
           ],
         },
         {
+          id: "educacion",
+          title: "Tu colegio, conectado.",
+          subtitle: "GESTIÓN EDUCATIVA",
+          body: "Conoce Colegio Panda, una demo basada en el proyecto Tesis: alumnos, asistencia, notas y libretas.",
+          Icon: GraduationCap,
+          items: [
+            "Dashboard académico propio",
+            "Alumnos, asistencia y calificaciones",
+            "Libreta con datos de ejemplo",
+          ],
+        },
+        {
           id: "reservas",
           title: "Un horario. Una reserva. Listo.",
           subtitle: "RESERVAS Y CITAS",
@@ -82,7 +95,12 @@ function DemoCards() {
             ))}
           </ul>
           <Link className="button" to={`/demo/${d.id}`}>
-            Probar {d.id === "ventas" ? "Ventas" : "Reservas"}{" "}
+            Probar{" "}
+            {d.id === "ventas"
+              ? "Ventas"
+              : d.id === "educacion"
+                ? "Educación"
+                : "Reservas"}{" "}
             <ArrowRight size={17} />
           </Link>
         </article>

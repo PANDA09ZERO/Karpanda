@@ -21,7 +21,7 @@ Guía oficial: [Configurar Analytics para una web](https://support.google.com/an
 - `view_service`: interés por uno de los servicios propuestos.
 - `consult_service`: copia del resumen de proyecto, **sin enviar el resumen**. Este evento indica interés, no una consulta enviada ni una venta.
 - `open_faq`: apertura de una pregunta frecuente, mediante su identificador fijo.
-- `demo_start`, `demo_step`, `demo_complete`, `demo_reset` y `demo_consult`: interacciones con las demostraciones públicas de ventas y reservas, mediante identificadores fijos. Las ventas y reservas son ficticias.
+- `demo_start`, `demo_step`, `demo_complete`, `demo_reset` y `demo_consult`: interacciones con las demostraciones públicas de ventas, reservas y educación, mediante identificadores fijos. Todas las operaciones son ficticias; no se envían alias de alumnos, asistencia ni notas.
 
 No hay eventos de compra ni ingresos porque este sitio no procesa cobros. No se envían nombres, correos, contraseñas, mensajes, datos de pedidos o identificadores de usuarios con esta integración. No se mide `/admin`, `/cuenta`, `/acceso`, `/cambiar-contrasena`, `/compra` ni las conversaciones de soporte. Al entrar en una ruta excluida, se deshabilita el destino de Analytics.
 

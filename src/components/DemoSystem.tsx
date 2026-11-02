@@ -10,6 +10,10 @@ import {
   CalendarDays,
   Sparkles,
   CircleHelp,
+  GraduationCap,
+  Users,
+  BookOpen,
+  FileText,
 } from "lucide-react";
 import { measurementConfigured, settingsEvent } from "../lib/analytics";
 
@@ -20,32 +24,45 @@ export function DemoSystem({
   guide,
   children,
 }: {
-  kind: "ventas" | "reservas";
+  kind: "ventas" | "reservas" | "educacion";
   view: string;
   onView: (view: string) => void;
   guide: ReactNode;
   children: ReactNode;
 }) {
   const sales = kind === "ventas";
+  const education = kind === "educacion";
+  const brand = education
+    ? "Colegio Panda"
+    : sales
+      ? "Panda Papelería"
+      : "Estudio Panda";
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, [view]);
-  const items = sales
+  const items = education
     ? [
         { id: "dashboard", label: "Dashboard", Icon: LayoutDashboard },
-        { id: "work", label: "Punto de venta", Icon: ShoppingBag },
-        { id: "inventory", label: "Inventario", Icon: Package },
-        { id: "history", label: "Ventas", Icon: ReceiptText },
+        { id: "students", label: "Alumnos", Icon: Users },
+        { id: "academic", label: "Académico", Icon: BookOpen },
+        { id: "documents", label: "Documentos", Icon: FileText },
       ]
-    : [
-        { id: "dashboard", label: "Dashboard", Icon: LayoutDashboard },
-        { id: "work", label: "Nueva reserva", Icon: CalendarDays },
-        { id: "agenda", label: "Agenda", Icon: CalendarDays },
-        { id: "services", label: "Servicios y equipo", Icon: Sparkles },
-      ];
+    : sales
+      ? [
+          { id: "dashboard", label: "Dashboard", Icon: LayoutDashboard },
+          { id: "work", label: "Punto de venta", Icon: ShoppingBag },
+          { id: "inventory", label: "Inventario", Icon: Package },
+          { id: "history", label: "Ventas", Icon: ReceiptText },
+        ]
+      : [
+          { id: "dashboard", label: "Dashboard", Icon: LayoutDashboard },
+          { id: "work", label: "Nueva reserva", Icon: CalendarDays },
+          { id: "agenda", label: "Agenda", Icon: CalendarDays },
+          { id: "services", label: "Servicios y equipo", Icon: Sparkles },
+        ];
   return (
     <div
-      className={`demo-system ${sales ? "demo-system-sales" : "demo-system-booking"}`}
+      className={`demo-system ${education ? "demo-system-education" : sales ? "demo-system-sales" : "demo-system-booking"}`}
     >
       <div className="ds-banner">
         <span>
@@ -60,16 +77,28 @@ export function DemoSystem({
         <aside className="ds-sidebar">
           <div className="ds-brand">
             <span>
-              {sales ? <ShoppingBag size={23} /> : <Sparkles size={23} />}
+              {education ? (
+                <GraduationCap size={23} />
+              ) : sales ? (
+                <ShoppingBag size={23} />
+              ) : (
+                <Sparkles size={23} />
+              )}
             </span>
             <div>
-              <strong>{sales ? "Panda Papelería" : "Estudio Panda"}</strong>
+              <strong>{brand}</strong>
               <small>
-                {sales ? "Ventas e inventario" : "Agenda y servicios"}
+                {education
+                  ? "Gestión educativa"
+                  : sales
+                    ? "Ventas e inventario"
+                    : "Agenda y servicios"}
               </small>
             </div>
           </div>
-          <p className="ds-nav-caption">MI NEGOCIO</p>
+          <p className="ds-nav-caption">
+            {education ? "MI INSTITUCIÓN" : "MI NEGOCIO"}
+          </p>
           <nav aria-label="Menú del sistema de demostración">
             {items.map(({ id, label, Icon }) => (
               <button
@@ -104,10 +133,7 @@ export function DemoSystem({
         <div className="ds-body">
           <header className="ds-topbar">
             <div>
-              <small>
-                {sales ? "PANDA PAPELERÍA" : "ESTUDIO PANDA"} / ESPACIO DE
-                TRABAJO
-              </small>
+              <small>{brand.toUpperCase()} / ESPACIO DE TRABAJO</small>
               <h1>{items.find((i) => i.id === view)?.label}</h1>
             </div>
             <div className="ds-profile">

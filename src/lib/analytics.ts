@@ -161,7 +161,10 @@ export function trackPublicAction(
   });
 }
 
-export function trackDemoAction(event: DemoEvent, demo: "ventas" | "reservas") {
+export function trackDemoAction(
+  event: DemoEvent,
+  demo: "ventas" | "reservas" | "educacion",
+) {
   trafficDemo(event);
   if (
     analyticsConfigured &&

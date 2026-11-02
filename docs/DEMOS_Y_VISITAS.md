@@ -2,13 +2,14 @@
 
 ## Página pública
 
-En `/demos` se puede elegir Ventas o Reservas. Cada demo abre un sistema independiente con marca de negocio ficticio, dashboard y menú propio; en teléfonos, el menú se sitúa abajo. La guía de instrucciones se puede abrir u ocultar sin perder el progreso. Ambas son demostraciones adaptadas a teléfonos y sin registro. Los datos viven en la memoria de la página y desaparecen al recargar o salir. Reiniciar devuelve el escenario original.
+En `/demos` se puede elegir Ventas, Reservas o Educación. Cada demo abre un sistema independiente con marca ficticia, dashboard y menú propio; en teléfonos, el menú se sitúa abajo. La guía de instrucciones se puede abrir u ocultar sin perder el progreso. Todas las demostraciones funcionan sin registro. Los datos viven en la memoria de la página y desaparecen al recargar o salir. Reiniciar devuelve el escenario original.
 
 - Ventas: explorar productos, buscar, añadir unidades, comprobar existencias, elegir un medio de pago simulado y emitir un comprobante ficticio. El stock disminuye dentro de la sesión. No se solicitan datos bancarios ni se cobra dinero.
 - Reservas: elegir servicio, profesional, fecha y horario; confirmar, ver la agenda y cancelar para liberar el horario. No se envían notificaciones ni se crean citas reales.
 - La portada, la navegación y las fichas de productos enlazan a las demos. Al finalizar se puede consultar por una solución adaptada al negocio.
 - Panda Papelería: dashboard con productos vendidos y actividad reciente, punto de venta, inventario en tarjetas con detalles e historial de comprobantes. Todas las vistas comparten las ventas y existencias de la misma sesión.
 - Estudio Panda: dashboard con citas de hoy y carga del equipo, creación de reservas, agenda en tarjetas con detalles y cancelación, catálogo de servicios y profesionales. Las cancelaciones también actualizan el dashboard y los horarios disponibles.
+- Colegio Panda (`/demo/educacion`): adaptación de los módulos académicos del proyecto local Tesis, creada como interfaz React independiente. Incluye alumnos sintéticos, alta por alias, expediente, asistencia del día, notas de dos cursos entre 0 y 20, dashboard actualizado, libreta y descarga de resumen de texto. La asistencia y las calificaciones solo se aplican al guardar. La tardanza cuenta como asistencia en el resumen y las notas menores a 11 generan avisos ilustrativos. No usa MySQL, Express, credenciales, archivos ni datos institucionales de Tesis; tampoco reproduce todos sus roles, matrículas, cobros, carga documental o reportes oficiales.
 
 ## Panel privado
 

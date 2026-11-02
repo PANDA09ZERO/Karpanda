@@ -6974,3 +6974,401 @@ button {
     padding: 21px;
   }
 }
+
+/* Education demo, adapted from the Tesis academic workflows. */
+.demo-system-education {
+  --ds-accent: #295c94;
+  background: #f3f6fa;
+}
+.demo-system-education .ds-sidebar nav button.active {
+  background: #e9f0fb;
+}
+.demo-system-education .ds-brand > span,
+.demo-system-education .button:not(.secondary) {
+  background: #295c94;
+  border-color: #295c94;
+}
+.demo-system-education .ds-welcome {
+  background: #e3edf9;
+}
+.demo-system-education .ds-guide {
+  border-color: #dce6f1;
+  background: #fbfcff;
+}
+.demo-system-education .demo-safety {
+  background: #edf3fb;
+}
+.demo-system-education .ds-avatar {
+  background: #e5edf9;
+  color: #295c94;
+}
+.demo-selection-educacion {
+  background: #eaf0fb;
+  border-color: #dbe5f4;
+}
+.demo-selection-educacion .demo-selection-top > svg {
+  color: #295c94;
+}
+.edu-period {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  color: #71859d;
+  margin: 10px 0 22px;
+  font-size: 11px;
+}
+.edu-period > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.edu-stats strong small {
+  font-size: 14px;
+  color: #93a0ad;
+  font-weight: 400;
+}
+.edu-course-bars {
+  display: grid;
+  gap: 26px;
+  margin: 28px 0;
+}
+.edu-course-bars > div > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+.edu-course-bars span {
+  color: #70849c;
+}
+.edu-track {
+  height: 12px;
+  border-radius: 20px;
+  background: #edf2fa;
+  overflow: hidden;
+}
+.edu-track i {
+  display: block;
+  height: 100%;
+  border-radius: 20px;
+  background: #7b9fc8;
+}
+.edu-alerts {
+  display: grid;
+  gap: 14px;
+  margin: 18px 0;
+}
+.edu-alerts > button {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 17px;
+  text-align: left;
+  border: 1px solid #f3e7ce;
+  background: #fffbf2;
+  border-radius: 13px;
+  color: #a57f40;
+}
+.edu-alerts > button > span {
+  flex: 1;
+}
+.edu-alerts strong,
+.edu-alerts small {
+  display: block;
+}
+.edu-alerts strong {
+  font-size: 12px;
+  color: #6c5838;
+}
+.edu-alerts small {
+  font-size: 10px;
+  margin-top: 7px;
+  line-height: 1.5;
+}
+.edu-student summary {
+  list-style: none;
+  cursor: pointer;
+}
+.edu-student summary::-webkit-details-marker {
+  display: none;
+}
+.edu-student .ds-avatar {
+  display: inline-grid;
+}
+.edu-student .state-pill {
+  float: right;
+  font-size: 9px;
+}
+.edu-student summary > small {
+  font-size: 11px;
+  color: #295c94;
+}
+.edu-add-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: end;
+  margin-bottom: 24px;
+}
+.edu-add-form > label {
+  flex: 1;
+  min-width: 170px;
+}
+.edu-add-form .button {
+  font-size: 12px;
+}
+.edu-tabs {
+  display: flex;
+  gap: 10px;
+  margin: 24px 0;
+}
+.edu-tabs > button {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  min-height: 46px;
+  border-radius: 11px;
+  padding: 12px 20px;
+  background: #fff;
+  color: #7c8da4;
+  border: 1px solid #dbe4f0;
+  font-size: 12px;
+}
+.edu-tabs > button.active {
+  background: #295c94;
+  color: #fff;
+  border-color: #295c94;
+}
+.edu-academic-controls,
+.edu-report-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 22px;
+}
+.edu-academic-controls label {
+  min-width: 200px;
+  flex: 1;
+}
+.edu-academic-controls p {
+  flex: 1;
+  color: #6f849c;
+  line-height: 1.7;
+}
+.edu-academic-controls small {
+  display: block;
+  font-size: 10px;
+}
+.education-demo label {
+  display: grid;
+  gap: 9px;
+  font-size: 11px;
+  color: #586e87;
+}
+.education-demo input,
+.education-demo select {
+  background: #fbfcff;
+  min-height: 45px;
+  border-radius: 9px;
+  border-color: #d6dfed;
+  width: 100%;
+}
+.education-demo .demo-search {
+  display: flex;
+  margin-bottom: 23px;
+}
+.education-demo .demo-search input {
+  border: 0;
+}
+.edu-save-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: 24px 0;
+  background: #e8eff8;
+  padding: 21px;
+  border-radius: 14px;
+}
+.edu-save-bar p {
+  color: #657e9c;
+  font-size: 11px;
+  max-width: 380px;
+  margin: 0;
+}
+.edu-save-bar .button {
+  font-size: 12px;
+}
+.edu-report-controls > label {
+  flex: 1;
+  min-width: 200px;
+}
+.edu-report-controls .button {
+  margin-top: 23px;
+  font-size: 12px;
+}
+.edu-report {
+  max-width: 850px;
+  margin: auto;
+  padding: 35px;
+}
+.edu-report > header {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  border-bottom: 1px solid #dce5f1;
+  padding-bottom: 23px;
+  color: #295c94;
+  flex-wrap: wrap;
+}
+.edu-report > header > div {
+  flex: 1;
+  min-width: 190px;
+}
+.edu-report h3 {
+  font-size: 25px;
+  margin: 8px 0;
+}
+.edu-report > header p {
+  margin: 4px 0;
+}
+.edu-report dl {
+  margin: 25px 0;
+  display: grid;
+  gap: 17px;
+  font-size: 12px;
+}
+.edu-report dl > div {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.edu-report dt {
+  color: #7d8ea3;
+}
+.edu-report dd {
+  margin: 0;
+  font-weight: 700;
+}
+.edu-report-grades {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+.edu-report-grades > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 20px;
+  border-radius: 13px;
+  background: #f1f5fb;
+}
+.edu-report-grades span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+.edu-report-grades strong {
+  font-size: 22px;
+  color: #295c94;
+}
+.edu-report-grades small {
+  font-size: 12px;
+  color: #91a0b3;
+  font-weight: 400;
+}
+.edu-completed {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 19px;
+  background: #e7f1e0;
+  border: 1px solid #dce8d0;
+  padding: 22px;
+  border-radius: 15px;
+  margin-top: 25px;
+  color: #5d7e42;
+}
+.edu-completed > div {
+  flex: 1;
+  min-width: 180px;
+}
+.edu-completed strong {
+  font-size: 14px;
+}
+.edu-completed p {
+  font-size: 11px;
+  margin: 9px 0 0;
+}
+.edu-completed .button {
+  font-size: 11px;
+}
+.edu-interest {
+  margin-top: 30px;
+}
+@media (min-width: 1101px) {
+  .demo-selection-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .traffic-demo-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 700px) {
+  .edu-tabs > button {
+    flex: 1;
+    padding: 12px;
+    justify-content: center;
+    font-size: 11px;
+  }
+  .edu-add-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .edu-save-bar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .edu-report-controls .button {
+    margin: 0;
+    width: 100%;
+    white-space: normal;
+  }
+  .edu-report {
+    padding: 22px;
+  }
+  .edu-report h3 {
+    font-size: 22px;
+  }
+  .edu-report > header {
+    gap: 14px;
+  }
+  .edu-stats strong small {
+    font-size: 10px;
+  }
+  .edu-alerts > button {
+    padding: 13px;
+    gap: 9px;
+  }
+  .edu-period {
+    font-size: 10px;
+    line-height: 1.7;
+  }
+  .edu-completed .button {
+    width: 100%;
+  }
+}
+.edu-stat-meta {
+  grid-column: 1 / -1;
+  color: #8b9bad;
+  font-size: 10px;
+  line-height: 1.5;
+}

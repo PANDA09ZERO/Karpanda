@@ -37,6 +37,9 @@ const SalesDemo = lazy(() =>
 const BookingDemo = lazy(() =>
   import("./pages/Demos").then((m) => ({ default: m.BookingDemo })),
 );
+const EducationDemo = lazy(() =>
+  import("./pages/EducationDemo").then((m) => ({ default: m.EducationDemo })),
+);
 const TrafficDashboard = lazy(() =>
   import("./pages/TrafficDashboard").then((m) => ({
     default: m.TrafficDashboard,
@@ -140,6 +143,7 @@ function AppRoutes() {
             <Route path="demos" element={<DemosPage />} />
             <Route path="demo/ventas" element={<SalesDemo />} />
             <Route path="demo/reservas" element={<BookingDemo />} />
+            <Route path="demo/educacion" element={<EducationDemo />} />
             <Route path="producto/:slug" element={<Detail />} />
             <Route path="compra/:slug" element={<Checkout />} />
             <Route path="como-funciona" element={<HowItWorks />} />
