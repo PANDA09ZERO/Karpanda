@@ -7819,3 +7819,94 @@ button {
     padding: 0;
   }
 }
+
+/* The catalog connects each available product to its public demo. */
+.catalog-gallery-link {
+  margin: 12px 0 22px;
+  font-size: 12px;
+}
+.catalog-demo-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 44px;
+  border-top: 1px solid #e3eadf;
+  margin-top: 20px;
+  padding-top: 16px;
+  color: #28624c;
+  font-size: 12px;
+  font-weight: 700;
+}
+.catalog-demo-link:hover {
+  color: #153c31;
+  text-decoration: underline;
+}
+.catalog-education-card {
+  min-width: 0;
+  border: 1px solid #dce5f2;
+  border-radius: 22px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  background: #f3f7fe;
+}
+.catalog-education-card .product-icon {
+  display: grid;
+  place-items: center;
+  color: #37628f;
+  background: #e4ecf8;
+}
+.catalog-education-card h3 {
+  font-size: 23px;
+  letter-spacing: -0.5px;
+  margin: 25px 0 12px;
+}
+.catalog-education-card > p {
+  font-size: 13px;
+  line-height: 1.8;
+  color: #7b8fa2;
+  margin: 0 0 26px;
+}
+.catalog-education-offer {
+  margin-top: auto;
+  display: grid;
+  gap: 7px;
+  padding-bottom: 20px;
+  color: #466a91;
+}
+.catalog-education-offer strong {
+  font-size: 16px;
+}
+.catalog-education-offer small {
+  font-size: 11px;
+  line-height: 1.7;
+}
+.catalog-education-card > .button {
+  font-size: 12px;
+  white-space: normal;
+}
+.catalog-education-card .catalog-demo-link {
+  border-color: #dce5f2;
+  color: #295c94;
+}
+@media (max-width: 640px) {
+  .catalog-education-card {
+    padding: 24px;
+  }
+  .catalog-education-card h3 {
+    font-size: 22px;
+  }
+}
+@media (min-width: 901px) {
+  .product-grid:has(.catalog-education-card):has(.product-card) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 359px) {
+  .public-marketing .product-card .card-bottom {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+}

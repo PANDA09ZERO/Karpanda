@@ -6,6 +6,7 @@ import {
   Check,
   CheckCircle2,
   ShieldCheck,
+  GraduationCap,
 } from "lucide-react";
 import { useApp } from "../context";
 import {
@@ -28,16 +29,19 @@ import {
   WorkingMethod,
 } from "./PublicMarketing";
 import { trackPublicAction } from "../lib/analytics";
-import { DemoPreview } from "../components/DemoShowcase";
 export function Catalog() {
   const { products, loading } = useApp();
   const [category, setCategory] = useState("Todas");
-  const categories = ["Todas", ...new Set(products.map((p) => p.category))];
+  const categories = [
+    "Todas",
+    ...new Set([...products.map((p) => p.category), "Educación"]),
+  ];
   const selected = categories.includes(category) ? category : "Todas";
   const visible =
     selected === "Todas"
       ? products
       : products.filter((p) => p.category === selected);
+  const showEducation = selected === "Todas" || selected === "Educación";
   return (
     <div className="container public-marketing">
       <section className="hero">
@@ -96,12 +100,16 @@ export function Catalog() {
         </div>
       </div>
       <ServicePreview />
-      <DemoPreview />
       <section className="solutions" id="soluciones">
         <p className="eyebrow">ENCUENTRA TU PUNTO DE PARTIDA</p>
         <h2>Una solución para cada forma de crecer</h2>
-        <p className="muted">Elige tu herramienta. Nosotros te acompañamos.</p>
-        {products.length > 0 && (
+        <p className="muted">
+          Elige tu herramienta y prueba sus funciones con datos de ejemplo.
+        </p>
+        <Link className="text-link catalog-gallery-link" to="/demos">
+          Ver todas las demos <ArrowUpRight size={16} />
+        </Link>
+        {categories.length > 0 && (
           <div
             className="catalog-filters"
             role="group"
@@ -124,11 +132,39 @@ export function Catalog() {
         )}
         {loading ? (
           <Loading />
-        ) : products.length ? (
+        ) : visible.length || showEducation ? (
           <div className="product-grid">
             {visible.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}
+            {showEducation && (
+              <article className="catalog-education-card">
+                <div className="category">
+                  <span className="product-icon">
+                    <GraduationCap size={24} />
+                  </span>
+                  <span>Educación · A medida</span>
+                </div>
+                <h3>Karpanda Educación</h3>
+                <p>
+                  Gestión de alumnos, profesores, familias, matrículas, pagos y
+                  seguimiento académico para tu institución.
+                </p>
+                <div className="catalog-education-offer">
+                  <strong>Adaptado a tu colegio</strong>
+                  <small>Consulta el alcance y la implementación.</small>
+                </div>
+                <Link
+                  className="button secondary"
+                  to="/servicios#preparar-consulta"
+                >
+                  Consultar implementación <ArrowRight size={16} />
+                </Link>
+                <Link className="catalog-demo-link" to="/demo/educacion">
+                  Probar demo del colegio <ArrowUpRight size={16} />
+                </Link>
+              </article>
+            )}
           </div>
         ) : (
           <Empty title="Estamos preparando nuevas soluciones">

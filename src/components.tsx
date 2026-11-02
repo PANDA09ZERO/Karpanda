@@ -175,6 +175,9 @@ export function Footer() {
   );
 }
 export function ProductCard({ product }: { product: Product }) {
+  const demo = ["ventas", "reservas"].includes(product.slug)
+    ? `/demo/${product.slug}`
+    : null;
   return (
     <article className="product-card">
       <div className="category">
@@ -194,6 +197,11 @@ export function ProductCard({ product }: { product: Product }) {
           Ver software <ArrowRight size={16} />
         </Link>
       </div>
+      {demo && (
+        <Link className="catalog-demo-link" to={demo}>
+          Probar demo <ArrowUpRight size={16} />
+        </Link>
+      )}
     </article>
   );
 }
