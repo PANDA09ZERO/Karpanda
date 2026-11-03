@@ -97,10 +97,23 @@ export function saveDemo(key: string, value: unknown) {
   localStorage.setItem(`karpanda:v1:${key}`, JSON.stringify(value));
 }
 export async function loadProducts(admin = false): Promise<Product[]> {
-  if (demoMode)
-    return readDemo<Product[]>("products", seedProducts).filter(
-      (p) => admin || p.published,
+  if (demoMode) {
+    const cached = readDemo<Product[]>("products", seedProducts);
+    const landingSlugs = new Set(
+      seedProducts.filter((p) => p.category === "Landing pages").map((p) => p.slug),
     );
+    const merged = cached.map((p) =>
+      landingSlugs.has(p.slug)
+        ? seedProducts.find((sp) => sp.slug === p.slug) || p
+        : p,
+    );
+    const slugs = new Set(merged.map((p) => p.slug));
+    const extras = seedProducts.filter(
+      (p) => p.category === "Landing pages" && !slugs.has(p.slug),
+    );
+    const all = [...merged, ...extras];
+    return all.filter((p) => admin || p.published);
+  }
   if (!supabase) throw new Error("Supabase no está configurado.");
   let query = supabase.from("kp_products").select("*").order("created_at");
   if (!admin) query = query.eq("published", true);
