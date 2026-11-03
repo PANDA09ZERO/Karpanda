@@ -50,7 +50,7 @@ export const seedProducts: Product[] = [
   {
     id: "55555555-5555-4555-8555-555555555555",
     slug: "landing-corporativa",
-    name: "Página web corporativa",
+    name: "Landing para Spa y Bienestar",
     category: "Landing pages",
     description:
       "Una página clara y profesional para presentar tu negocio y captar contactos.",
@@ -62,7 +62,7 @@ export const seedProducts: Product[] = [
   {
     id: "66666666-6666-4666-8666-666666666666",
     slug: "landing-campana",
-    name: "Landing de campaña",
+    name: "Landing para Cafetería",
     category: "Landing pages",
     description:
       "Landing enfocada en una oferta o campaña para convertir visitas en consultas.",
@@ -74,7 +74,7 @@ export const seedProducts: Product[] = [
   {
     id: "77777777-7777-4777-8777-777777777777",
     slug: "landing-catalogo",
-    name: "Catálogo web",
+    name: "Landing para Tienda de Motos",
     category: "Landing pages",
     description:
       "Catálogo de productos o servicios con información clara y contacto directo.",
