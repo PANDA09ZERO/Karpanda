@@ -23,7 +23,7 @@ export function ProductPreview({ product }: { product: Product }) {
         ? CalendarDays
         : info.kind === "gestion"
           ? BriefcaseBusiness
-          : info.kind === "landing"
+          : info.kind.startsWith("landing")
             ? Globe
             : Package;
   return (
@@ -163,7 +163,7 @@ export function ProductPreview({ product }: { product: Product }) {
                   </small>
                 </div>
               </>
-            ) : info.kind === "landing" ? (
+            ) : info.kind.startsWith("landing") ? (
               <>
                 <div className="psp-panel">
                   <strong>Secciones de la página</strong>
@@ -224,7 +224,7 @@ export function ProductOverview({ product }: { product: Product }) {
             Probar una demo interactiva <ArrowRight size={17} />
           </Link>
         )}
-        {info.kind === "landing" && (
+        {info.kind.startsWith("landing") && (
           <Link
             className="button product-demo-link"
             to={landingExample(product.slug)}
@@ -292,7 +292,7 @@ export function ProductOverview({ product }: { product: Product }) {
         <p className="eyebrow">PREGUNTAS FRECUENTES</p>
         <h2>Antes de empezar</h2>
         <div className="faq-list">
-          {productFaqs(info.kind).map(([q, a]) => (
+          {productFaqs(info.kind.startsWith("landing") ? "landing" : info.kind).map(([q, a]) => (
             <details key={q}>
               <summary>
                 {q}
