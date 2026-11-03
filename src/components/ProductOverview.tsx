@@ -233,7 +233,7 @@ export function ProductOverview({ product }: { product: Product }) {
           </Link>
         )}
       </section>
-      <ProductPreview product={product} />
+      {!info.kind.startsWith("landing") && <ProductPreview product={product} />}
       {screenshotFor(info.kind) && (
         <section className="product-screenshot-section">
           <p className="eyebrow">CAPTURA REAL</p>
