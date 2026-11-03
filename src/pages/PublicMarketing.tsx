@@ -15,6 +15,11 @@ import {
   Sparkles,
   Copy,
   CheckCheck,
+  Store,
+  CalendarDays,
+  BriefcaseBusiness,
+  GraduationCap,
+  Quote,
 } from "lucide-react";
 import { trackPublicAction } from "../lib/analytics";
 import { pandas } from "../components";
@@ -152,6 +157,191 @@ export function ServicePreview() {
         Ideas de servicios a medida. Alcance, disponibilidad y propuesta se
         confirman antes de iniciar.
       </p>
+    </section>
+  );
+}
+
+export function Industries() {
+  const items = [
+    {
+      icon: Store,
+      title: "Tiendas y comercios",
+      problem: "Stock desordenado, ventas sin registro, cierre de caja manual.",
+      product: "Karpanda Ventas",
+      to: "/producto/ventas",
+    },
+    {
+      icon: CalendarDays,
+      title: "Negocios con citas",
+      problem: "Agenda en papel, cruces de horarios, clientes sin confirmar.",
+      product: "Karpanda Reservas",
+      to: "/producto/reservas",
+    },
+    {
+      icon: BriefcaseBusiness,
+      title: "Equipos por proyecto",
+      problem: "Clientes, tareas y avances dispersos en varios lugares.",
+      product: "Karpanda Gestión",
+      to: "/producto/gestion",
+    },
+    {
+      icon: GraduationCap,
+      title: "Colegios e institutos",
+      problem: "Matrículas, notas y documentos sin una visión conectada.",
+      product: "Karpanda Educación",
+      to: "/producto/educacion",
+    },
+  ];
+  return (
+    <section className="marketing-section" id="para-quien">
+      <div className="marketing-section-heading">
+        <div>
+          <p className="eyebrow">PARA QUIÉN ES</p>
+          <h2>
+            Un punto de partida
+            <br />
+            para cada forma de trabajar.
+          </h2>
+        </div>
+        <div>
+          <p className="muted">
+            Elige el escenario más cercano a tu negocio y explora la demo con
+            datos de ejemplo.
+          </p>
+        </div>
+      </div>
+      <div className="industry-grid">
+        {items.map((it) => (
+          <Link to={it.to} className="industry-card" key={it.title}>
+            <it.icon size={28} />
+            <h3>{it.title}</h3>
+            <p>{it.problem}</p>
+            <span>
+              {it.product} <ArrowRight size={15} />
+            </span>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export function SocialProof() {
+  const testimonials = [
+    {
+      quote:
+        "Por fin veo el stock y las ventas en el mismo lugar. Antes usaba tres hojas de cálculo.",
+      name: "María",
+      role: "Tienda de barrio",
+    },
+    {
+      quote:
+        "La agenda dejó de tener cruces de horarios. Mis clientas confirman la cita y yo la veo al instante.",
+      name: "Sofía",
+      role: "Estudio de belleza",
+    },
+    {
+      quote:
+        "Tengo los proyectos, las tareas y los clientes conectados. Ya no pierdo el contexto.",
+      name: "Diego",
+      role: "Agencia de servicios",
+    },
+  ];
+  return (
+    <section className="marketing-section social-proof" id="prueba-social">
+      <div className="marketing-section-heading">
+        <div>
+          <p className="eyebrow">QUIENES YA LO PROBARON</p>
+          <h2>
+            Menos desorden.
+            <br />
+            Más claridad.
+          </h2>
+        </div>
+      </div>
+      <div className="testimonial-grid">
+        {testimonials.map((t) => (
+          <article className="testimonial-card" key={t.name}>
+            <Quote size={22} />
+            <p>{t.quote}</p>
+            <div>
+              <strong>{t.name}</strong>
+              <small>{t.role}</small>
+            </div>
+          </article>
+        ))}
+      </div>
+      <p className="marketing-caption">
+        Testimonios ilustrativos de la experiencia de uso. Los resultados reales
+        dependen de cada negocio.
+      </p>
+    </section>
+  );
+}
+
+export function Plans() {
+  const rows = [
+    ["Usuarios incluidos", "Hasta 5", "Hasta 5", "A medida"],
+    ["Dispositivos", "Web y móvil", "Web y móvil", "Web y móvil"],
+    ["Demo interactiva", "Incluida", "Incluida", "Incluida"],
+    ["Soporte", "Correo", "Prioritario", "Dedicado"],
+    ["Actualizaciones", "Durante la suscripción", "Durante la suscripción", "Acordadas"],
+    ["Implementación", "Autogestionada", "Acompañada", "A medida"],
+  ];
+  return (
+    <section className="marketing-section" id="planes">
+      <div className="marketing-section-heading">
+        <div>
+          <p className="eyebrow">PLANES Y PRECIOS</p>
+          <h2>
+            Elige cómo
+            <br />
+            quieres empezar.
+          </h2>
+        </div>
+        <div>
+          <p className="muted">
+            Precios de ejemplo. Las condiciones finales se confirman al
+            contratar.
+          </p>
+        </div>
+      </div>
+      <div className="plans-table-wrap">
+        <table className="plans-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Empresa</th>
+              <th>Empresa Plus</th>
+              <th>Institución</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map(([label, a, b, c]) => (
+              <tr key={label}>
+                <th>{label}</th>
+                <td>{a}</td>
+                <td>{b}</td>
+                <td>{c}</td>
+              </tr>
+            ))}
+            <tr className="plans-price-row">
+              <th>Precio mensual</th>
+              <td>S/ 199</td>
+              <td>S/ 249</td>
+              <td>Por cotizar</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div className="plans-cta">
+        <Link className="button" to="/#soluciones">
+          Ver productos <ArrowRight size={16} />
+        </Link>
+        <Link className="button secondary" to="/servicios#preparar-consulta">
+          Consultar implementación <ArrowUpRight size={16} />
+        </Link>
+      </div>
     </section>
   );
 }

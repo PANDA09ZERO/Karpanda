@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import {
   ArrowRight,
@@ -22,8 +22,11 @@ import { money, placeOrder } from "../lib/data";
 import { demoMode } from "../lib/supabase";
 import {
   FrequentlyAsked,
+  Industries,
+  Plans,
   PublicCTA,
   ServicePreview,
+  SocialProof,
   WhyKarpanda,
   WorkingMethod,
 } from "./PublicMarketing";
@@ -98,6 +101,9 @@ export function Catalog() {
         </div>
       </div>
       <ServicePreview />
+      <Industries />
+      <SocialProof />
+      <Plans />
       <section className="solutions" id="soluciones">
         <p className="eyebrow">ENCUENTRA TU PUNTO DE PARTIDA</p>
         <h2>Una solución para cada forma de crecer</h2>
@@ -157,6 +163,18 @@ export function Detail() {
   const { slug } = useParams();
   const { products, loading } = useApp();
   const p = products.find((p) => p.slug === slug);
+  useEffect(() => {
+    if (!p) return;
+    const content = productContent(p);
+    document.title = `${p.name} · Karpanda`;
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) {
+      meta = document.createElement("meta");
+      meta.setAttribute("name", "description");
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute("content", content.summary);
+  }, [p]);
   if (loading) return <Loading />;
   if (!p) return <NotFound />;
   return (

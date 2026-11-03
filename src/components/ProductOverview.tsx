@@ -231,6 +231,77 @@ export function ProductOverview({ product }: { product: Product }) {
           </p>
         </section>
       )}
+      <section className="product-faq">
+        <p className="eyebrow">PREGUNTAS FRECUENTES</p>
+        <h2>Antes de empezar</h2>
+        <div className="faq-list">
+          {productFaqs(info.kind).map(([q, a]) => (
+            <details key={q}>
+              <summary>
+                {q}
+                <span>+</span>
+              </summary>
+              <p>{a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
     </div>
   );
+}
+
+function productFaqs(kind: string): [string, string][] {
+  const common: [string, string][] = [
+    [
+      "¿La demo usa datos reales?",
+      "No. La demo utiliza datos ficticios que puedes modificar y reiniciar cuando quieras.",
+    ],
+    [
+      "¿Puedo usarlo desde el celular?",
+      "Sí. La interfaz se adapta a computadoras, tabletas y teléfonos.",
+    ],
+  ];
+  const specific: Record<string, [string, string][]> = {
+    ventas: [
+      [
+        "¿El stock se actualiza al vender?",
+        "Sí. Al confirmar una venta de prueba, las existencias y el historial se actualizan.",
+      ],
+      [
+        "¿Puedo exportar la información?",
+        "Sí. Puedes revisar y exportar el historial de ventas y el inventario.",
+      ],
+    ],
+    reservas: [
+      [
+        "¿Se evitan los cruces de horarios?",
+        "Sí. Solo se muestran horarios disponibles para el profesional y servicio elegidos.",
+      ],
+      [
+        "¿Qué pasa si cancelo una cita?",
+        "El horario se libera y vuelve a estar disponible en la agenda.",
+      ],
+    ],
+    gestion: [
+      [
+        "¿Puedo asignar responsables a las tareas?",
+        "Sí. Cada tarea puede tener un responsable y un estado de avance.",
+      ],
+      [
+        "¿Se pueden generar reportes por cliente?",
+        "Sí. Puedes filtrar por cliente y descargar un resumen de avances y presupuestos.",
+      ],
+    ],
+    educacion: [
+      [
+        "¿Incluye matrículas y pagos?",
+        "Sí. Puedes crear matrículas con cargos ficticios y registrar abonos.",
+      ],
+      [
+        "¿Se puede imprimir la libreta?",
+        "Sí. Puedes generar e imprimir una libreta de ejemplo por alumno.",
+      ],
+    ],
+  };
+  return [...(specific[kind] || []), ...common];
 }

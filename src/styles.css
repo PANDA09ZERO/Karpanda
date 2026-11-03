@@ -8409,3 +8409,118 @@ button {
     padding: 23px;
   }
 }
+/* Industries */
+.industry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+.industry-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
+  border: 1px solid rgba(18, 91, 72, 0.12);
+  border-radius: 14px;
+  background: #fff;
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.industry-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+.industry-card h3 {
+  margin: 4px 0 0;
+  color: #125b48;
+}
+.industry-card p {
+  color: #4b5563;
+  font-size: 14px;
+  flex: 1;
+}
+.industry-card span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  color: #125b48;
+  font-size: 13px;
+}
+/* Social proof */
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+.testimonial-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  border-radius: 14px;
+  background: #f6faf8;
+  border: 1px solid rgba(18, 91, 72, 0.1);
+}
+.testimonial-card svg {
+  color: #125b48;
+}
+.testimonial-card p {
+  font-size: 15px;
+  line-height: 1.5;
+  color: #1f2937;
+  flex: 1;
+}
+.testimonial-card div {
+  display: flex;
+  flex-direction: column;
+}
+.testimonial-card strong {
+  color: #125b48;
+}
+.testimonial-card small {
+  color: #6b7280;
+}
+/* Plans */
+.plans-table-wrap {
+  overflow-x: auto;
+  margin-top: 16px;
+}
+.plans-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 520px;
+}
+.plans-table th,
+.plans-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(18, 91, 72, 0.1);
+  text-align: left;
+  font-size: 14px;
+}
+.plans-table thead th {
+  background: #125b48;
+  color: #fff;
+  font-weight: 700;
+}
+.plans-table tbody th {
+  font-weight: 600;
+  color: #1f2937;
+}
+.plans-table tbody td {
+  color: #4b5563;
+}
+.plans-price-row th,
+.plans-price-row td {
+  font-weight: 700;
+  color: #125b48;
+}
+.plans-cta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
