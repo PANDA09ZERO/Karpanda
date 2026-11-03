@@ -454,7 +454,16 @@ export function OfficeList({
         </div>
       )}
       {loading ? (
-        <Loading />
+        <div className="skeleton-grid" aria-busy="true" aria-label="Cargando registros">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div className="skeleton-card" key={i}>
+              <div className="skeleton title" />
+              <div className="skeleton" />
+              <div className="skeleton" />
+              <div className="skeleton price" />
+            </div>
+          ))}
+        </div>
       ) : data?.items.length ? (
         <>
           <Records

@@ -133,7 +133,16 @@ export function OfficeDashboard() {
           </button>
         </div>
       ) : loading ? (
-        <Loading />
+        <div className="skeleton-grid" aria-busy="true" aria-label="Cargando panel">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div className="skeleton-card" key={i}>
+              <div className="skeleton title" />
+              <div className="skeleton" />
+              <div className="skeleton" />
+              <div className="skeleton price" />
+            </div>
+          ))}
+        </div>
       ) : (
         data && (
           <>
