@@ -8753,3 +8753,51 @@ dialog.modal::backdrop {
 .screenshot-frame:hover img {
   transform: scale(1.02);
 }
+/* Savings calculator */
+.savings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  margin-top: 16px;
+  align-items: start;
+}
+.savings-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.savings-inputs label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 600;
+  color: #1f2937;
+}
+.savings-inputs input {
+  padding: 10px 12px;
+  border: 1px solid rgba(18, 91, 72, 0.2);
+  border-radius: 10px;
+  font-size: 15px;
+}
+.savings-result {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  border-radius: 14px;
+  background: #f6faf8;
+  border: 1px solid rgba(18, 91, 72, 0.12);
+}
+.savings-result > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.savings-result small {
+  color: #6b7280;
+  font-size: 12px;
+}
+.savings-result strong {
+  font-size: 24px;
+  color: #125b48;
+}

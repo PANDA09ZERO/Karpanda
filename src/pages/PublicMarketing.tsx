@@ -521,6 +521,75 @@ export function PublicCTA() {
     </section>
   );
 }
+export function SavingsCalculator() {
+  const [hours, setHours] = useState(5);
+  const [rate, setRate] = useState(25);
+  const weeksPerMonth = 4.33;
+  const savedRatio = 0.7;
+  const monthly = hours * weeksPerMonth * rate * savedRatio;
+  const yearly = monthly * 12;
+  return (
+    <section className="marketing-section savings-calculator" id="calculadora">
+      <div className="marketing-section-heading">
+        <div>
+          <p className="eyebrow">CALCULA TU AHORRO</p>
+          <h2>
+            ¿Cuánto tiempo
+            <br />
+            recuperas al mes?
+          </h2>
+        </div>
+        <div>
+          <p className="muted">
+            Estima el valor del tiempo que podrías recuperar automatizando tareas
+            repetitivas.
+          </p>
+        </div>
+      </div>
+      <div className="savings-grid">
+        <div className="savings-inputs">
+          <label>
+            Horas perdidas por semana
+            <input
+              type="number"
+              min={0}
+              max={40}
+              value={hours}
+              onChange={(e) => setHours(Number(e.target.value) || 0)}
+            />
+          </label>
+          <label>
+            Valor de tu hora (S/)
+            <input
+              type="number"
+              min={0}
+              value={rate}
+              onChange={(e) => setRate(Number(e.target.value) || 0)}
+            />
+          </label>
+          <small className="muted">
+            Suponemos que Karpanda puede recuperar alrededor del 70% de ese
+            tiempo.
+          </small>
+        </div>
+        <div className="savings-result">
+          <div>
+            <small>Ahorro mensual estimado</small>
+            <strong>S/ {monthly.toFixed(2)}</strong>
+          </div>
+          <div>
+            <small>Ahorro anual estimado</small>
+            <strong>S/ {yearly.toFixed(2)}</strong>
+          </div>
+          <Link className="button full" to="/#soluciones">
+            Explorar soluciones <ArrowRight size={16} />
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function ServicesPage() {
   const [selected, setSelected] = useState("web"),
     [goal, setGoal] = useState(""),
