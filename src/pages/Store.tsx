@@ -26,7 +26,6 @@ import {
   Industries,
   Plans,
   PublicCTA,
-  SavingsCalculator,
   ServicePreview,
   SocialProof,
   WhyKarpanda,
@@ -139,7 +138,6 @@ export function Catalog() {
       <Industries />
       <SocialProof />
       <Plans />
-      <SavingsCalculator />
       <section className="solutions" id="soluciones">
         <p className="eyebrow">ENCUENTRA TU PUNTO DE PARTIDA</p>
         <h2>Una solución para cada forma de crecer</h2>
