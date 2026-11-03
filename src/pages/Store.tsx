@@ -211,14 +211,44 @@ export function Detail() {
   useEffect(() => {
     if (!p) return;
     const content = productContent(p);
+    const kind = content.kind;
+    const imageMap: Record<string, string> = {
+      ventas: "/screenshots/ventas.png",
+      reservas: "/screenshots/reservas.png",
+      gestion: "/screenshots/gestion.png",
+      educacion: "/screenshots/educacion.png",
+    };
+    const image = `https://karpanda.vercel.app${imageMap[kind] || "/assets/karpanda-pandas.png"}`;
+    const url = `https://karpanda.vercel.app/producto/${p.slug}`;
+
     document.title = `${p.name} · Karpanda`;
-    let meta = document.querySelector('meta[name="description"]');
-    if (!meta) {
-      meta = document.createElement("meta");
-      meta.setAttribute("name", "description");
-      document.head.appendChild(meta);
-    }
-    meta.setAttribute("content", content.summary);
+
+    const setMeta = (selector: string, attr: string, value: string) => {
+      let el = document.querySelector(selector);
+      if (!el) {
+        el = document.createElement("meta");
+        if (selector.includes('property=')) {
+          const m = selector.match(/property="([^"]+)"/);
+          if (m) el.setAttribute("property", m[1]);
+        } else {
+          const m = selector.match(/name="([^"]+)"/);
+          if (m) el.setAttribute("name", m[1]);
+        }
+        document.head.appendChild(el);
+      }
+      el.setAttribute(attr, value);
+    };
+
+    setMeta('meta[name="description"]', "content", content.summary);
+    setMeta('meta[property="og:title"]', "content", `${p.name} · Karpanda`);
+    setMeta('meta[property="og:description"]', "content", content.summary);
+    setMeta('meta[property="og:image"]', "content", image);
+    setMeta('meta[property="og:url"]', "content", url);
+    setMeta('meta[property="og:type"]', "content", "product");
+    setMeta('meta[name="twitter:card"]', "content", "summary_large_image");
+    setMeta('meta[name="twitter:title"]', "content", `${p.name} · Karpanda`);
+    setMeta('meta[name="twitter:description"]', "content", content.summary);
+    setMeta('meta[name="twitter:image"]', "content", image);
   }, [p]);
   if (loading) return <Loading />;
   if (!p) return <NotFound />;
