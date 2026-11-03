@@ -9392,3 +9392,26 @@ dialog.modal::backdrop {
     grid-template-columns: 1fr;
   }
 }
+/* More breathing room from screen edges */
+.landing-example {
+  padding-inline: 24px;
+}
+.landing-nav,
+.landing-hero,
+.landing-section,
+.landing-footer {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+@media (max-width: 768px) {
+  .landing-example {
+    padding-inline: 12px;
+  }
+  .landing-nav,
+  .landing-hero,
+  .landing-section,
+  .landing-footer {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
