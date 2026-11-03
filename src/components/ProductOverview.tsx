@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowRight,
@@ -199,6 +200,26 @@ export function ProductOverview({ product }: { product: Product }) {
         )}
       </section>
       <ProductPreview product={product} />
+      <section className="product-screenshot-section">
+        <p className="eyebrow">CAPTURA REAL</p>
+        <h2>Así se ve en uso</h2>
+        <div className="screenshot-frame">
+          <img
+            src={screenshotFor(info.kind)}
+            alt={`Captura real del demo de ${product.name}`}
+            loading="lazy"
+          />
+        </div>
+        <p className="muted">
+          Imagen tomada del escenario de demostración. Los datos son ficticios y
+          se pueden reiniciar desde la demo.
+        </p>
+        {demo && (
+          <Link className="button secondary product-demo-link" to={demo}>
+            Abrir la demo interactiva <ArrowRight size={17} />
+          </Link>
+        )}
+      </section>
       <section className="product-module-section">
         <p className="eyebrow">EL SISTEMA POR DENTRO</p>
         <h2>Módulos que trabajan juntos</h2>
@@ -304,4 +325,12 @@ function productFaqs(kind: string): [string, string][] {
     ],
   };
   return [...(specific[kind] || []), ...common];
+}function screenshotFor(kind: string) {
+  const map: Record<string, string> = {
+    ventas: "/screenshots/ventas.png",
+    reservas: "/screenshots/reservas.png",
+    gestion: "/screenshots/gestion.png",
+    educacion: "/screenshots/educacion.png",
+  };
+  return map[kind] || "/screenshots/ventas.png";
 }

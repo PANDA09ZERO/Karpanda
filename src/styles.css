@@ -8732,3 +8732,24 @@ dialog.modal::backdrop {
     transform: translateY(0);
   }
 }
+/* Real screenshot section */
+.product-screenshot-section {
+  margin-top: 8px;
+}
+.screenshot-frame {
+  margin: 12px 0;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(18, 91, 72, 0.12);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  background: #0f1f1a;
+}
+.screenshot-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 0.3s ease;
+}
+.screenshot-frame:hover img {
+  transform: scale(1.02);
+}
