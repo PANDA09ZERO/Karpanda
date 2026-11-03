@@ -1,9 +1,11 @@
 import { demoMode, supabase } from "./supabase";
 import type { Product, Order, Ticket } from "../types";
+import { quoteProduct } from "./catalog";
 export const seedProducts: Product[] = [
   {
     id: "11111111-1111-4111-8111-111111111111",
     slug: "ventas",
+    demo_path: "/demo/ventas",
     name: "Karpanda Ventas",
     category: "Ventas e inventario",
     description: "Controla tu caja, productos y ventas.",
@@ -14,6 +16,7 @@ export const seedProducts: Product[] = [
   {
     id: "22222222-2222-4222-8222-222222222222",
     slug: "reservas",
+    demo_path: "/demo/reservas",
     name: "Karpanda Reservas",
     category: "Citas y servicios",
     description: "Tu agenda y tus clientes, en orden.",
@@ -24,12 +27,25 @@ export const seedProducts: Product[] = [
   {
     id: "33333333-3333-4333-8333-333333333333",
     slug: "gestion",
+    demo_path: "/demo/gestion",
     name: "Karpanda Gestión",
     category: "Operación de negocios",
     description: "Conecta clientes, tareas y reportes.",
     price: 249,
     published: true,
     app_url: null,
+  },
+  {
+    id: "44444444-4444-4444-8444-444444444444",
+    slug: "educacion",
+    name: "Karpanda Educación",
+    category: "Educación",
+    description:
+      "Conecta alumnos, profesores, familias, matrículas y seguimiento académico.",
+    price: 0,
+    published: true,
+    app_url: null,
+    demo_path: "/demo/educacion",
   },
 ];
 export const money = (n: number) => `S/ ${Number(n).toFixed(2)}`;
@@ -60,6 +76,10 @@ export async function placeOrder(
   product: Product,
   buyer: string,
 ): Promise<Order> {
+  if (quoteProduct(product))
+    throw Error(
+      "Este producto requiere cotización. Consulta su implementación antes de registrar un pedido.",
+    );
   if (demoMode) {
     const order: Order = {
       id: crypto.randomUUID(),

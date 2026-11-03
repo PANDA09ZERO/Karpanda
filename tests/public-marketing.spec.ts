@@ -14,7 +14,7 @@ test("página pública: catálogo filtrado, preguntas y resumen de proyecto", as
     "Karpanda Reservas",
   );
   await page.getByRole("button", { name: "Todas", exact: true }).click();
-  await expect(page.locator(".product-card")).toHaveCount(3);
+  await expect(page.locator(".product-card")).toHaveCount(4);
   await page
     .locator(".faq-list summary")
     .filter({ hasText: "¿Necesito saber de tecnología para empezar?" })
@@ -94,7 +94,7 @@ test("sin ID: no carga Google aunque exista una preferencia anterior", async ({
     ),
   );
   await page.goto("/");
-  await expect(page.locator(".product-card")).toHaveCount(3);
+  await expect(page.locator(".product-card")).toHaveCount(4);
   await expect(page.locator("#karpanda-ga4")).toHaveCount(0);
   await expect(page.getByLabel("Preferencias de medición")).toHaveCount(0);
 });

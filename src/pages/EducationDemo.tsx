@@ -973,10 +973,10 @@ export function EducationDemo() {
           <span>¿Buscas un sistema para tu institución?</span>
           <Link
             className="text-link"
-            to="/servicios#preparar-consulta"
+            to="/producto/educacion"
             onClick={() => trackDemoAction("demo_consult", "educacion")}
           >
-            Consultar una adaptación <ArrowRight size={15} />
+            Conocer Karpanda Educación <ArrowRight size={15} />
           </Link>
         </div>
       </div>

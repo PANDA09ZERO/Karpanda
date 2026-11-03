@@ -7,6 +7,7 @@ import {
   CalendarDays,
   Sparkles,
   GraduationCap,
+  BriefcaseBusiness,
 } from "lucide-react";
 export function DemoPreview() {
   return (
@@ -66,6 +67,18 @@ function DemoCards() {
           ],
         },
         {
+          id: "gestion",
+          title: "De un cliente a un proyecto.",
+          subtitle: "GESTIÓN DE NEGOCIOS",
+          body: "Organiza Panda Studio: clientes, proyectos, responsables, tareas y reportes en un mismo lugar.",
+          Icon: BriefcaseBusiness,
+          items: [
+            "Dashboard y clientes conectados",
+            "Proyectos y tareas con seguimiento",
+            "Reportes de presupuestos simulados",
+          ],
+        },
+        {
           id: "reservas",
           title: "Un horario. Una reserva. Listo.",
           subtitle: "RESERVAS Y CITAS",
@@ -98,9 +111,11 @@ function DemoCards() {
             Probar{" "}
             {d.id === "ventas"
               ? "Ventas"
-              : d.id === "educacion"
-                ? "Educación"
-                : "Reservas"}{" "}
+              : d.id === "gestion"
+                ? "Gestión"
+                : d.id === "educacion"
+                  ? "Educación"
+                  : "Reservas"}{" "}
             <ArrowRight size={17} />
           </Link>
         </article>

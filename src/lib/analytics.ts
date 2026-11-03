@@ -163,7 +163,7 @@ export function trackPublicAction(
 
 export function trackDemoAction(
   event: DemoEvent,
-  demo: "ventas" | "reservas" | "educacion",
+  demo: "ventas" | "reservas" | "educacion" | "gestion",
 ) {
   trafficDemo(event);
   if (

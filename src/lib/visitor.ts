@@ -15,6 +15,7 @@ export function publicPath(path: string) {
       "/demo/ventas",
       "/demo/reservas",
       "/demo/educacion",
+      "/demo/gestion",
     ].includes(path) || /^\/producto\/[a-z0-9-]+$/.test(path)
   );
 }

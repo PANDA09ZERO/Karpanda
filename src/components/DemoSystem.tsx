@@ -31,7 +31,7 @@ export function DemoSystem({
   guide,
   children,
 }: {
-  kind: "ventas" | "reservas" | "educacion";
+  kind: "ventas" | "reservas" | "educacion" | "gestion";
   view: string;
   onView: (view: string) => void;
   guide: ReactNode;
@@ -39,13 +39,16 @@ export function DemoSystem({
 }) {
   const sales = kind === "ventas";
   const education = kind === "educacion";
+  const management = kind === "gestion";
   const [moreOpen, setMoreOpen] = useState(false);
   const closeMore = useCallback(() => setMoreOpen(false), []);
   const brand = education
     ? "Colegio Panda"
-    : sales
-      ? "Panda Papelería"
-      : "Estudio Panda";
+    : management
+      ? "Panda Studio"
+      : sales
+        ? "Panda Papelería"
+        : "Estudio Panda";
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, [view]);
@@ -62,22 +65,29 @@ export function DemoSystem({
         { id: "alerts", label: "Alertas", Icon: Bell },
         { id: "reports", label: "Reportes", Icon: ChartNoAxesCombined },
       ]
-    : sales
+    : management
       ? [
           { id: "dashboard", label: "Dashboard", Icon: LayoutDashboard },
-          { id: "work", label: "Punto de venta", Icon: ShoppingBag },
-          { id: "inventory", label: "Inventario", Icon: Package },
-          { id: "history", label: "Ventas", Icon: ReceiptText },
+          { id: "clients", label: "Clientes", Icon: Users },
+          { id: "projects", label: "Proyectos y tareas", Icon: BookOpen },
+          { id: "reports", label: "Reportes", Icon: ChartNoAxesCombined },
         ]
-      : [
-          { id: "dashboard", label: "Dashboard", Icon: LayoutDashboard },
-          { id: "work", label: "Nueva reserva", Icon: CalendarDays },
-          { id: "agenda", label: "Agenda", Icon: CalendarDays },
-          { id: "services", label: "Servicios y equipo", Icon: Sparkles },
-        ];
+      : sales
+        ? [
+            { id: "dashboard", label: "Dashboard", Icon: LayoutDashboard },
+            { id: "work", label: "Punto de venta", Icon: ShoppingBag },
+            { id: "inventory", label: "Inventario", Icon: Package },
+            { id: "history", label: "Ventas", Icon: ReceiptText },
+          ]
+        : [
+            { id: "dashboard", label: "Dashboard", Icon: LayoutDashboard },
+            { id: "work", label: "Nueva reserva", Icon: CalendarDays },
+            { id: "agenda", label: "Agenda", Icon: CalendarDays },
+            { id: "services", label: "Servicios y equipo", Icon: Sparkles },
+          ];
   return (
     <div
-      className={`demo-system ${education ? "demo-system-education" : sales ? "demo-system-sales" : "demo-system-booking"}`}
+      className={`demo-system ${education ? "demo-system-education" : management ? "demo-system-management" : sales ? "demo-system-sales" : "demo-system-booking"}`}
     >
       <div className="ds-banner">
         <span>
@@ -105,9 +115,11 @@ export function DemoSystem({
               <small>
                 {education
                   ? "Gestión educativa"
-                  : sales
-                    ? "Ventas e inventario"
-                    : "Agenda y servicios"}
+                  : management
+                    ? "Clientes y proyectos"
+                    : sales
+                      ? "Ventas e inventario"
+                      : "Agenda y servicios"}
               </small>
             </div>
           </div>

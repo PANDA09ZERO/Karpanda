@@ -45,6 +45,10 @@ const TrafficDashboard = lazy(() =>
     default: m.TrafficDashboard,
   })),
 );
+const ManagementDemo = lazy(() =>
+  import("./pages/ManagementDemo").then((m) => ({ default: m.ManagementDemo })),
+);
+/* Offices are loaded independently from the public demos. */
 const OfficeDetail = lazy(() =>
   import("./pages/OfficeRecords").then((m) => ({ default: m.OfficeDetail })),
 );
@@ -144,6 +148,7 @@ function AppRoutes() {
             <Route path="demo/ventas" element={<SalesDemo />} />
             <Route path="demo/reservas" element={<BookingDemo />} />
             <Route path="demo/educacion" element={<EducationDemo />} />
+            <Route path="demo/gestion" element={<ManagementDemo />} />
             <Route path="producto/:slug" element={<Detail />} />
             <Route path="compra/:slug" element={<Checkout />} />
             <Route path="como-funciona" element={<HowItWorks />} />

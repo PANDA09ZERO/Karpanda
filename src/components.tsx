@@ -7,6 +7,7 @@ import {
 } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { Modal } from "./components/Modal";
+import { productDemo, quoteProduct } from "./lib/catalog";
 import {
   ArrowLeft,
   ArrowRight,
@@ -99,9 +100,12 @@ export function PublicLayout() {
     setOpen(false);
   }, [location.pathname]);
   if (
-    ["/demo/ventas", "/demo/reservas", "/demo/educacion"].includes(
-      location.pathname,
-    )
+    [
+      "/demo/ventas",
+      "/demo/reservas",
+      "/demo/educacion",
+      "/demo/gestion",
+    ].includes(location.pathname)
   )
     return (
       <main id="main" tabIndex={-1}>
@@ -175,9 +179,7 @@ export function Footer() {
   );
 }
 export function ProductCard({ product }: { product: Product }) {
-  const demo = ["ventas", "reservas"].includes(product.slug)
-    ? `/demo/${product.slug}`
-    : null;
+  const demo = productDemo(product);
   return (
     <article className="product-card">
       <div className="category">
@@ -190,8 +192,14 @@ export function ProductCard({ product }: { product: Product }) {
       <p>{product.description}</p>
       <div className="card-bottom">
         <span className="price">
-          S/ {product.price}
-          <small>/ mes</small>
+          {quoteProduct(product) ? (
+            "Por cotizar"
+          ) : (
+            <>
+              S/ {product.price}
+              <small>/ mes</small>
+            </>
+          )}
         </span>
         <Link className="button secondary" to={`/producto/${product.slug}`}>
           Ver software <ArrowRight size={16} />

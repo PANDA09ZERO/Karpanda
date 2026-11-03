@@ -29,19 +29,16 @@ import {
   WorkingMethod,
 } from "./PublicMarketing";
 import { trackPublicAction } from "../lib/analytics";
+import { productDemo, quoteProduct } from "../lib/catalog";
 export function Catalog() {
   const { products, loading } = useApp();
   const [category, setCategory] = useState("Todas");
-  const categories = [
-    "Todas",
-    ...new Set([...products.map((p) => p.category), "Educación"]),
-  ];
+  const categories = ["Todas", ...new Set(products.map((p) => p.category))];
   const selected = categories.includes(category) ? category : "Todas";
   const visible =
     selected === "Todas"
       ? products
       : products.filter((p) => p.category === selected);
-  const showEducation = selected === "Todas" || selected === "Educación";
   return (
     <div className="container public-marketing">
       <section className="hero">
@@ -132,39 +129,11 @@ export function Catalog() {
         )}
         {loading ? (
           <Loading />
-        ) : visible.length || showEducation ? (
+        ) : visible.length ? (
           <div className="product-grid">
             {visible.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}
-            {showEducation && (
-              <article className="catalog-education-card">
-                <div className="category">
-                  <span className="product-icon">
-                    <GraduationCap size={24} />
-                  </span>
-                  <span>Educación · A medida</span>
-                </div>
-                <h3>Karpanda Educación</h3>
-                <p>
-                  Gestión de alumnos, profesores, familias, matrículas, pagos y
-                  seguimiento académico para tu institución.
-                </p>
-                <div className="catalog-education-offer">
-                  <strong>Adaptado a tu colegio</strong>
-                  <small>Consulta el alcance y la implementación.</small>
-                </div>
-                <Link
-                  className="button secondary"
-                  to="/servicios#preparar-consulta"
-                >
-                  Consultar implementación <ArrowRight size={16} />
-                </Link>
-                <Link className="catalog-demo-link" to="/demo/educacion">
-                  Probar demo del colegio <ArrowUpRight size={16} />
-                </Link>
-              </article>
-            )}
           </div>
         ) : (
           <Empty title="Estamos preparando nuevas soluciones">
@@ -199,17 +168,19 @@ export function Detail() {
       <PageHeading title={p.name}>
         <Badge>{p.category.toUpperCase()}</Badge>
         <span className="detail-subtitle">
-          El control de tu negocio, en un solo lugar.
+          {p.slug === "educacion"
+            ? "El seguimiento de tu institución, en un solo lugar."
+            : "El control de tu negocio, en un solo lugar."}
         </span>
       </PageHeading>
       <div className="detail-grid">
         <div>
           <ProductPreview product={p} />
           <section className="features">
-            {["ventas", "reservas"].includes(p.slug) && (
+            {productDemo(p) && (
               <Link
                 className="button secondary product-demo-link"
-                to={`/demo/${p.slug}`}
+                to={productDemo(p)!}
               >
                 Probar una demo interactiva <ArrowRight size={17} />
               </Link>
@@ -219,12 +190,27 @@ export function Detail() {
               {p.slug === "reservas" ? "organizarte" : "trabajar"} mejor
             </h2>
             <ul>
-              {[
-                "Caja e inventario en tiempo real",
-                "Reportes y exportación de información",
-                "Hasta 5 usuarios con permisos",
-                "Actualizaciones y soporte incluidos",
-              ].map((s) => (
+              {(p.slug === "educacion"
+                ? [
+                    "Alumnos, profesores y familias",
+                    "Matrículas, pagos y gestión académica",
+                    "Asistencia, calificaciones y libretas",
+                    "Implementación adaptada a tu institución",
+                  ]
+                : p.slug === "gestion"
+                  ? [
+                      "Directorio de clientes y proyectos",
+                      "Tareas, responsables y seguimiento",
+                      "Dashboard y reportes por cliente",
+                      "Acceso desde computadoras y teléfonos",
+                    ]
+                  : [
+                      "Caja e inventario en tiempo real",
+                      "Reportes y exportación de información",
+                      "Hasta 5 usuarios con permisos",
+                      "Actualizaciones y soporte incluidos",
+                    ]
+              ).map((s) => (
                 <li key={s}>
                   <Check size={20} />
                   {s}
@@ -234,20 +220,47 @@ export function Detail() {
           </section>
         </div>
         <aside className="plan">
-          <Badge>SUSCRIPCIÓN MENSUAL</Badge>
-          <h2>Plan Empresa</h2>
-          <Price value={p.price} />
-          <p className="muted">1 empresa · hasta 5 usuarios</p>
-          <Link className="button full" to={`/compra/${p.slug}`}>
-            Elegir este plan <ArrowRight size={18} />
-          </Link>
+          <Badge>
+            {quoteProduct(p)
+              ? "IMPLEMENTACIÓN A MEDIDA"
+              : "SUSCRIPCIÓN MENSUAL"}
+          </Badge>
+          <h2>
+            {quoteProduct(p) ? "Solución para tu institución" : "Plan Empresa"}
+          </h2>
+          {quoteProduct(p) ? (
+            <>
+              <h3>Por cotizar</h3>
+              <p className="muted">
+                Definimos contigo el alcance, los usuarios y la puesta en
+                marcha.
+              </p>
+              <Link className="button full" to="/servicios#preparar-consulta">
+                Consultar implementación <ArrowRight size={18} />
+              </Link>
+            </>
+          ) : (
+            <>
+              <Price value={p.price} />
+              <p className="muted">1 empresa · hasta 5 usuarios</p>
+              <Link className="button full" to={`/compra/${p.slug}`}>
+                Elegir este plan <ArrowRight size={18} />
+              </Link>
+            </>
+          )}
           <ul className="plain-list">
             <li>Acceso desde el navegador</li>
             <li>Soporte para acompañarte</li>
-            <li>Actualizaciones durante tu suscripción</li>
+            <li>
+              {quoteProduct(p)
+                ? "Alcance y acompañamiento según propuesta"
+                : "Actualizaciones durante tu suscripción"}
+            </li>
           </ul>
           <small className="muted">
-            Precio de ejemplo. Condiciones por definir.
+            {quoteProduct(p)
+              ? "El presupuesto se define según las necesidades de tu institución."
+              : "Precio de ejemplo. Condiciones por definir."}
           </small>
         </aside>
       </div>
@@ -263,6 +276,7 @@ export function Checkout() {
   const p = products.find((p) => p.slug === slug);
   if (loading) return <Loading />;
   if (!p) return <NotFound />;
+  if (quoteProduct(p)) return <Navigate to={`/producto/${p.slug}`} replace />;
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!p) return;

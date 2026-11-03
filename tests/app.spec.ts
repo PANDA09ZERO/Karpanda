@@ -8,7 +8,7 @@ test("catálogo → producto → compra → pedidos → licencia persistente", a
   await expect(
     page.getByRole("heading", { name: "Tu próximo paso, más simple." }),
   ).toBeVisible();
-  await expect(page.locator(".product-card")).toHaveCount(3);
+  await expect(page.locator(".product-card")).toHaveCount(4);
   await page.screenshot({
     path: "test-results/catalogo-desktop.png",
     fullPage: true,
@@ -59,7 +59,7 @@ test("administración guarda edición y publica productos en el catálogo", asyn
     page.getByRole("button", { name: "Publicar Karpanda Ventas Pro" }),
   ).toBeVisible();
   await page.getByRole("link", { name: "Volver a la tienda" }).click();
-  await expect(page.locator(".product-card")).toHaveCount(2);
+  await expect(page.locator(".product-card")).toHaveCount(3);
   await page.goto("/admin");
   await page.screenshot({
     path: "test-results/admin-desktop.png",
@@ -87,7 +87,7 @@ test("móvil: imágenes visibles, menú y pantallas sin desbordamiento", async (
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
-  await expect(page.locator(".product-card")).toHaveCount(3);
+  await expect(page.locator(".product-card")).toHaveCount(4);
   for (const img of await page.locator("img").all()) {
     await img.scrollIntoViewIfNeeded();
     await expect

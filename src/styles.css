@@ -7910,3 +7910,122 @@ button {
     gap: 16px;
   }
 }
+
+/* Management demo: clients, project progress and tasks. */
+.demo-system-management {
+  --ds-accent: #456350;
+  background: #f4f6f1;
+}
+.demo-system-management .ds-welcome {
+  background: #e6edde;
+}
+.management-progress {
+  display: grid;
+  gap: 19px;
+  margin-top: 22px;
+}
+.management-progress > button {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 13px;
+  border: 0;
+  background: transparent;
+  padding: 10px 0;
+  text-align: left;
+}
+.management-progress strong {
+  display: block;
+  font-size: 12px;
+}
+.management-progress small {
+  display: block;
+  font-size: 10px;
+  color: #85917b;
+  margin-top: 7px;
+}
+.management-progress b {
+  color: #718d55;
+  font-size: 13px;
+}
+.management-progress i {
+  grid-column: 1/-1;
+  height: 9px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #edf2e6;
+}
+.management-progress i > span {
+  height: 100%;
+  display: block;
+  border-radius: 20px;
+  background: #90ad72;
+}
+.management-client .text-link,
+.management-project .text-link {
+  font-size: 11px;
+  margin: 18px 0 0;
+  display: flex;
+}
+.management-client .text-link + .text-link {
+  color: #8b8f7e;
+}
+.management-client summary,
+.management-project summary {
+  cursor: pointer;
+  list-style: none;
+}
+.management-client summary::-webkit-details-marker,
+.management-project summary::-webkit-details-marker {
+  display: none;
+}
+.management-client .button,
+.management-project .button {
+  font-size: 11px;
+  white-space: normal;
+}
+.management-task-list {
+  display: grid;
+  gap: 19px;
+  margin: 22px 0;
+}
+.management-task-list label {
+  display: grid;
+  gap: 8px;
+  padding: 15px;
+  border: 1px solid #e1e8da;
+  border-radius: 12px;
+  background: #f8faf5;
+}
+.management-task-list strong {
+  font-size: 12px;
+  line-height: 1.7;
+}
+.management-task-list small {
+  font-size: 10px;
+  color: #86957a;
+}
+.management-task-list select {
+  min-width: 0;
+  width: 100%;
+  font-size: 11px;
+}
+.management-project summary > strong {
+  display: block;
+  font-size: 17px;
+  color: #678250;
+  margin: 17px 0;
+}
+.management-demo .demo-search {
+  margin: 20px 0;
+}
+@media (min-width: 901px) {
+  .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1101px) {
+  .demo-selection-grid,
+  .traffic-demo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

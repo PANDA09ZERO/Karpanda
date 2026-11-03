@@ -19,6 +19,7 @@ import {
   seedProducts,
 } from "../lib/data";
 import type { License, Order, Product } from "../types";
+import { productDemos, productDemo, quoteProduct } from "../lib/catalog";
 import { Records, InfoGrid, type Column } from "../components/Backoffice";
 export function Admin() {
   const { id } = useParams();
@@ -54,6 +55,7 @@ export function Admin() {
       category: String(form.get("category")).trim(),
       description: String(form.get("description")).trim(),
       price: Number(form.get("price")),
+      demo_path: String(form.get("demo_path") || "") || null,
       app_url: String(form.get("app_url")).trim() || null,
       published: editing?.published ?? false,
     };
@@ -118,7 +120,10 @@ export function Admin() {
   const cols: Column[] = [
     { label: "Producto", render: (r) => r.name },
     { label: "Categoría", render: (r) => r.category },
-    { label: "Plan mensual", render: (r) => money(r.price) },
+    {
+      label: "Precio",
+      render: (r) => (Number(r.price) <= 0 ? "Por cotizar" : money(r.price)),
+    },
     {
       label: "Estado",
       render: (r) => (
@@ -175,7 +180,16 @@ export function Admin() {
                   items={[
                     { label: "Nombre", value: selected.name },
                     { label: "Categoría", value: selected.category },
-                    { label: "Plan mensual", value: money(selected.price) },
+                    {
+                      label: "Precio",
+                      value: quoteProduct(selected)
+                        ? "Por cotizar"
+                        : money(selected.price),
+                    },
+                    {
+                      label: "Demo pública",
+                      value: productDemo(selected) || "Sin demo asignada",
+                    },
                     {
                       label: "Publicación",
                       value: selected.published
@@ -286,16 +300,30 @@ export function Admin() {
               />
             </label>
             <label>
-              Precio mensual en soles
+              Precio mensual en soles (0 = por cotizar)
               <input
                 name="price"
                 type="number"
-                min="0.01"
+                min="0"
                 max="999999.99"
                 step="0.01"
                 defaultValue={editing?.price}
                 required
               />
+            </label>
+            <label>
+              Demo pública
+              <select
+                name="demo_path"
+                defaultValue={editing ? productDemo(editing) || "" : ""}
+              >
+                <option value="">Sin demo</option>
+                {productDemos.map((d) => (
+                  <option key={d.path} value={d.path}>
+                    {d.label}
+                  </option>
+                ))}
+              </select>
             </label>
             <label>
               URL de acceso al software (opcional)

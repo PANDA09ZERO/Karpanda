@@ -7,6 +7,7 @@ export type Product = {
   price: number;
   published: boolean;
   app_url: string | null;
+  demo_path?: string | null;
 };
 export type Order = {
   id: string;

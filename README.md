@@ -6,9 +6,11 @@ La portada incluye servicios propuestos, catálogo filtrable, presentación de K
 
 Google Analytics 4 se configura mediante `VITE_GA_MEASUREMENT_ID`. Sin un ID real no carga Google. Karpanda también lleva su propio resumen consentido en `/admin/visitas`, independiente de Google y sin importar su historial. Se excluyen rutas privadas y contenido de formularios. Los visitantes pueden rechazar la medición o cambiar su elección desde el pie de página. Es necesario desactivar la medición mejorada en el flujo de Google para evitar eventos automáticos y duplicados. Consulta [la guía de Google](docs/GOOGLE_ANALYTICS.md).
 
-`/demos` presenta tres sistemas interactivos: ventas e inventario, agenda de reservas y gestión educativa basada en Tesis. Cada uno tiene dashboard y menú propio. Funcionan sin registro, con datos ficticios y reinicio; no generan operaciones reales. Consulta [Demos y visitas](docs/DEMOS_Y_VISITAS.md) para las funciones, métricas, privacidad y despliegue.
+`/demos` presenta cuatro sistemas interactivos: ventas e inventario, agenda de reservas, clientes/proyectos y gestión educativa basada en Tesis. Cada uno tiene dashboard y menú propio. Funcionan sin registro, con datos ficticios y reinicio; no generan operaciones reales. Consulta [Demos y visitas](docs/DEMOS_Y_VISITAS.md) para las funciones, métricas, privacidad y despliegue.
 
 Aplicación React + TypeScript + Vite basada en el [diseño de Figma](https://www.figma.com/design/9lVkuMmrAV5a0cEJ2NHV9z?node-id=5-791). Incluye catálogo adaptable a móvil, producto y plan, compra, registro e inicio de sesión, portal del cliente y administración.
+
+Los cuatro productos se administran en Productos. `demo_path` enlaza cada uno a una demo pública permitida. Un precio de 0 se presenta como Por cotizar y bloquea la compra automática tanto en el navegador como en la base de datos; un precio positivo habilita el flujo de pedido existente.
 
 ## Ejecutar
 

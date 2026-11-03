@@ -10,7 +10,7 @@ test("Supabase Karpanda: catálogo público y acceso protegido real", async ({
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("/");
-  await expect(page.locator(".product-card")).toHaveCount(3);
+  await expect(page.locator(".product-card")).toHaveCount(4);
   await expect(page.locator(".demo-banner")).toHaveCount(0);
   await expect(page.getByRole("alert")).toHaveCount(0);
   await page.goto("/cuenta");

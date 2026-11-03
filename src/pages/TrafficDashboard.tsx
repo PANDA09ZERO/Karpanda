@@ -48,6 +48,7 @@ const names: Record<string, string> = {
   "/demo/ventas": "Demo de Ventas",
   "/demo/reservas": "Demo de Reservas",
   "/demo/educacion": "Demo de Educación",
+  "/demo/gestion": "Demo de Gestión",
   "/como-funciona": "Cómo funciona",
   "/terminos": "Términos y privacidad",
 };
@@ -316,37 +317,40 @@ export function TrafficDashboard() {
                 </Link>
               </div>
               <div className="traffic-demo-grid">
-                {["/demo/ventas", "/demo/reservas", "/demo/educacion"].map(
-                  (path) => {
-                    const row = data.demos.find((d) => d.path === path);
-                    return (
-                      <article key={path}>
-                        <span className="demo-live-label">
-                          <FlaskConical size={14} />
-                          INTERACTIVA
-                        </span>
-                        <h3>{pageName(path)}</h3>
-                        <dl>
-                          <div>
-                            <dt>Recorridos iniciados</dt>
-                            <dd>{number(row?.starts || 0)}</dd>
-                          </div>
-                          <div>
-                            <dt>Recorridos completados</dt>
-                            <dd>{number(row?.completions || 0)}</dd>
-                          </div>
-                          <div>
-                            <dt>Clics para conocer la solución</dt>
-                            <dd>{number(row?.consults || 0)}</dd>
-                          </div>
-                        </dl>
-                        <Link className="text-link" to={path}>
-                          Probar demo <ArrowUpRight size={15} />
-                        </Link>
-                      </article>
-                    );
-                  },
-                )}
+                {[
+                  "/demo/ventas",
+                  "/demo/reservas",
+                  "/demo/educacion",
+                  "/demo/gestion",
+                ].map((path) => {
+                  const row = data.demos.find((d) => d.path === path);
+                  return (
+                    <article key={path}>
+                      <span className="demo-live-label">
+                        <FlaskConical size={14} />
+                        INTERACTIVA
+                      </span>
+                      <h3>{pageName(path)}</h3>
+                      <dl>
+                        <div>
+                          <dt>Recorridos iniciados</dt>
+                          <dd>{number(row?.starts || 0)}</dd>
+                        </div>
+                        <div>
+                          <dt>Recorridos completados</dt>
+                          <dd>{number(row?.completions || 0)}</dd>
+                        </div>
+                        <div>
+                          <dt>Clics para conocer la solución</dt>
+                          <dd>{number(row?.consults || 0)}</dd>
+                        </div>
+                      </dl>
+                      <Link className="text-link" to={path}>
+                        Probar demo <ArrowUpRight size={15} />
+                      </Link>
+                    </article>
+                  );
+                })}
               </div>
             </section>
             <p className="muted small traffic-footnote">

@@ -65,6 +65,7 @@ Deno.serve(async (req) => {
       "/demo/ventas",
       "/demo/reservas",
       "/demo/educacion",
+      "/demo/gestion",
     ];
     if (
       typeof b.path !== "string" ||
@@ -86,7 +87,12 @@ Deno.serve(async (req) => {
       return reply({ error: "Evento no válido" }, 400);
     if (
       b.event !== "page_view" &&
-      !["/demo/ventas", "/demo/reservas", "/demo/educacion"].includes(b.path)
+      ![
+        "/demo/ventas",
+        "/demo/reservas",
+        "/demo/educacion",
+        "/demo/gestion",
+      ].includes(b.path)
     )
       return reply({ error: "Evento no permitido" }, 400);
     const day = new Intl.DateTimeFormat("en-CA", {
