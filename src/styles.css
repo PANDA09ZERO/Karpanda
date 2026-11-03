@@ -8591,3 +8591,31 @@ button {
 .hero-demo {
   transition: box-shadow 0.25s ease;
 }
+/* Sombras suaves globales */
+.product-card,
+.industry-card,
+.testimonial-card,
+.panel {
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.product-card:hover,
+.industry-card:hover,
+.testimonial-card:hover {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+}
+.button {
+  box-shadow: 0 2px 10px rgba(18, 91, 72, 0.2);
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+.button:hover {
+  box-shadow: 0 6px 18px rgba(18, 91, 72, 0.3);
+  transform: translateY(-1px);
+}
+.button.secondary {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+.button.secondary:hover {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+}
