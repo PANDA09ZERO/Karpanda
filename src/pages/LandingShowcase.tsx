@@ -10,7 +10,11 @@ import {
   Mail,
   MapPin,
   Star,
+  Menu,
+  X,
+  ChevronRight,
 } from "lucide-react";
+import { useState } from "react";
 import { PageHeading } from "../components";
 
 type LandingExample = {
@@ -22,6 +26,7 @@ type LandingExample = {
   services: { name: string; desc: string }[];
   highlights: string[];
   testimonials: { name: string; text: string }[];
+  benefits: { title: string; desc: string }[];
 };
 
 const examples: LandingExample[] = [
@@ -41,6 +46,11 @@ const examples: LandingExample[] = [
       "Ambiente tranquilo y personalizado",
       "Reserva online en segundos",
       "Paquetes para parejas y grupos",
+    ],
+    benefits: [
+      { title: "Reserva fácil", desc: "Agenda tu cita en menos de un minuto desde el celular." },
+      { title: "Atención personalizada", desc: "Cada visita se adapta a tus necesidades." },
+      { title: "Ambiente premium", desc: "Espacios diseñados para tu relajación." },
     ],
     testimonials: [
       { name: "Lucía", text: "Salí renovada. El ambiente es increíble." },
@@ -64,6 +74,11 @@ const examples: LandingExample[] = [
       "Ambiente acogedor",
       "WiFi y espacio para trabajar",
     ],
+    benefits: [
+      { title: "Café de origen", desc: "Granos seleccionados de productores locales." },
+      { title: "Hecho cada día", desc: "Repostería fresca todas las mañanas." },
+      { title: "Tu espacio", desc: "WiFi, enchufes y ambiente para trabajar." },
+    ],
     testimonials: [
       { name: "María", text: "El mejor café de la zona, sin duda." },
       { name: "Diego", text: "Perfecto para trabajar con WiFi y buena música." },
@@ -86,6 +101,11 @@ const examples: LandingExample[] = [
       "Garantía en repuestos",
       "Asesoría personalizada",
     ],
+    benefits: [
+      { title: "Taller experto", desc: "Mecánicos certificados para tu moto." },
+      { title: "Repuestos garantizados", desc: "Calidad y garantía en cada pieza." },
+      { title: "Financiamiento", desc: "Planes flexibles para tu compra." },
+    ],
     testimonials: [
       { name: "Jorge", text: "Excelente atención y precios justos." },
       { name: "Ana", text: "El mantenimiento fue rápido y profesional." },
@@ -102,6 +122,7 @@ function iconFor(slug: string) {
 export function LandingShowcase() {
   const { slug } = useParams();
   const example = examples.find((e) => e.slug === slug);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   if (!slug) {
     return (
@@ -111,7 +132,7 @@ export function LandingShowcase() {
             Páginas públicas de ejemplo para distintos negocios.
           </span>
         </PageHeading>
-        <div className="landing-gallery-grid" style={{ marginBottom: 24 }}>
+        <div className="industry-grid">
           {examples.map((e) => {
             const Icon = iconFor(e.slug);
             return (
@@ -149,6 +170,44 @@ export function LandingShowcase() {
         } as React.CSSProperties
       }
     >
+      <nav className="landing-nav">
+        <div className="landing-nav-brand">
+          <Icon size={22} />
+          <span>{example.title}</span>
+        </div>
+        <div className="landing-nav-links">
+          <a href="#servicios">Servicios</a>
+          <a href="#beneficios">Beneficios</a>
+          <a href="#testimonios">Testimonios</a>
+          <a href="#contacto" className="landing-nav-cta">
+            Contacto
+          </a>
+        </div>
+        <button
+          className="landing-nav-toggle"
+          onClick={() => setMenuOpen((v) => !v)}
+          aria-label="Menú"
+        >
+          {menuOpen ? <X size={22} /> : <Menu size={22} />}
+        </button>
+      </nav>
+      {menuOpen && (
+        <div className="landing-mobile-menu">
+          <a href="#servicios" onClick={() => setMenuOpen(false)}>
+            Servicios
+          </a>
+          <a href="#beneficios" onClick={() => setMenuOpen(false)}>
+            Beneficios
+          </a>
+          <a href="#testimonios" onClick={() => setMenuOpen(false)}>
+            Testimonios
+          </a>
+          <a href="#contacto" onClick={() => setMenuOpen(false)}>
+            Contacto
+          </a>
+        </div>
+      )}
+
       <header className="landing-hero">
         <div className="landing-hero-copy">
           <span className="landing-eyebrow">EJEMPLO DE LANDING PAGE</span>
@@ -159,12 +218,19 @@ export function LandingShowcase() {
               Contáctanos <ArrowRight size={18} />
             </a>
             <a href="#servicios" className="landing-btn-ghost">
-              Ver servicios
+              Ver servicios <ChevronRight size={16} />
             </a>
           </div>
         </div>
         <div className="landing-hero-visual">
-          <Icon size={120} strokeWidth={1.2} />
+          <div className="landing-hero-card">
+            <Icon size={64} strokeWidth={1.2} />
+            <div className="landing-hero-card-lines">
+              <span />
+              <span />
+              <span />
+            </div>
+          </div>
         </div>
       </header>
 
@@ -185,19 +251,22 @@ export function LandingShowcase() {
         </div>
       </section>
 
-      <section className="landing-section">
-        <h2>Por qué elegirnos</h2>
+      <section className="landing-section" id="beneficios">
+        <h2>Beneficios</h2>
         <div className="landing-highlight-grid">
-          {example.highlights.map((h) => (
-            <div key={h} className="landing-highlight-card">
+          {example.benefits.map((b) => (
+            <div key={b.title} className="landing-highlight-card">
               <Sparkles size={20} />
-              <span>{h}</span>
+              <div>
+                <strong>{b.title}</strong>
+                <span>{b.desc}</span>
+              </div>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="landing-section">
+      <section className="landing-section" id="testimonios">
         <h2>Lo que dicen nuestros clientes</h2>
         <div className="landing-testimonial-grid">
           {example.testimonials.map((t) => (
@@ -239,10 +308,18 @@ export function LandingShowcase() {
             Escríbenos <ArrowRight size={16} />
           </a>
         </div>
-        <Link className="landing-btn-ghost" to="/landing" style={{ marginTop: 16, display: "inline-flex" }}>
+        <Link
+          className="landing-btn-ghost"
+          to="/landing"
+          style={{ marginTop: 20, display: "inline-flex" }}
+        >
           Ver más ejemplos <ArrowRight size={16} />
         </Link>
       </section>
+
+      <footer className="landing-footer">
+        <span>© {new Date().getFullYear()} {example.title}. Ejemplo de landing page por Karpanda.</span>
+      </footer>
     </div>
   );
 }
