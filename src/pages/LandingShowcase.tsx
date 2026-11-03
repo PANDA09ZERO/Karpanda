@@ -33,7 +33,7 @@ type LandingExample = {
 const examples: LandingExample[] = [
   {
     slug: "spa",
-    title: "Serenity Spa",
+    title: "Landing para Spa y Bienestar",
     tagline: "Bienestar, calma y cuidado personal en un solo lugar.",
     accent: "#7c5cff",
     accentSoft: "#ede9fe",
@@ -65,7 +65,7 @@ const examples: LandingExample[] = [
   },
   {
     slug: "cafeteria",
-    title: "Café Aroma",
+    title: "Landing para Cafetería",
     tagline: "Café de especialidad y repostería artesanal cada mañana.",
     accent: "#b45309",
     accentSoft: "#fef3c7",
@@ -97,7 +97,7 @@ const examples: LandingExample[] = [
   },
   {
     slug: "motos",
-    title: "Moto Center",
+    title: "Landing para Tienda de Motos",
     tagline: "Venta, mantenimiento y accesorios para tu moto.",
     accent: "#dc2626",
     accentSoft: "#fee2e2",
