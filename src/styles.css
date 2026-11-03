@@ -9352,3 +9352,43 @@ dialog.modal::backdrop {
     display: none;
   }
 }
+/* Proportions fix for landing examples */
+.landing-nav,
+.landing-hero,
+.landing-section,
+.landing-footer {
+  max-width: 1120px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+.landing-hero {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+.landing-hero-copy h1 {
+  font-size: 44px;
+}
+.landing-hero-copy p {
+  font-size: 18px;
+}
+.landing-hero-visual {
+  max-width: 320px;
+}
+.landing-service-grid {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+.landing-gallery-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+@media (max-width: 900px) {
+  .landing-gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 768px) {
+  .landing-gallery-grid {
+    grid-template-columns: 1fr;
+  }
+}
