@@ -17,6 +17,7 @@ import {
   pandas,
   Price,
   ProductCard,
+  ProductPreview,
 } from "../components";
 import { money, placeOrder } from "../lib/data";
 import { demoMode } from "../lib/supabase";
@@ -37,6 +38,24 @@ import { ProductOverview } from "../components/ProductOverview";
 export function Catalog() {
   const { products, loading } = useApp();
   const [category, setCategory] = useState("Todas");
+  const [heroSlug, setHeroSlug] = useState("ventas");
+  const heroSlugs = ["ventas", "reservas", "gestion", "educacion"];
+  const heroLabels: Record<string, string> = {
+    ventas: "Ventas",
+    reservas: "Reservas",
+    gestion: "Gestión",
+    educacion: "Educación",
+  };
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setHeroSlug((prev) => {
+        const i = heroSlugs.indexOf(prev);
+        return heroSlugs[(i + 1) % heroSlugs.length];
+      });
+    }, 5000);
+    return () => window.clearInterval(id);
+  }, []);
+  const heroProduct = products.find((p) => p.slug === heroSlug) || products[0];
   const categories = ["Todas", ...new Set(products.map((p) => p.category))];
   const selected = categories.includes(category) ? category : "Todas";
   const visible =
@@ -79,14 +98,29 @@ export function Catalog() {
             </span>
           </div>
         </div>
-        <div className="hero-visual">
-          <img
-            src={pandas}
-            width="660"
-            height="330"
-            alt="Los pandas de Karpanda trabajando juntos con tecnología"
-            fetchPriority="high"
-          />
+        <div className="hero-visual hero-visual-demo">
+          <div className="hero-demo">
+            <div className="hero-demo-tabs" role="tablist" aria-label="Elegir demo">
+              {heroSlugs.map((s) => (
+                <button
+                  key={s}
+                  role="tab"
+                  aria-selected={heroSlug === s}
+                  className={heroSlug === s ? "active" : ""}
+                  onClick={() => setHeroSlug(s)}
+                >
+                  {heroLabels[s]}
+                </button>
+              ))}
+            </div>
+            <div className="hero-demo-preview">
+              {heroProduct ? (
+                <ProductPreview product={heroProduct} />
+              ) : (
+                <div className="loading">Cargando demo…</div>
+              )}
+            </div>
+          </div>
           <Badge>Simple. Cercano. Karpanda.</Badge>
         </div>
       </section>

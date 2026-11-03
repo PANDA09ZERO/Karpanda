@@ -8524,3 +8524,48 @@ button {
   flex-wrap: wrap;
   margin-top: 20px;
 }
+/* Hero interactive demo */
+.hero-visual-demo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: stretch;
+}
+.hero-demo {
+  background: #fff;
+  border: 1px solid rgba(18, 91, 72, 0.12);
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+.hero-demo-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 8px;
+  background: #f6faf8;
+  border-bottom: 1px solid rgba(18, 91, 72, 0.08);
+}
+.hero-demo-tabs button {
+  flex: 1;
+  padding: 6px 8px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #4b5563;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.hero-demo-tabs button.active {
+  background: #125b48;
+  color: #fff;
+}
+.hero-demo-preview {
+  transform: scale(0.85);
+  transform-origin: top center;
+  max-height: 360px;
+  overflow: hidden;
+}
+.hero-demo-preview .product-system-preview {
+  margin: 0;
+}
