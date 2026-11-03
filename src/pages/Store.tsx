@@ -113,7 +113,7 @@ export function Catalog() {
                 </button>
               ))}
             </div>
-            <div className="hero-demo-preview">
+            <div className="hero-demo-preview" key={heroSlug}>
               {heroProduct ? (
                 <ProductPreview product={heroProduct} />
               ) : (
