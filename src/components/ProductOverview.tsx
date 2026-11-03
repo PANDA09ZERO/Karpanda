@@ -224,6 +224,14 @@ export function ProductOverview({ product }: { product: Product }) {
             Probar una demo interactiva <ArrowRight size={17} />
           </Link>
         )}
+        {info.kind === "landing" && (
+          <Link
+            className="button product-demo-link"
+            to={landingExample(product.slug)}
+          >
+            Ver ejemplo en vivo <ArrowRight size={17} />
+          </Link>
+        )}
       </section>
       <ProductPreview product={product} />
       {screenshotFor(info.kind) && (
@@ -371,4 +379,13 @@ function productFaqs(kind: string): [string, string][] {
     educacion: "/screenshots/educacion.png",
   };
   return map[kind] || null;
+}
+
+function landingExample(slug: string) {
+  const map: Record<string, string> = {
+    "landing-corporativa": "/landing/spa",
+    "landing-campana": "/landing/cafeteria",
+    "landing-catalogo": "/landing/motos",
+  };
+  return map[slug] || "/landing";
 }

@@ -22,6 +22,7 @@ import { ClientHome, Downloads, Profile } from "./pages/Portal";
 import { Admin } from "./pages/Admin";
 import { ForcedPasswordChange, PasswordForm } from "./pages/Users";
 import { ServicesPage } from "./pages/PublicMarketing";
+import { LandingShowcase } from "./pages/LandingShowcase";
 import { PublicAnalytics } from "./components/PublicAnalytics";
 import { DemosPage } from "./components/DemoShowcase";
 import { PwaPrompt } from "./components/PwaPrompt";
@@ -145,6 +146,8 @@ function AppRoutes() {
           <Route element={<PublicLayout />}>
             <Route index element={<Catalog />} />
             <Route path="servicios" element={<ServicesPage />} />
+            <Route path="landing" element={<LandingShowcase />} />
+            <Route path="landing/:slug" element={<LandingShowcase />} />
             <Route path="demos" element={<DemosPage />} />
             <Route path="demo/ventas" element={<SalesDemo />} />
             <Route path="demo/reservas" element={<BookingDemo />} />
