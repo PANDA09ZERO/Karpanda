@@ -280,13 +280,56 @@ export function SocialProof() {
 }
 
 export function Plans() {
-  const rows = [
-    ["Usuarios incluidos", "Hasta 5", "Hasta 5", "A medida"],
-    ["Dispositivos", "Web y móvil", "Web y móvil", "Web y móvil"],
-    ["Demo interactiva", "Incluida", "Incluida", "Incluida"],
-    ["Soporte", "Correo", "Prioritario", "Dedicado"],
-    ["Actualizaciones", "Durante la suscripción", "Durante la suscripción", "Acordadas"],
-    ["Implementación", "Autogestionada", "Acompañada", "A medida"],
+  const plans = [
+    {
+      name: "Empresa",
+      price: "S/ 199",
+      period: "/ mes",
+      featured: false,
+      features: [
+        "Hasta 5 usuarios",
+        "Web y móvil",
+        "Demo interactiva incluida",
+        "Soporte por correo",
+        "Actualizaciones durante la suscripción",
+        "Implementación autogestionada",
+      ],
+      cta: { label: "Ver productos", to: "/#soluciones", secondary: false },
+    },
+    {
+      name: "Empresa Plus",
+      price: "S/ 249",
+      period: "/ mes",
+      featured: true,
+      features: [
+        "Hasta 5 usuarios",
+        "Web y móvil",
+        "Demo interactiva incluida",
+        "Soporte prioritario",
+        "Actualizaciones durante la suscripción",
+        "Implementación acompañada",
+      ],
+      cta: { label: "Elegir este plan", to: "/#soluciones", secondary: false },
+    },
+    {
+      name: "Institución",
+      price: "Por cotizar",
+      period: "",
+      featured: false,
+      features: [
+        "Usuarios a medida",
+        "Web y móvil",
+        "Demo interactiva incluida",
+        "Soporte dedicado",
+        "Actualizaciones acordadas",
+        "Implementación a medida",
+      ],
+      cta: {
+        label: "Consultar implementación",
+        to: "/servicios#preparar-consulta",
+        secondary: true,
+      },
+    },
   ];
   return (
     <section className="marketing-section" id="planes">
@@ -306,38 +349,35 @@ export function Plans() {
           </p>
         </div>
       </div>
-      <div className="plans-table-wrap">
-        <table className="plans-table">
-          <thead>
-            <tr>
-              <th></th>
-              <th>Empresa</th>
-              <th>Empresa Plus</th>
-              <th>Institución</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map(([label, a, b, c]) => (
-              <tr key={label}>
-                <th>{label}</th>
-                <td>{a}</td>
-                <td>{b}</td>
-                <td>{c}</td>
-              </tr>
-            ))}
-            <tr className="plans-price-row">
-              <th>Precio mensual</th>
-              <td>S/ 199</td>
-              <td>S/ 249</td>
-              <td>Por cotizar</td>
-            </tr>
-          </tbody>
-        </table>
+      <div className="plans-card-grid">
+        {plans.map((plan) => (
+          <article
+            key={plan.name}
+            className={`plan-card ${plan.featured ? "plan-card-featured" : ""}`}
+          >
+            {plan.featured && <span className="plan-badge">Recomendado</span>}
+            <h3>{plan.name}</h3>
+            <div className="plan-price">
+              <strong>{plan.price}</strong>
+              {plan.period && <small>{plan.period}</small>}
+            </div>
+            <ul className="plan-features">
+              {plan.features.map((f) => (
+                <li key={f}>
+                  <Check size={16} /> {f}
+                </li>
+              ))}
+            </ul>
+            <Link
+              className={plan.cta.secondary ? "button secondary full" : "button full"}
+              to={plan.cta.to}
+            >
+              {plan.cta.label} <ArrowRight size={16} />
+            </Link>
+          </article>
+        ))}
       </div>
       <div className="plans-cta">
-        <Link className="button" to="/#soluciones">
-          Ver productos <ArrowRight size={16} />
-        </Link>
         <Link className="button secondary" to="/servicios#preparar-consulta">
           Consultar implementación <ArrowUpRight size={16} />
         </Link>
