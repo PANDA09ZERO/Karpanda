@@ -54,7 +54,7 @@ export const seedProducts: Product[] = [
     category: "Landing pages",
     description:
       "Una página clara y profesional para presentar tu negocio y captar contactos.",
-    price: 299,
+    price: 0,
     published: true,
     app_url: null,
     demo_path: null,
@@ -66,7 +66,7 @@ export const seedProducts: Product[] = [
     category: "Landing pages",
     description:
       "Landing enfocada en una oferta o campaña para convertir visitas en consultas.",
-    price: 199,
+    price: 0,
     published: true,
     app_url: null,
     demo_path: null,
@@ -78,7 +78,7 @@ export const seedProducts: Product[] = [
     category: "Landing pages",
     description:
       "Catálogo de productos o servicios con información clara y contacto directo.",
-    price: 249,
+    price: 0,
     published: true,
     app_url: null,
     demo_path: null,
@@ -107,14 +107,24 @@ export async function loadProducts(admin = false): Promise<Product[]> {
   const { data, error } = await query;
   if (error) throw error;
   const base = (data as Product[]) || [];
-  const slugs = new Set(base.map((p) => p.slug));
+  const landingSlugs = new Set(
+    seedProducts.filter((p) => p.category === "Landing pages").map((p) => p.slug),
+  );
+  // En producción, los productos de landing se toman siempre de la versión estática
+  // (nombres y precios actualizados), reemplazando los que existan en la base.
+  const merged = base.map((p) =>
+    landingSlugs.has(p.slug)
+      ? seedProducts.find((sp) => sp.slug === p.slug) || p
+      : p,
+  );
+  const slugs = new Set(merged.map((p) => p.slug));
   const staticLanding = seedProducts.filter(
     (p) => p.category === "Landing pages" && !slugs.has(p.slug),
   );
   const extras = admin
     ? staticLanding
     : staticLanding.filter((p) => p.published);
-  return [...base, ...extras] as Product[];
+  return [...merged, ...extras] as Product[];
 }
 export async function placeOrder(
   product: Product,
