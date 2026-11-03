@@ -106,7 +106,15 @@ export async function loadProducts(admin = false): Promise<Product[]> {
   if (!admin) query = query.eq("published", true);
   const { data, error } = await query;
   if (error) throw error;
-  return data as Product[];
+  const base = (data as Product[]) || [];
+  const slugs = new Set(base.map((p) => p.slug));
+  const staticLanding = seedProducts.filter(
+    (p) => p.category === "Landing pages" && !slugs.has(p.slug),
+  );
+  const extras = admin
+    ? staticLanding
+    : staticLanding.filter((p) => p.published);
+  return [...base, ...extras] as Product[];
 }
 export async function placeOrder(
   product: Product,
