@@ -122,7 +122,12 @@ grant all on public.kp_products,public.kp_orders,public.kp_licenses,public.kp_ti
 insert into public.kp_products(id,slug,name,category,description,price,published) values
 ('11111111-1111-4111-8111-111111111111','ventas','Karpanda Ventas','Ventas e inventario','Controla tu caja, productos y ventas.',199,true),
 ('22222222-2222-4222-8222-222222222222','reservas','Karpanda Reservas','Citas y servicios','Tu agenda y tus clientes, en orden.',149,true),
-('33333333-3333-4333-8333-333333333333','gestion','Karpanda Gestión','Operación de negocios','Conecta clientes, tareas y reportes.',249,true);
+('33333333-3333-4333-8333-333333333333','gestion','Karpanda Gestion','Operacion de negocios','Conecta clientes, tareas y reportes.',249,true),
+('44444444-4444-4444-8444-444444444444','educacion','Karpanda Educacion','Educacion','Conecta alumnos, profesores, familias, matriculas y seguimiento academico.',0,true),
+('55555555-5555-4555-8555-555555555555','landing-corporativa','Karpanda Landing Corporativa','Landing pages','Una pagina clara y profesional para presentar tu negocio y captar contactos.',299,true),
+('66666666-6666-4666-8666-666666666666','landing-campana','Karpanda Landing de Campana','Landing pages','Landing enfocada en una oferta o campana para convertir visitas en consultas.',199,true),
+('77777777-7777-4777-8777-777777777777','landing-catalogo','Karpanda Catalogo Web','Landing pages','Catalogo de productos o servicios con informacion clara y contacto directo.',249,true);
+
 
 insert into storage.buckets(id,name,public) values('kp-downloads','kp-downloads',false) on conflict(id) do nothing;
 create policy "Download with active Karpanda license" on storage.objects for select to authenticated

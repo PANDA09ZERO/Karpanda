@@ -8,6 +8,7 @@ import {
   CalendarDays,
   Package,
   BriefcaseBusiness,
+  Globe,
 } from "lucide-react";
 import type { Product } from "../types";
 import { productContent } from "../lib/productContent";
@@ -22,7 +23,9 @@ export function ProductPreview({ product }: { product: Product }) {
         ? CalendarDays
         : info.kind === "gestion"
           ? BriefcaseBusiness
-          : Package;
+          : info.kind === "landing"
+            ? Globe
+            : Package;
   return (
     <section
       className={`product-system-preview product-system-${info.kind}`}
@@ -160,6 +163,29 @@ export function ProductPreview({ product }: { product: Product }) {
                   </small>
                 </div>
               </>
+            ) : info.kind === "landing" ? (
+              <>
+                <div className="psp-panel">
+                  <strong>Secciones de la página</strong>
+                  <div className="psp-line">
+                    <span>Hero y mensaje</span>
+                    <b>Principal</b>
+                  </div>
+                  <div className="psp-line">
+                    <span>Servicios o productos</span>
+                    <b>Destacado</b>
+                  </div>
+                  <div className="psp-line">
+                    <span>Contacto</span>
+                    <b>Directo</b>
+                  </div>
+                </div>
+                <div className="psp-panel">
+                  <strong>Dispositivos</strong>
+                  <p>Se adapta a celular, tablet y computadora.</p>
+                  <small>Diseño responsive y carga rápida.</small>
+                </div>
+              </>
             ) : (
               <div className="psp-panel">
                 <strong>{product.name}</strong>
@@ -200,26 +226,28 @@ export function ProductOverview({ product }: { product: Product }) {
         )}
       </section>
       <ProductPreview product={product} />
-      <section className="product-screenshot-section">
-        <p className="eyebrow">CAPTURA REAL</p>
-        <h2>Así se ve en uso</h2>
-        <div className="screenshot-frame">
-          <img
-            src={screenshotFor(info.kind)}
-            alt={`Captura real del demo de ${product.name}`}
-            loading="lazy"
-          />
-        </div>
-        <p className="muted">
-          Imagen tomada del escenario de demostración. Los datos son ficticios y
-          se pueden reiniciar desde la demo.
-        </p>
-        {demo && (
-          <Link className="button secondary product-demo-link" to={demo}>
-            Abrir la demo interactiva <ArrowRight size={17} />
-          </Link>
-        )}
-      </section>
+      {screenshotFor(info.kind) && (
+        <section className="product-screenshot-section">
+          <p className="eyebrow">CAPTURA REAL</p>
+          <h2>Así se ve en uso</h2>
+          <div className="screenshot-frame">
+            <img
+              src={screenshotFor(info.kind)!}
+              alt={`Captura real del demo de ${product.name}`}
+              loading="lazy"
+            />
+          </div>
+          <p className="muted">
+            Imagen tomada del escenario de demostración. Los datos son ficticios y
+            se pueden reiniciar desde la demo.
+          </p>
+          {demo && (
+            <Link className="button secondary product-demo-link" to={demo}>
+              Abrir la demo interactiva <ArrowRight size={17} />
+            </Link>
+          )}
+        </section>
+      )}
       <section className="product-module-section">
         <p className="eyebrow">EL SISTEMA POR DENTRO</p>
         <h2>Módulos que trabajan juntos</h2>
@@ -283,6 +311,16 @@ function productFaqs(kind: string): [string, string][] {
     ],
   ];
   const specific: Record<string, [string, string][]> = {
+    landing: [
+      [
+        "¿Puedo actualizar el contenido yo mismo?",
+        "Sí. Te dejamos una guía simple para actualizar textos e imágenes.",
+      ],
+      [
+        "¿Incluye dominio y hosting?",
+        "Se acuerda en la propuesta según tus necesidades.",
+      ],
+    ],
     ventas: [
       [
         "¿El stock se actualiza al vender?",
@@ -325,12 +363,12 @@ function productFaqs(kind: string): [string, string][] {
     ],
   };
   return [...(specific[kind] || []), ...common];
-}function screenshotFor(kind: string) {
+}function screenshotFor(kind: string): string | null {
   const map: Record<string, string> = {
     ventas: "/screenshots/ventas.png",
     reservas: "/screenshots/reservas.png",
     gestion: "/screenshots/gestion.png",
     educacion: "/screenshots/educacion.png",
   };
-  return map[kind] || "/screenshots/ventas.png";
+  return map[kind] || null;
 }

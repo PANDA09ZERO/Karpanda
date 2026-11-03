@@ -170,6 +170,79 @@ const content: Record<string, Overview> = {
       "Revisa el dashboard, la libreta y los demás módulos.",
     ],
   },
+  "landing-corporativa": {
+    subtitle: "Una presencia web clara para tu negocio.",
+    audience: "Para negocios que necesitan una página profesional",
+    summary:
+      "Presenta quién eres, qué ofreces y cómo contactarte en una página rápida, clara y adaptable a cualquier pantalla.",
+    brand: "Karpanda Web",
+    nav: ["Inicio", "Servicios", "Nosotros", "Contacto"],
+    stats: [
+      ["Secciones", "4"],
+      ["Dispositivos", "Todos"],
+      ["Tiempo de entrega", "Acordado"],
+    ],
+    modules: [
+      ["Hero y mensaje principal", "Comunica tu propuesta de valor en los primeros segundos."],
+      ["Servicios o productos", "Presenta tu oferta con información clara y ordenada."],
+      ["Prueba social", "Testimonios o logos para generar confianza."],
+      ["Contacto y llamada a la acción", "Formulario o enlace directo para que te escriban."],
+    ],
+    steps: [
+      "Revisamos tu negocio y objetivos.",
+      "Diseñamos y construimos la página.",
+      "Publicamos y te acompañamos a empezar.",
+    ],
+  },
+  "landing-campana": {
+    subtitle: "Convierte visitas en consultas para tu campaña.",
+    audience: "Para campañas, lanzamientos y promociones",
+    summary:
+      "Una página enfocada en una oferta concreta, con mensaje claro y un solo objetivo: que te contacten.",
+    brand: "Karpanda Campaña",
+    nav: ["Oferta", "Beneficios", "Preguntas", "Contacto"],
+    stats: [
+      ["Objetivo", "Conversión"],
+      ["Secciones", "5"],
+      ["Dispositivos", "Todos"],
+    ],
+    modules: [
+      ["Oferta principal", "Presenta tu promoción o lanzamiento con claridad."],
+      ["Beneficios", "Explica por qué elegirte en puntos simples."],
+      ["Preguntas frecuentes", "Resuelve dudas antes de que te escriban."],
+      ["Formulario de contacto", "Captura leads de forma directa."],
+    ],
+    steps: [
+      "Definimos la oferta y el mensaje.",
+      "Diseñamos la landing de campaña.",
+      "Medimos y ajustamos según resultados.",
+    ],
+  },
+  "landing-catalogo": {
+    subtitle: "Tu catálogo de productos o servicios en la web.",
+    audience: "Para negocios que quieren mostrar su oferta online",
+    summary:
+      "Presenta tus productos o servicios con fotos, descripciones y contacto directo, sin complicaciones.",
+    brand: "Karpanda Catálogo",
+    nav: ["Catálogo", "Categorías", "Detalle", "Contacto"],
+    stats: [
+      ["Productos", "A medida"],
+      ["Categorías", "Flexibles"],
+      ["Dispositivos", "Todos"],
+    ],
+    modules: [
+      ["Listado de productos", "Muestra tu oferta con imágenes y descripciones."],
+      ["Categorías", "Organiza por tipo o línea de productos."],
+      ["Detalle de producto", "Amplía la información de cada item."],
+      ["Contacto directo", "Botón para consultar o comprar."],
+    ],
+    steps: [
+      "Reunimos tu catálogo y fotos.",
+      "Construimos la página de catálogo.",
+      "Publicamos y te enseñamos a actualizarlo.",
+    ],
+  },
+
 };
 export function productContent(p: Product) {
   const key = content[p.slug]

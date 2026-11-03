@@ -47,6 +47,42 @@ export const seedProducts: Product[] = [
     app_url: null,
     demo_path: "/demo/educacion",
   },
+  {
+    id: "55555555-5555-4555-8555-555555555555",
+    slug: "landing-corporativa",
+    name: "Karpanda Landing Corporativa",
+    category: "Landing pages",
+    description:
+      "Una página clara y profesional para presentar tu negocio y captar contactos.",
+    price: 299,
+    published: true,
+    app_url: null,
+    demo_path: null,
+  },
+  {
+    id: "66666666-6666-4666-8666-666666666666",
+    slug: "landing-campana",
+    name: "Karpanda Landing de Campaña",
+    category: "Landing pages",
+    description:
+      "Landing enfocada en una oferta o campaña para convertir visitas en consultas.",
+    price: 199,
+    published: true,
+    app_url: null,
+    demo_path: null,
+  },
+  {
+    id: "77777777-7777-4777-8777-777777777777",
+    slug: "landing-catalogo",
+    name: "Karpanda Catálogo Web",
+    category: "Landing pages",
+    description:
+      "Catálogo de productos o servicios con información clara y contacto directo.",
+    price: 249,
+    published: true,
+    app_url: null,
+    demo_path: null,
+  },
 ];
 export const money = (n: number) => `S/ ${Number(n).toFixed(2)}`;
 export function readDemo<T>(key: string, fallback: T): T {
