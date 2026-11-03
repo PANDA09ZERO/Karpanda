@@ -26,6 +26,9 @@ import {
   Globe,
   GraduationCap,
   BriefcaseBusiness,
+  Megaphone,
+  Target,
+  LayoutGrid,
   Users,
   X,
   Ellipsis,
@@ -190,6 +193,9 @@ function categoryIcon(product: Product) {
     return CalendarDays;
   if (c.includes("operaci") || c.includes("gesti") || s.includes("gestion"))
     return BriefcaseBusiness;
+  if (s.includes("landing-campana")) return Megaphone;
+  if (s.includes("landing-catalogo")) return LayoutGrid;
+  if (s.includes("landing-corporativa")) return Globe;
   if (c.includes("landing") || c.includes("web") || s.includes("landing"))
     return Globe;
   if (c.includes("venta") || c.includes("inventario") || s.includes("venta"))
