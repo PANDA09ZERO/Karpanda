@@ -22,6 +22,10 @@ import {
   Menu,
   Package,
   ShoppingBag,
+  Store,
+  Globe,
+  GraduationCap,
+  BriefcaseBusiness,
   Users,
   X,
   Ellipsis,
@@ -178,13 +182,29 @@ export function Footer() {
     </footer>
   );
 }
+function categoryIcon(product: Product) {
+  const c = (product.category || "").toLowerCase();
+  const s = (product.slug || "").toLowerCase();
+  if (c.includes("educaci") || s.includes("educacion")) return GraduationCap;
+  if (c.includes("cita") || c.includes("servicio") || s.includes("reserva"))
+    return CalendarDays;
+  if (c.includes("operaci") || c.includes("gesti") || s.includes("gestion"))
+    return BriefcaseBusiness;
+  if (c.includes("landing") || c.includes("web") || s.includes("landing"))
+    return Globe;
+  if (c.includes("venta") || c.includes("inventario") || s.includes("venta"))
+    return Store;
+  return Package;
+}
+
 export function ProductCard({ product }: { product: Product }) {
   const demo = productDemo(product);
+  const Icon = categoryIcon(product);
   return (
     <article className="product-card">
       <div className="category">
         <span className="product-icon">
-          <img src="/assets/ventas.svg" width="24" height="24" alt="" />
+          <Icon size={22} />
         </span>
         <span>{product.category}</span>
       </div>
