@@ -169,7 +169,16 @@ export function Catalog() {
           </div>
         )}
         {loading ? (
-          <Loading />
+          <div className="skeleton-grid" aria-busy="true" aria-label="Cargando productos">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div className="skeleton-card" key={i}>
+                <div className="skeleton title" />
+                <div className="skeleton" />
+                <div className="skeleton" />
+                <div className="skeleton price" />
+              </div>
+            ))}
+          </div>
         ) : visible.length ? (
           <div className="product-grid">
             {visible.map((p) => (
