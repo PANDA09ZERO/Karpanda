@@ -27,6 +27,7 @@ type LandingExample = {
   highlights: string[];
   testimonials: { name: string; text: string }[];
   benefits: { title: string; desc: string }[];
+  faqs: { q: string; a: string }[];
 };
 
 const examples: LandingExample[] = [
@@ -51,6 +52,11 @@ const examples: LandingExample[] = [
       { title: "Reserva fácil", desc: "Agenda tu cita en menos de un minuto desde el celular." },
       { title: "Atención personalizada", desc: "Cada visita se adapta a tus necesidades." },
       { title: "Ambiente premium", desc: "Espacios diseñados para tu relajación." },
+    ],
+    faqs: [
+      { q: "¿Cómo empiezo?", a: "Contáctanos y te guiamos paso a paso." },
+      { q: "¿Incluye soporte?", a: "Sí, acompañamiento durante la implementación." },
+      { q: "¿Se adapta a mi negocio?", a: "Personalizamos la página a tu marca." },
     ],
     testimonials: [
       { name: "Lucía", text: "Salí renovada. El ambiente es increíble." },
@@ -79,6 +85,11 @@ const examples: LandingExample[] = [
       { title: "Hecho cada día", desc: "Repostería fresca todas las mañanas." },
       { title: "Tu espacio", desc: "WiFi, enchufes y ambiente para trabajar." },
     ],
+    faqs: [
+      { q: "¿Cómo empiezo?", a: "Contáctanos y te guiamos paso a paso." },
+      { q: "¿Incluye soporte?", a: "Sí, acompañamiento durante la implementación." },
+      { q: "¿Se adapta a mi negocio?", a: "Personalizamos la página a tu marca." },
+    ],
     testimonials: [
       { name: "María", text: "El mejor café de la zona, sin duda." },
       { name: "Diego", text: "Perfecto para trabajar con WiFi y buena música." },
@@ -105,6 +116,11 @@ const examples: LandingExample[] = [
       { title: "Taller experto", desc: "Mecánicos certificados para tu moto." },
       { title: "Repuestos garantizados", desc: "Calidad y garantía en cada pieza." },
       { title: "Financiamiento", desc: "Planes flexibles para tu compra." },
+    ],
+    faqs: [
+      { q: "¿Cómo empiezo?", a: "Contáctanos y te guiamos paso a paso." },
+      { q: "¿Incluye soporte?", a: "Sí, acompañamiento durante la implementación." },
+      { q: "¿Se adapta a mi negocio?", a: "Personalizamos la página a tu marca." },
     ],
     testimonials: [
       { name: "Jorge", text: "Excelente atención y precios justos." },
@@ -221,6 +237,17 @@ export function LandingShowcase() {
               Ver servicios <ChevronRight size={16} />
             </a>
           </div>
+          <div className="landing-trust-row">
+            <span className="landing-trust-badge">
+              <Check size={14} /> Diseño responsive
+            </span>
+            <span className="landing-trust-badge">
+              <Check size={14} /> Carga rápida
+            </span>
+            <span className="landing-trust-badge">
+              <Check size={14} /> Soporte incluido
+            </span>
+          </div>
         </div>
         <div className="landing-hero-visual">
           <div className="landing-hero-card">
@@ -290,6 +317,28 @@ export function LandingShowcase() {
             <div key={n} className="landing-gallery-item" />
           ))}
         </div>
+      </section>
+
+      <section className="landing-section">
+        <h2>Preguntas frecuentes</h2>
+        <div className="landing-faq-list">
+          {example.faqs.map((f) => (
+            <details key={f.q} className="landing-faq-item">
+              <summary>
+                {f.q} <ChevronRight size={16} />
+              </summary>
+              <p>{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      <section className="landing-section landing-cta-banner">
+        <h2>¿Listo para empezar?</h2>
+        <p>Conversemos sobre tu proyecto y construyamos tu landing.</p>
+        <a href="#contacto" className="landing-btn-primary">
+          Hablemos <ArrowRight size={18} />
+        </a>
       </section>
 
       <section className="landing-section landing-contact-section" id="contacto">

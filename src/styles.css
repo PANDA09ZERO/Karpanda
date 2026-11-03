@@ -9415,3 +9415,73 @@ dialog.modal::backdrop {
     padding-right: 20px;
   }
 }
+/* Landing FAQ, CTA banner, trust badges */
+.landing-faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 720px;
+}
+.landing-faq-item {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  padding: 14px 18px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+.landing-faq-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  font-weight: 600;
+  color: #1f2937;
+  list-style: none;
+}
+.landing-faq-item summary::-webkit-details-marker {
+  display: none;
+}
+.landing-faq-item p {
+  margin: 10px 0 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+.landing-cta-banner {
+  text-align: center;
+  padding: 48px 24px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 70%, #000));
+  color: #fff;
+}
+.landing-cta-banner h2 {
+  color: #fff;
+  font-size: 32px;
+  margin: 0 0 8px;
+}
+.landing-cta-banner p {
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 20px;
+  font-size: 16px;
+}
+.landing-cta-banner .landing-btn-primary {
+  background: #fff;
+  color: var(--accent);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+.landing-trust-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+.landing-trust-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+}
