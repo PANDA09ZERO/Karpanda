@@ -17,7 +17,6 @@ import {
   pandas,
   Price,
   ProductCard,
-  ProductPreview,
 } from "../components";
 import { money, placeOrder } from "../lib/data";
 import { demoMode } from "../lib/supabase";
@@ -30,6 +29,8 @@ import {
 } from "./PublicMarketing";
 import { trackPublicAction } from "../lib/analytics";
 import { productDemo, quoteProduct } from "../lib/catalog";
+import { productContent } from "../lib/productContent";
+import { ProductOverview } from "../components/ProductOverview";
 export function Catalog() {
   const { products, loading } = useApp();
   const [category, setCategory] = useState("Todas");
@@ -167,58 +168,10 @@ export function Detail() {
       </p>
       <PageHeading title={p.name}>
         <Badge>{p.category.toUpperCase()}</Badge>
-        <span className="detail-subtitle">
-          {p.slug === "educacion"
-            ? "El seguimiento de tu institución, en un solo lugar."
-            : "El control de tu negocio, en un solo lugar."}
-        </span>
+        <span className="detail-subtitle">{productContent(p).subtitle}</span>
       </PageHeading>
       <div className="detail-grid">
-        <div>
-          <ProductPreview product={p} />
-          <section className="features">
-            {productDemo(p) && (
-              <Link
-                className="button secondary product-demo-link"
-                to={productDemo(p)!}
-              >
-                Probar una demo interactiva <ArrowRight size={17} />
-              </Link>
-            )}
-            <h2>
-              Todo lo que necesitas para{" "}
-              {p.slug === "reservas" ? "organizarte" : "trabajar"} mejor
-            </h2>
-            <ul>
-              {(p.slug === "educacion"
-                ? [
-                    "Alumnos, profesores y familias",
-                    "Matrículas, pagos y gestión académica",
-                    "Asistencia, calificaciones y libretas",
-                    "Implementación adaptada a tu institución",
-                  ]
-                : p.slug === "gestion"
-                  ? [
-                      "Directorio de clientes y proyectos",
-                      "Tareas, responsables y seguimiento",
-                      "Dashboard y reportes por cliente",
-                      "Acceso desde computadoras y teléfonos",
-                    ]
-                  : [
-                      "Caja e inventario en tiempo real",
-                      "Reportes y exportación de información",
-                      "Hasta 5 usuarios con permisos",
-                      "Actualizaciones y soporte incluidos",
-                    ]
-              ).map((s) => (
-                <li key={s}>
-                  <Check size={20} />
-                  {s}
-                </li>
-              ))}
-            </ul>
-          </section>
-        </div>
+        <ProductOverview product={p} />
         <aside className="plan">
           <Badge>
             {quoteProduct(p)

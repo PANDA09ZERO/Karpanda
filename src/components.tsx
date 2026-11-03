@@ -456,52 +456,7 @@ export function PageHeading({
     </div>
   );
 }
-export function ProductPreview({ product }: { product: Product }) {
-  return (
-    <div
-      className="software-preview"
-      aria-label={`Vista ilustrativa de ${product.name}`}
-    >
-      <aside>
-        <strong>Karpanda</strong>
-        {["Resumen", "Ventas", "Productos", "Clientes", "Reportes"].map(
-          (s, i) => (
-            <span className={i === 0 ? "selected" : ""} key={s}>
-              {s}
-            </span>
-          ),
-        )}
-      </aside>
-      <div className="preview-body">
-        <h3>
-          Resumen de {product.slug === "reservas" ? "reservas" : "ventas"}
-        </h3>
-        <p>Hoy · Mi negocio · Ejemplo</p>
-        <div className="preview-stats">
-          {[
-            ["Ventas del día", "S/ 1,850"],
-            ["Pedidos", "24"],
-            ["Productos", "186"],
-          ].map(([label, value]) => (
-            <div key={label}>
-              <span>{label}</span>
-              <strong>{value}</strong>
-            </div>
-          ))}
-        </div>
-        <div
-          className="chart"
-          role="img"
-          aria-label="Gráfico ilustrativo de actividad"
-        >
-          {[38, 60, 45, 78, 67, 91, 85, 65, 95, 73, 88, 106].map((h, i) => (
-            <span key={i} style={{ height: `${h / 1.1}%` }} />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
+export { ProductPreview } from "./components/ProductOverview";
 export function Price({ value }: { value: number }) {
   return (
     <div className="big-price">
